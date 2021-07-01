@@ -1,10 +1,10 @@
 package dotd.hmp.data
 
+import android.graphics.Color
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import dotd.hmp.Model
 import dotd.hmp.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +26,7 @@ abstract class ModelDatabase: RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 GlobalScope.launch(Dispatchers.IO) {
-                    instance.dao().insert()
+
                 }
             }
         }

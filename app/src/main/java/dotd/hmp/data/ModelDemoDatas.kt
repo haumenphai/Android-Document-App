@@ -1,7 +1,6 @@
 package dotd.hmp.data
 
 import android.graphics.Color
-import dotd.hmp.Model
 
 object ModelDemoDatas {
     fun getDemoDatas(): List<Model> {

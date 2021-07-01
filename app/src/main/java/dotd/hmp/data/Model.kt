@@ -1,5 +1,6 @@
-package dotd.hmp
+package dotd.hmp.data
 
+import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -11,6 +12,8 @@ class Model {
     var name: String = ""
     var color: Int = 0
     var jsonFields: String = ""
+    var sequence: Int = 0
+    var description = ""
 
     constructor()
 
@@ -24,6 +27,15 @@ class Model {
     constructor(name: String, color: Int, jsonFileds: String) {
         this.name = name
         this.color = color
-        this.jsonFields = jsonFields
+        this.jsonFields = jsonFileds
     }
+
+    companion object {
+        val itemAddNewModel by lazy {
+                Model("Add", Color.RED).apply {
+                description = "add new model"
+            }
+        }
+    }
+
 }

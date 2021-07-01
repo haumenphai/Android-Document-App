@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -20,6 +20,14 @@
         android:layout_height="wrap_content"
         android:text="test"
         android:layout_below="@id/recycler_view"
+        android:layout_centerHorizontal="true"
+        />
+    <Button
+        android:id="@+id/btn_insert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="insert"
+        android:layout_below="@id/btnTest"
         android:layout_centerHorizontal="true"
         />
 

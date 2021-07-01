@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="100dp"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:id="@+id/layout_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_toLeftOf="@id/btn_delete_field"
+        android:layout_toRightOf="@id/spinner1"
+
+        >
+        <EditText
+            android:id="@+id/edit_field_name"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_edit_classic"
+            android:hint="field name"
+            android:textSize="15sp"
+            android:inputType="text|textNoSuggestions"
+            android:layout_weight="1" />
+        <EditText
+            android:id="@+id/edit_content"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_edit_classic"
+            android:hint="content"
+            android:textSize="15sp"
+            android:layout_marginLeft="2dp"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/btn_delete_field"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:text="delete"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:background="@drawable/rippler_blue_white"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/layout_edit"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/black" />
+</RelativeLayout>

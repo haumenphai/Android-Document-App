@@ -2,7 +2,6 @@ package dotd.hmp.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import dotd.hmp.Model
 
 @Dao
 interface ModelDao {
@@ -18,9 +17,10 @@ interface ModelDao {
     @Query("DELETE FROM model")
     fun deleteAll()
 
-    @Query("SELECT * FROM model")
+    @Query("SELECT * FROM model ORDER BY sequence")
     fun getList(): List<Model>
 
-    @Query("SELECT * FROM model")
+    @Query("SELECT * FROM model ORDER BY sequence")
     fun getLiveData(): LiveData<List<Model>>
+
 }
