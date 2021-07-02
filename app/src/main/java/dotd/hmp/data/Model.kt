@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 
 @Entity
 class Model {
@@ -12,6 +13,7 @@ class Model {
     var name: String = ""
     var color: Int = 0
     var jsonFields: String = ""
+    var jsonData: String = ""
     var sequence: Int = 0
     var description = ""
 
@@ -24,10 +26,10 @@ class Model {
     }
 
     @Ignore
-    constructor(name: String, color: Int, jsonFileds: String) {
+    constructor(name: String, color: Int, jsonFields: String) {
         this.name = name
         this.color = color
-        this.jsonFields = jsonFileds
+        this.jsonFields = jsonFields
     }
 
     companion object {
@@ -38,4 +40,18 @@ class Model {
         }
     }
 
+    fun setFieldList(list: MutableList<Field>) {
+        this.jsonFields = Gson().toJson(list)
+    }
+
+    fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
+
+}
+
+enum class FieldType {
+    TEXT, NUMBER
+}
+
+class Field(var fieldName: String, var fieldType: FieldType) {
+    fun isValid(): Boolean = fieldName.trim() != ""
 }

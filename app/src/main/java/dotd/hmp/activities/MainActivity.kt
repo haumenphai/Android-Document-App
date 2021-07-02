@@ -4,12 +4,13 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.ModelApdater
 import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDatabase
 import dotd.hmp.databinding.ActivityMainBinding
+import dotd.hmp.dialog.DialogAddNewModel
+import dotd.hmp.hepler.UIHelper
 
 class MainActivity : AppCompatActivity() {
     private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -49,10 +50,22 @@ class MainActivity : AppCompatActivity() {
         })
         adapter.onClickItem = {
             if (it.isItemAddNewModel()) {
-                Toast.makeText(this, "open activity add new model", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AddDataModelAcivity::class.java))
+                DialogAddNewModel(this).apply {
+                    setBtnOkClick { modelName, color ->
+                        UIHelper.hideKeyboardFrom(this@MainActivity, b.root)
+                        val intent = Intent(this@MainActivity, CreateModelAcivity::class.java)
+                        intent.putExtra("model_name", modelName)
+                        intent.putExtra("color", color)
+                        startActivity(intent)
+                    }
+                    setBtnCancelClick {
+                        UIHelper.hideKeyboardFrom(this@MainActivity, b.root)
+                    }
+                    UIHelper.showKeyboard(this@MainActivity)
+                    show()
+                }
             } else {
-                Toast.makeText(this, "open acitvity view data in model", Toast.LENGTH_SHORT).show()
+                // open acitvity view data in model
             }
         }
     }
