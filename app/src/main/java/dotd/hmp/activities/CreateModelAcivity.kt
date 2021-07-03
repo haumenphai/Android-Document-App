@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import dotd.hmp.R
 import dotd.hmp.data.Field
 import dotd.hmp.data.FieldType
@@ -22,16 +24,15 @@ import dotd.hmp.hepler.title
 class CreateModelAcivity : AppCompatActivity() {
     private val b by lazy { ActivityCreateModelBinding.inflate(layoutInflater) }
     private val fieldList = mutableListOf<Field>()
-
     private val modelName by lazy { intent.getStringExtra("model_name")!! }
-    private val modelColor by lazy { intent.getIntExtra("color", -1) }
+    private val modelIcon by lazy { intent.getIntExtra("icon", -1) }
+    private val fieldCount = MutableLiveData<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(b.root)
         b.layoutOneFieldDefault.root.visibility = View.GONE
         fieldList.clear()
-        supportActionBar!!.title = modelName
 
         addNewLayoutOneFieldToRootLayout()
         setClick()
@@ -56,7 +57,7 @@ class CreateModelAcivity : AppCompatActivity() {
 
                 b.btnBack.setOnClickListener { dialog.cancel() }
                 b.btnCreate.setOnClickListener {
-                    val model = Model(modelName, modelColor)
+                    val model = Model(modelName, modelIcon)
                     model.setFieldList(fieldList)
                     ModelDB.insert(model)
                     finish()
@@ -68,11 +69,21 @@ class CreateModelAcivity : AppCompatActivity() {
             UIHelper.hideKeyboardFrom(this, b.root)
             false
         }
+
+        fieldCount.observeForever {
+            supportActionBar!!.title = "Create $modelName... ($it field)"
+        }
     }
 
 
 
     private fun addNewLayoutOneFieldToRootLayout() {
+        if (fieldCount.value != null) {
+            fieldCount.postValue(fieldCount.value!! + 1)
+        } else {
+            fieldCount.postValue(1)
+        }
+
         val layoutOneField = LayoutInflater.from(this).inflate(R.layout.layout_one_field, null)
         val b2 = LayoutOneFieldBinding.bind(layoutOneField)
         b.layoutContentScroll.addView(layoutOneField)
@@ -83,6 +94,7 @@ class CreateModelAcivity : AppCompatActivity() {
         b2.btnDeleteField.setOnClickListener {
             b.layoutContentScroll.removeView(layoutOneField)
             fieldList.remove(field)
+            fieldCount.postValue(fieldCount.value!! - 1)
         }
     
         val listSpinner = listOf("Text", "Number")

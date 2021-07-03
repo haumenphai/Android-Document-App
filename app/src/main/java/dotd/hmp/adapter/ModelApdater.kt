@@ -1,9 +1,10 @@
-package dotd.hmp
+package dotd.hmp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import dotd.hmp.R
 import dotd.hmp.data.Model
 import dotd.hmp.databinding.ItemModelBinding
 
@@ -25,7 +26,11 @@ class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerVie
         val b = holder.b
         val model = list[position]
 
-        b.image.setBackgroundColor(model.color)
+        if (model.hasIcon())
+            b.icon.setImageResource(model.icon)
+        else
+            b.icon.setImageResource(R.drawable.ic_default_model_icon)
+
         b.modelName.text = model.name
     }
 
@@ -42,5 +47,4 @@ class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerVie
             }
         }
     }
-
 }

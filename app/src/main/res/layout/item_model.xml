@@ -10,18 +10,18 @@
     >
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/black"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/rippler_blue_white"
         />
     <TextView
         android:id="@+id/model_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Model name"
-        android:layout_below="@id/image"
+        android:layout_below="@id/icon"
         android:layout_centerHorizontal="true"
         />
 

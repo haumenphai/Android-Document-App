@@ -1,16 +1,18 @@
 package dotd.hmp.activities
 
 import android.content.Intent
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import dotd.hmp.ModelApdater
+import dotd.hmp.adapter.ModelApdater
 import dotd.hmp.data.Model
+import dotd.hmp.data.ModelDB
 import dotd.hmp.data.ModelDatabase
+import dotd.hmp.data.ModelDemoDatas
 import dotd.hmp.databinding.ActivityMainBinding
 import dotd.hmp.dialog.DialogAddNewModel
 import dotd.hmp.hepler.UIHelper
+
 
 class MainActivity : AppCompatActivity() {
     private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -30,10 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         b.btnInsert.setOnClickListener {
             // TODO: remove test
-            ModelDatabase.instance.dao().insert(
-                Model("Student", Color.GREEN),
-                Model("Employee", Color.RED)
-            )
+            ModelDB.insert(ModelDemoDatas.getModelStudent())
         }
     }
 
@@ -51,11 +50,11 @@ class MainActivity : AppCompatActivity() {
         adapter.onClickItem = {
             if (it.isItemAddNewModel()) {
                 DialogAddNewModel(this).apply {
-                    setBtnOkClick { modelName, color ->
+                    setBtnOkClick { modelName, icon ->
                         UIHelper.hideKeyboardFrom(this@MainActivity, b.root)
                         val intent = Intent(this@MainActivity, CreateModelAcivity::class.java)
                         intent.putExtra("model_name", modelName)
-                        intent.putExtra("color", color)
+                        intent.putExtra("icon", icon)
                         startActivity(intent)
                     }
                     setBtnCancelClick {
@@ -65,10 +64,11 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
             } else {
-                // open acitvity view data in model
+                val intent = Intent(this, ViewDataModelActivity::class.java)
+                intent.putExtra("model", it)
+                startActivity(intent)
             }
         }
     }
 
-    fun Model.isItemAddNewModel(): Boolean = Model.itemAddNewModel == this
 }

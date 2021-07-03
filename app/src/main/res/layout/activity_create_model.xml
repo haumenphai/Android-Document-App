@@ -7,6 +7,14 @@
     tools:context=".activities.CreateModelAcivity"
     >
 
+<!--    Todo: remove icon test-->
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"

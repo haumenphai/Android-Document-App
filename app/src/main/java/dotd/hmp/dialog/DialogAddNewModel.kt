@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.widget.Toast
 import dotd.hmp.R
+import dotd.hmp.data.NO_ICON
 import dotd.hmp.databinding.DialogAddNewModelBinding
 import dotd.hmp.hepler.UIHelper
 
@@ -20,17 +21,30 @@ class DialogAddNewModel(val context: Context) {
         dialog.setCanceledOnTouchOutside(false)
     }
 
-    // todo: add icon
-    fun setBtnOkClick(callBack: (modelName: String, color: Int) -> Unit) {
+    fun setBtnOkClick(callBack: (modelName: String, icon: Int) -> Unit) {
+        var icon = NO_ICON
+
         b.btnOk.setOnClickListener {
             val text = b.edittext.text.toString()
             if (text.trim().isEmpty()) {
                 AlertDialog.Builder(context).setMessage("Model name mustn't be empty!")
                 return@setOnClickListener
             }
-            callBack(text, Color.RED)
+            callBack(text, icon)
             cancel()
         }
+        b.imgIcon.setOnClickListener {
+            UIHelper.hideKeyboardFrom(context, b.edittext)
+            DialogPickIcon(context).apply {
+                setItemIconClick { itemIcon ->
+                    icon = itemIcon.iconResource
+                    cancel()
+                    this@DialogAddNewModel.b.imgIcon.setImageResource(icon)
+                }
+                show()
+            }
+        }
+
     }
 
     fun setBtnCancelClick(callBack: () -> Unit) {
@@ -42,6 +56,5 @@ class DialogAddNewModel(val context: Context) {
 
     fun cancel() = dialog.cancel()
     fun show() = dialog.show()
-
 
 }
