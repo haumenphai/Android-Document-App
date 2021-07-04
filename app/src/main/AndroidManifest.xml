@@ -11,12 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Documentapp">
         <activity
-            android:name=".activities.ViewDataModelActivity"
+            android:name="ViewDataModelActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".activities.CreateModelAcivity"
+            android:name="CreateModelAcivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
