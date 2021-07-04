@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import dotd.hmp.R
 import org.json.JSONObject
@@ -33,13 +34,6 @@ class Model: Serializable {
         this.icon = icon
     }
 
-    @Ignore
-    constructor(name: String, icon: Int, jsonFields: String) {
-        this.name = name
-        this.icon = icon
-        this.jsonFields = jsonFields
-    }
-
     companion object {
         val itemAddNewModel by lazy {
                 Model("Add", Color.RED).apply {
@@ -57,7 +51,7 @@ class Model: Serializable {
 
     fun addNewRecord(jsonObj: org.json.JSONObject) {
         if (!jsonObj.isJsonObjRecordValidate()) {
-            throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList")
+            throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
         }
         val jsonArray = getJsonArray()
         jsonArray.add(Gson().fromJson(jsonObj.toString(), JsonObject::class.java))
@@ -75,9 +69,45 @@ class Model: Serializable {
         return true
     }
 
+    fun sortByField(fieldName: String): Model {
+        val jsonArr = getJsonArray()
+        if (!hasField(fieldName) || jsonArr.size() == 0) {
+            return this
+        }
+
+        val model = this.clone()
+        val jsonData = getJsonArray().sortedWith(compareBy(
+            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString},
+            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString}
+        )).toString()
+        model.jsonData = jsonData
+
+        return model
+    }
+
+    fun hasField(fieldName: String): Boolean {
+        getFieldList().forEach {
+            if (it.fieldName == fieldName)
+                return true
+        }
+        return false
+    }
+
     fun isItemAddNewModel(): Boolean = itemAddNewModel == this
 
     fun hasIcon(): Boolean = icon != NO_ICON
+
+    fun clone(): Model {
+        val model = Model()
+        model.id = this.id
+        model.name = this.name
+        model.icon = this.icon
+        model.jsonFields = this.jsonFields
+        model.jsonData = this.jsonData
+        model.sequence = this.sequence
+        model.description = this.description
+        return model
+    }
 
 }
 

@@ -65,6 +65,14 @@
             app:tint="@color/black" />
     </RelativeLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar_layout"
+        tools:listitem="@layout/item_data_model"
+        tools:itemCount="2"
+        />
 
 
 </RelativeLayout>

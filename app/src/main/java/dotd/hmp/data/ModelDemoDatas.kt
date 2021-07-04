@@ -4,11 +4,6 @@ import android.graphics.Color
 import dotd.hmp.R
 
 object ModelDemoDatas {
-    fun getDemoDatas(): List<Model> {
-        val list = mutableListOf<Model>()
-        list.add(Model("Student", R.drawable.ic_clear))
-        return list
-    }
 
     fun getModelStudent(): Model {
         val fieldList = mutableListOf<Field>()
@@ -21,9 +16,37 @@ object ModelDemoDatas {
             setFieldList(fieldList)
             jsonData = """
                 [
-                    {"name": "Peter", age: 12},
-                    {"name": "Beem", "age": 18},
-                    {"name": "Muckey", "age": 17}
+                    {
+                        "name": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "Aeter"
+                        },
+                        "age": {
+                            "fieldType": "${FieldType.NUMBER}", 
+                            "value": 20
+                        }
+                    },
+                    {
+                        "name": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "Ceter"
+                        },
+                        "age": {
+                            "fieldType": "${FieldType.NUMBER}", 
+                            "value": 40
+                        }
+                    },
+                    {
+                        "name": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "Bocke"
+                        },
+                        "age": {
+                            "fieldType": "${FieldType.NUMBER}",  
+                            "value": 19
+                        }
+                    }
+                    
                 ]
             """.trimIndent()
         }
