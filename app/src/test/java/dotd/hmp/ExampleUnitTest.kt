@@ -1,26 +1,15 @@
 package dotd.hmp
 
-import android.icu.util.Calendar
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dotd.hmp.data.Field
 import dotd.hmp.data.FieldType
-import dotd.hmp.hepler.DateTimeHelper
 import org.json.JSONObject
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.Period
-import java.time.format.DateTimeFormatter
-import java.util.*
-import java.util.Calendar.YEAR
-import kotlin.time.Duration
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -94,26 +83,5 @@ class ExampleUnitTest {
         s.add(gson.fromJson(j1.toString(), JsonObject::class.java))
 
         Log.d("CCC", s.toString())
-    }
-
-    @Test
-    fun tedt() {
-//        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss [E]")
-//        val date = Date(System.currentTimeMillis())
-//        println(sdf.format(date))
-
-        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss [E]")
-        val differenceTime = System.currentTimeMillis() - 1000233467
-        val date = Date(differenceTime)
-        val calendar = java.util.Calendar.getInstance()
-        calendar.time = date
-
-        println(date)
-        println(sdf.format(date))
-        println(calendar.get(Calendar.DAY_OF_MONTH))
-        println(LocalDateTime.MIN.plusSeconds(121).second)
-
-        println(DateTimeHelper.milisecondToDatetime(121*1000 + 1))
-        println("2021-12-30 20:00:01 TH" > "2021-12-30 20:00:00 TH2")
     }
 }

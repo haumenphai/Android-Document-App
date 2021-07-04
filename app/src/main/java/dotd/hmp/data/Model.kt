@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import dotd.hmp.R
 import org.json.JSONObject
@@ -52,11 +53,6 @@ class Model: Serializable {
         if (!jsonObj.isJsonObjRecordValidate()) {
             throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
         }
-        val createTime = JSONObject()
-        createTime.put("fieldType", FieldType.TIMESTAMP)
-        createTime.put("value", System.currentTimeMillis())
-
-        jsonObj.put("createTime", createTime)
         val jsonArray = getJsonArray()
         jsonArray.add(Gson().fromJson(jsonObj.toString(), JsonObject::class.java))
         jsonData = jsonArray.toString()
@@ -116,7 +112,7 @@ class Model: Serializable {
 }
 
 enum class FieldType {
-    TEXT, NUMBER, TIMESTAMP
+    TEXT, NUMBER
 }
 
 class Field(var fieldName: String, var fieldType: FieldType) {
