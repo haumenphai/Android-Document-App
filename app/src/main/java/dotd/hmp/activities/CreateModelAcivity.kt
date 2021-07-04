@@ -37,7 +37,6 @@ class CreateModelAcivity : AppCompatActivity() {
         addNewLayoutOneFieldToRootLayout()
         setClick()
     }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun setClick() {
         b.btnAddNewField.setOnClickListener {
