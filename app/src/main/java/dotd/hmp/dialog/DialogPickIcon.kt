@@ -44,7 +44,7 @@ class DialogPickIcon(val context: Context) {
     }
 }
 
-class ItemIcon(var iconResource: Int, var name: String = "")
+class ItemIcon(var drawableResource: Int, var name: String = "")
 
 class ItemIconApdapter(private var list: List<ItemIcon> = mutableListOf()):
     RecyclerView.Adapter<ItemIconApdapter.ItemIconHolder>() {
@@ -65,7 +65,7 @@ class ItemIconApdapter(private var list: List<ItemIcon> = mutableListOf()):
         val b = holder.b
         val itemIcon = list[position]
 
-        b.imgIcon.setImageResource(itemIcon.iconResource)
+        b.imgIcon.setImageResource(itemIcon.drawableResource)
     }
 
     override fun getItemCount(): Int = list.size

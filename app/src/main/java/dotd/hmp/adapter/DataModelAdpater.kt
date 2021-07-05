@@ -10,10 +10,12 @@ import com.google.gson.JsonObject
 import dotd.hmp.R
 import dotd.hmp.data.FieldType
 import dotd.hmp.data.Model
+import dotd.hmp.data.isDefaultField
 import dotd.hmp.databinding.ItemDataModelBinding
+import dotd.hmp.hepler.DateTimeHelper
 import dotd.hmp.hepler.setTextHTML
 
-class DataModelAdpater():
+class DataModelAdpater :
         RecyclerView.Adapter<DataModelAdpater.DataModelHolder>() {
 
     private lateinit var jsonArr: JsonArray
@@ -36,20 +38,35 @@ class DataModelAdpater():
         b.tvSequence.text = "#${position+1}"
 
         var text = ""
-        jsonObject.keySet().forEach { fieldName ->
+        val fieldNames = jsonObject.keySet()
+
+        for (fieldName in fieldNames) {
+            // hide default field in list view
+            if (fieldName.isDefaultField()) continue
+
             val fieldType = jsonObject.get(fieldName).asJsonObject.get("fieldType").asString
             val value =  jsonObject.get(fieldName).asJsonObject.get("value").asString
-            if (fieldType == FieldType.TEXT.toString() ||
-                fieldType == FieldType.NUMBER.toString()) {
-                text += """
-                    <font color="black">
+            when (fieldType) {
+                FieldType.TEXT.toString(), FieldType.NUMBER.toString() -> {
+                    text += """
+                        <font color="black">
                            <b>${fieldName}:</b>
-                    </font> $value <br/>
-                """.trimIndent()
+                        </font> $value <br/>
+                    """.trimIndent()
+                }
+                FieldType.DATETIME.toString() -> {
+                    text += """
+                        <font color="black">
+                           <b>${fieldName}:</b>
+                        </font> ${DateTimeHelper.timestampToDatetimeString(value.toLong())} <br/>
+                    """.trimIndent()
+                }
             }
         }
         b.tvData.setTextHTML(text)
     }
+
+
 
     override fun getItemCount(): Int = jsonArr.size()
 

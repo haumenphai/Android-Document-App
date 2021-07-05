@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     >
+    <!--    Use for create new record (AddModelRecordFragment)-->
 
     <TextView
         android:id="@+id/tv_field_name"
