@@ -27,7 +27,7 @@ class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerVie
         val model = list[position]
 
         if (model.hasIcon())
-            b.icon.setImageResource(model.icon)
+            b.icon.setImageResource(model.icon!!)
         else
             b.icon.setImageResource(R.drawable.ic_default_model_icon)
 

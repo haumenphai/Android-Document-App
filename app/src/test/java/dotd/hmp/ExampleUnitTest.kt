@@ -113,7 +113,6 @@ class ExampleUnitTest {
         println(calendar.get(Calendar.DAY_OF_MONTH))
         println(LocalDateTime.MIN.plusSeconds(121).second)
 
-        println(DateTimeHelper.milisecondToDatetime(121*1000 + 1))
         println("2021-12-30 20:00:01 TH" > "2021-12-30 20:00:00 TH2")
     }
 }

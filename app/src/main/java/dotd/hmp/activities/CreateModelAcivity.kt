@@ -52,8 +52,8 @@ class CreateModelAcivity : AppCompatActivity() {
                 }
             }
             DialogConfirmCreateModel(this).apply {
-                b.tvContent.setText(getTextFieldsConfirm())
-                b.tvModelName.setText(modelName)
+                b.tvContent.text = getTextFieldsConfirm()
+                b.tvModelName.text = modelName
 
                 b.btnBack.setOnClickListener { dialog.cancel() }
                 b.btnCreate.setOnClickListener {
@@ -97,7 +97,7 @@ class CreateModelAcivity : AppCompatActivity() {
             fieldCount.postValue(fieldCount.value!! - 1)
         }
     
-        val listSpinner = listOf("Text", "Number")
+        val listSpinner = listOf("Text", "Number", "Datetime")
         b2.spinner1.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, listSpinner)
 
         b2.spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -105,6 +105,7 @@ class CreateModelAcivity : AppCompatActivity() {
                 when (listSpinner[position]) {
                     "Text" -> field.fieldType = FieldType.TEXT
                     "Number" -> field.fieldType = FieldType.NUMBER
+                    "Datetime" -> field.fieldType = FieldType.DATETIME
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}

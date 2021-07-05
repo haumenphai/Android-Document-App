@@ -2,6 +2,7 @@ package dotd.hmp.data
 
 import android.graphics.Color
 import dotd.hmp.R
+import java.util.*
 
 object ModelDemoDatas {
 
@@ -17,6 +18,14 @@ object ModelDemoDatas {
             jsonData = """
                 [
                     {
+                        "id": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "${UUID.randomUUID()}"
+                        },
+                        "createTime": {
+                             "fieldType": "${FieldType.NUMBER}",
+                            "value": ${System.currentTimeMillis()}
+                        },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "Aeter"
@@ -26,7 +35,15 @@ object ModelDemoDatas {
                             "value": 20
                         }
                     },
-                    {
+                    {   
+                        "id": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "${UUID.randomUUID()}"
+                        },
+                        "createTime": {
+                             "fieldType": "${FieldType.NUMBER}",
+                            "value": ${System.currentTimeMillis()}
+                        },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "Ceter"
@@ -37,6 +54,14 @@ object ModelDemoDatas {
                         }
                     },
                     {
+                        "id": {
+                            "fieldType": "${FieldType.TEXT}",
+                            "value": "${UUID.randomUUID()}"
+                        },
+                        "createTime": {
+                             "fieldType": "${FieldType.NUMBER}",
+                            "value": ${System.currentTimeMillis()}
+                        },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "Bocke"

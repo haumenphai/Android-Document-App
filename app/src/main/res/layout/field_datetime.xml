@@ -6,16 +6,16 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     >
-    <!--    Use for create new record (AddModelRecordFragment)-->
+    <!--   Use for create new record (AddModelRecordFragment)-->
 
     <TextView
         android:id="@+id/tv_field_name"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:maxLines="1"
-        android:ellipsize="end"
         android:padding="5dp"
-        android:text="name: "
+        android:text="field name 123123312: "
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -23,19 +23,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_content"
+        android:id="@+id/edit_date_preview"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_edit_classic"
-        android:hint="input text"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_field_name"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textMultiLine|textNoSuggestions"
+        android:hint="Datetime:"
         android:textColor="@color/black"
         android:textColorHint="@color/text_color_hint"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_pick_date_time"
+        app:layout_constraintStart_toEndOf="@+id/tv_field_name"
+        app:layout_constraintTop_toTopOf="parent"
+        android:ellipsize="end"
+        android:enabled="false"
         />
 
     <View
@@ -43,11 +44,19 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/edit_content"
+        app:layout_constraintTop_toBottomOf="@id/edit_date_preview"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="5dp"
         />
+
+    <Button
+        android:id="@+id/btn_pick_date_time"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:text="Pick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

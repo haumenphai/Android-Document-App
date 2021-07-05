@@ -3,11 +3,8 @@ package dotd.hmp.dialog
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.widget.Toast
 import dotd.hmp.R
-import dotd.hmp.data.NO_ICON
 import dotd.hmp.databinding.DialogAddNewModelBinding
 import dotd.hmp.hepler.UIHelper
 
@@ -22,7 +19,7 @@ class DialogAddNewModel(val context: Context) {
     }
 
     fun setBtnOkClick(callBack: (modelName: String, icon: Int) -> Unit) {
-        var icon = NO_ICON
+        var icon = R.drawable.ic_default_model_icon
 
         b.btnOk.setOnClickListener {
             val text = b.edittext.text.toString()
@@ -33,11 +30,13 @@ class DialogAddNewModel(val context: Context) {
             callBack(text, icon)
             cancel()
         }
+
+        // call other dialog
         b.imgIcon.setOnClickListener {
             UIHelper.hideKeyboardFrom(context, b.edittext)
             DialogPickIcon(context).apply {
                 setItemIconClick { itemIcon ->
-                    icon = itemIcon.iconResource
+                    icon = itemIcon.drawableResource
                     cancel()
                     this@DialogAddNewModel.b.imgIcon.setImageResource(icon)
                 }

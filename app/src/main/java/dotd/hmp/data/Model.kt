@@ -11,15 +11,40 @@ import dotd.hmp.R
 import org.json.JSONObject
 import java.io.Serializable
 import java.lang.Exception
+import java.util.*
 
-const val NO_ICON = -1
+
+/*
+jsonData:
+[
+   {        <====== This is Record
+       "id": {     <====== This is Field
+            "fieldType": "TEXT",
+            "value": "abZhdhDZMWlamKzmeDZZ"
+       },
+       "createTime": {
+            "fieldType": "DATETIME",
+            "value": 12031200222
+       },
+       "name": {
+            "fieldType": "TEXT",
+            "value": "Peter"
+        },
+        "age": {
+            "fieldType": "NUMBER",
+            "value": 20
+        }
+    },
+]
+
+ */
 
 @Entity
 class Model: Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var name: String = ""
-    var icon: Int = NO_ICON
+    var icon: Int? = null
     var jsonFields: String = ""
     var jsonData: String = "[]"
     var sequence: Int = 0
@@ -52,11 +77,8 @@ class Model: Serializable {
         if (!jsonObj.isJsonObjRecordValidate()) {
             throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
         }
-        val createTime = JSONObject()
-        createTime.put("fieldType", FieldType.TIMESTAMP)
-        createTime.put("value", System.currentTimeMillis())
+        insertDefaultField(jsonObj)
 
-        jsonObj.put("createTime", createTime)
         val jsonArray = getJsonArray()
         jsonArray.add(Gson().fromJson(jsonObj.toString(), JsonObject::class.java))
         jsonData = jsonArray.toString()
@@ -71,6 +93,19 @@ class Model: Serializable {
             }
         }
         return true
+    }
+
+    private fun insertDefaultField(jsonObj: JSONObject) {
+        val id = JSONObject()
+        id.put("fieldType", FieldType.TEXT)
+        id.put("value", UUID.randomUUID().toString())
+
+        val createTime = JSONObject()
+        createTime.put("fieldType", FieldType.DATETIME)
+        createTime.put("value", System.currentTimeMillis())
+
+        jsonObj.put("id", id)
+        jsonObj.put("createTime", createTime)
     }
 
     fun sortByField(fieldName: String): Model {
@@ -99,7 +134,7 @@ class Model: Serializable {
 
     fun isItemAddNewModel(): Boolean = itemAddNewModel == this
 
-    fun hasIcon(): Boolean = icon != NO_ICON
+    fun hasIcon(): Boolean = icon != null
 
     fun clone(): Model {
         val model = Model()
@@ -116,10 +151,13 @@ class Model: Serializable {
 }
 
 enum class FieldType {
-    TEXT, NUMBER, TIMESTAMP
+    TEXT, NUMBER, DATETIME
 }
 
 class Field(var fieldName: String, var fieldType: FieldType) {
     fun isValid(): Boolean = fieldName.trim() != ""
 }
+
+val defaultField = arrayOf("id", "createTime")
+fun String.isDefaultField() = this in defaultField
 
