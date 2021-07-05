@@ -1,16 +1,12 @@
 package dotd.hmp.fragment
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.ikovac.timepickerwithseconds.MyTimePickerDialog
 import dotd.hmp.R
 import dotd.hmp.activities.ViewDataModelActivity
 import dotd.hmp.data.FieldType
@@ -18,10 +14,9 @@ import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FieldDatetimeBinding
 import dotd.hmp.databinding.FieldNumberBinding
 import dotd.hmp.databinding.FragmentAddModelRecordBinding
-import dotd.hmp.hepler.DateTime
+import dotd.hmp.dialog.DialogPickDatetime
 import dotd.hmp.hepler.UIHelper
 import org.json.JSONObject
-import java.util.*
 
 
 class AddModelRecordFragment: Fragment() {
@@ -80,7 +75,7 @@ class AddModelRecordFragment: Fragment() {
                     val binding = FieldDatetimeBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
                     binding.btnPickDateTime.setOnClickListener {
-                        showDialogDatetimePicker(it.context) { dateTime ->
+                        DialogPickDatetime.show(it.context) { dateTime ->
                             binding.editDatePreview.setText(dateTime.format())
                             jsonObject2.put("fieldType", FieldType.DATETIME)
                             jsonObject2.put("value", dateTime.toMiliseconds())
@@ -104,30 +99,5 @@ class AddModelRecordFragment: Fragment() {
             UIHelper.hideKeyboardFrom(act, b.root)
         }
     }
-
-    private fun showDialogDatetimePicker(context: Context, callBack: (dateTime: DateTime) -> Unit) {
-        val c = Calendar.getInstance()
-        val dateTime = DateTime()
-        val year1 = c.get(Calendar.YEAR)
-        val month1 = c.get(Calendar.MONTH)
-        val day1 = c.get(Calendar.DAY_OF_MONTH)
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
-        val second = c.get(Calendar.SECOND)
-
-        DatePickerDialog(context, { view, year, monthOfYear, dayOfMonth ->
-            dateTime.year = year
-            dateTime.month = monthOfYear
-            dateTime.day = dayOfMonth
-
-            MyTimePickerDialog(context, { v, hourOfDay, minute, seconds ->
-                dateTime.hour = hourOfDay
-                dateTime.minute = minute
-                dateTime.seconds = seconds
-                callBack(dateTime)
-            }, hour, minute, second, true).show()
-        }, year1, month1, day1).show()
-    }
-
 
 }
