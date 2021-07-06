@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import com.google.gson.JsonObject
 import dotd.hmp.R
 import dotd.hmp.activities.ViewDataModelActivity
 import dotd.hmp.data.FieldType
@@ -22,7 +23,7 @@ import org.json.JSONObject
 class AddModelRecordFragment: Fragment() {
     private lateinit var b: FragmentAddModelRecordBinding
     private val act: ViewDataModelActivity by lazy { activity as ViewDataModelActivity }
-    private val jsonObj = org.json.JSONObject()
+    private val jsonObj = JsonObject()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,11 +31,7 @@ class AddModelRecordFragment: Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         b = FragmentAddModelRecordBinding.inflate(inflater, container, false)
         setUpLayout()
         setClick()
@@ -45,7 +42,7 @@ class AddModelRecordFragment: Fragment() {
     fun setUpLayout() {
         val model = act.model.value!!
         model.getFieldList().forEach { field ->
-            val jsonObject2 = JSONObject()
+            val jsonObject2 = JsonObject()
 
             when (field.fieldType) {
                 FieldType.NUMBER -> {
@@ -53,9 +50,9 @@ class AddModelRecordFragment: Fragment() {
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
                     binding.editContent.addTextChangedListener { text ->
-                        jsonObject2.put("fieldType", FieldType.NUMBER)
-                        jsonObject2.put("value", text.toString())
-                        jsonObj.put(field.fieldName, jsonObject2)
+                        jsonObject2.addProperty("fieldType", FieldType.NUMBER.toString())
+                        jsonObject2.addProperty("value", text.toString())
+                        jsonObj.add(field.fieldName, jsonObject2)
                     }
                     b.layoutField.addView(view)
                 }
@@ -64,9 +61,9 @@ class AddModelRecordFragment: Fragment() {
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
                     binding.editContent.addTextChangedListener { text ->
-                        jsonObject2.put("fieldType", FieldType.TEXT)
-                        jsonObject2.put("value", text.toString())
-                        jsonObj.put(field.fieldName, jsonObject2)
+                        jsonObject2.addProperty("fieldType", FieldType.TEXT.toString())
+                        jsonObject2.addProperty("value", text.toString())
+                        jsonObj.add(field.fieldName, jsonObject2)
                     }
                     b.layoutField.addView(view)
                 }
@@ -77,9 +74,9 @@ class AddModelRecordFragment: Fragment() {
                     binding.btnPickDateTime.setOnClickListener {
                         DialogPickDatetime.show(it.context) { dateTime ->
                             binding.editDatePreview.setText(dateTime.format())
-                            jsonObject2.put("fieldType", FieldType.DATETIME)
-                            jsonObject2.put("value", dateTime.toMiliseconds())
-                            jsonObj.put(field.fieldName, jsonObject2)
+                            jsonObject2.addProperty("fieldType", FieldType.DATETIME.toString())
+                            jsonObject2.addProperty("value", dateTime.toMiliseconds().toString())
+                            jsonObj.add(field.fieldName, jsonObject2)
                         }
                     }
                     b.layoutField.addView(view)
@@ -91,7 +88,7 @@ class AddModelRecordFragment: Fragment() {
     fun setClick() {
         b.btnCreateRecord.setOnClickListener {
             val model = act.model.value!!
-            model.addNewRecord(jsonObj)
+            model.addRecord(jsonObj)
             ModelDB.update(model)
             act.model.value = model
 

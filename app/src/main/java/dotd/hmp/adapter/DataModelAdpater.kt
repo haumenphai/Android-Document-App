@@ -23,7 +23,7 @@ class DataModelAdpater :
 
     fun setModel(model: Model) {
         this.model = model
-        this.jsonArr = model.getJsonArray()
+        this.jsonArr = model.getRecordArray()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataModelHolder {

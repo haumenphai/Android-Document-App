@@ -24,7 +24,7 @@ object ModelDemoDatas {
                         },
                         "createTime": {
                              "fieldType": "${FieldType.NUMBER}",
-                            "value": ${System.currentTimeMillis()}
+                            "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
@@ -32,7 +32,7 @@ object ModelDemoDatas {
                         },
                         "age": {
                             "fieldType": "${FieldType.NUMBER}", 
-                            "value": 20
+                            "value": "20"
                         }
                     },
                     {   
@@ -42,7 +42,7 @@ object ModelDemoDatas {
                         },
                         "createTime": {
                              "fieldType": "${FieldType.NUMBER}",
-                            "value": ${System.currentTimeMillis()}
+                            "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
@@ -50,7 +50,7 @@ object ModelDemoDatas {
                         },
                         "age": {
                             "fieldType": "${FieldType.NUMBER}", 
-                            "value": 40
+                            "value": "40"
                         }
                     },
                     {
@@ -60,7 +60,7 @@ object ModelDemoDatas {
                         },
                         "createTime": {
                              "fieldType": "${FieldType.NUMBER}",
-                            "value": ${System.currentTimeMillis()}
+                            "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
                             "fieldType": "${FieldType.TEXT}",
@@ -68,12 +68,12 @@ object ModelDemoDatas {
                         },
                         "age": {
                             "fieldType": "${FieldType.NUMBER}",  
-                            "value": 19
+                            "value": "19"
                         }
                     }
                     
                 ]
-            """.trimIndent()
+            """.replace(" ", "").replace("\n", "")
         }
         return model
     }
