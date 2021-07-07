@@ -11,10 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dotd.hmp.R
-import dotd.hmp.data.Field
-import dotd.hmp.data.FieldType
-import dotd.hmp.data.Model
-import dotd.hmp.data.ModelDB
+import dotd.hmp.data.*
 import dotd.hmp.databinding.ActivityCreateModelBinding
 import  dotd.hmp.databinding.LayoutOneFieldBinding
 import dotd.hmp.dialog.DialogConfirmCreateModel
@@ -51,6 +48,10 @@ class CreateModelAcivity : AppCompatActivity() {
                     showMess("Field Name mustn't be empty")
                     return@setOnClickListener
                 }
+                if (it.fieldName.isDefaultField()) {
+                    showMess("Model musn't contain default field: $defaultField\n\nPlease change \"${it.fieldName}\" to another name!")
+                    return@setOnClickListener
+                }
             }
             DialogConfirmCreateModel(this).apply {
                 b.tvContent.text = getTextFieldsConfirm()
@@ -75,7 +76,6 @@ class CreateModelAcivity : AppCompatActivity() {
             supportActionBar!!.title = "Create $modelName... ($it field)"
         }
     }
-
 
 
     private fun addNewLayoutOneFieldToRootLayout() {

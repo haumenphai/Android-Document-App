@@ -224,7 +224,7 @@ class Field(var fieldName: String, var fieldType: FieldType) {
 
 }
 
-val defaultField = arrayOf("id", "create_time", "update_time")
+val defaultField = listOf("id", "create_time", "update_time")
 fun String.isDefaultField() = this in defaultField
 
 
