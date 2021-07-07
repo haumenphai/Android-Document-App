@@ -79,14 +79,14 @@ class Model: Serializable {
         this.jsonFields = Gson().toJson(list)
     }
 
+    // field list not contain default field
     fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
 
     fun addRecord(record: JsonObject) {
-        if (!record.isRecordValidate()) {
+        if (!isRecordValidate(record)) {
             throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
         }
         insertDefaultField(record)
-        insertUpdatetime(record)
 
         val jsonArray = getRecordArray()
         jsonArray.add(record)
@@ -108,7 +108,7 @@ class Model: Serializable {
     }
 
     fun updateRecord(record: JsonObject) {
-        if (!record.isRecordValidate()) {
+        if (!isRecordValidate(record)) {
             throw Exception("Exception when update new record, jsonOject not enough field when compared to fieldList of Model")
         }
 
@@ -129,37 +129,16 @@ class Model: Serializable {
 
     fun getRecordArray(): com.google.gson.JsonArray = Gson().fromJson(jsonData, JsonArray::class.java)
 
-    private fun JsonObject.isRecordValidate(): Boolean {
+    fun isRecordValidate(record: JsonObject): Boolean {
         getFieldList().forEach {
             // record does not contain field defined in model
-            if (!this.has(it.fieldName)) {
+            if (!record.has(it.fieldName)) {
                 return false
                 // not check field has [fieldType, value] because performance
             }
         }
         return true
     }
-
-    private fun insertDefaultField(record: JsonObject) {
-        val id = JsonObject()
-        id.addProperty("fieldType", FieldType.TEXT.toString())
-        id.addProperty("value", UUID.randomUUID().toString())
-
-        val createTime = JsonObject()
-        createTime.addProperty("fieldType", FieldType.DATETIME.toString())
-        createTime.addProperty("value", System.currentTimeMillis())
-
-        record.add("id", id)
-        record.add("createTime", createTime)
-    }
-
-    private fun insertUpdatetime(record: JsonObject) {
-        val updateTime = JsonObject()
-        updateTime.addProperty("fieldType", FieldType.TEXT.toString())
-        updateTime.addProperty("value", System.currentTimeMillis().toString())
-        record.add("updateTime", updateTime)
-    }
-
 
     fun sortByField(fieldName: String): Model {
         val jsonArr = getRecordArray()
@@ -202,6 +181,27 @@ class Model: Serializable {
         return model
     }
 
+
+    private fun insertDefaultField(record: JsonObject) {
+        val id = JsonObject()
+        id.addProperty("fieldType", FieldType.TEXT.toString())
+        id.addProperty("value", UUID.randomUUID().toString())
+
+        val createTime = JsonObject()
+        createTime.addProperty("fieldType", FieldType.DATETIME.toString())
+        createTime.addProperty("value", System.currentTimeMillis().toString())
+
+        record.add("id", id)
+        record.add("create_time", createTime)
+        insertUpdatetime(record)
+    }
+
+    private fun insertUpdatetime(record: JsonObject) {
+        val updateTime = JsonObject()
+        updateTime.addProperty("fieldType", FieldType.DATETIME.toString())
+        updateTime.addProperty("value", System.currentTimeMillis().toString())
+        record.add("update_time", updateTime)
+    }
 }
 
 enum class FieldType {
@@ -220,9 +220,11 @@ class Field(var fieldName: String, var fieldType: FieldType) {
         )
     }
 
+    override fun toString(): String = "($fieldName: $fieldType)"
+
 }
 
-val defaultField = arrayOf("id", "createTime")
+val defaultField = arrayOf("id", "create_time", "update_time")
 fun String.isDefaultField() = this in defaultField
 
 

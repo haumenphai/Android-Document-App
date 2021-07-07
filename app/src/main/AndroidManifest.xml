@@ -10,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Documentapp">
+        <activity android:name=".activities.ViewDetailRecordActivity"></activity>
         <activity
-            android:name=".activities.ViewDataModelActivity"
+            android:name=".activities.ViewRecordsActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activities.CreateModelAcivity"

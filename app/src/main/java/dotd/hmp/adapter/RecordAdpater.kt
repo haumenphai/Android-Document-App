@@ -13,10 +13,11 @@ import dotd.hmp.data.Model
 import dotd.hmp.data.isDefaultField
 import dotd.hmp.databinding.ItemDataModelBinding
 import dotd.hmp.hepler.DateTimeHelper
+import dotd.hmp.hepler.toFieldNameShow
 import dotd.hmp.hepler.setTextHTML
 
-class DataModelAdpater :
-        RecyclerView.Adapter<DataModelAdpater.DataModelHolder>() {
+class RecordAdpater :
+        RecyclerView.Adapter<RecordAdpater.DataModelHolder>() {
 
     private lateinit var jsonArr: JsonArray
     private lateinit var model: Model
@@ -24,6 +25,7 @@ class DataModelAdpater :
     fun setModel(model: Model) {
         this.model = model
         this.jsonArr = model.getRecordArray()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataModelHolder {
@@ -34,30 +36,30 @@ class DataModelAdpater :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: DataModelHolder, position: Int) {
         val b = holder.b
-        val jsonObject = jsonArr[position].asJsonObject
+        val record = jsonArr[position].asJsonObject
         b.tvSequence.text = "#${position+1}"
 
         var text = ""
-        val fieldNames = jsonObject.keySet()
+        val fieldNames = record.keySet()
 
         for (fieldName in fieldNames) {
             // hide default field in list view
             if (fieldName.isDefaultField()) continue
 
-            val fieldType = jsonObject.get(fieldName).asJsonObject.get("fieldType").asString
-            val value =  jsonObject.get(fieldName).asJsonObject.get("value").asString
+            val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
+            val value =  record.get(fieldName).asJsonObject.get("value").asString
             when (fieldType) {
                 FieldType.TEXT.toString(), FieldType.NUMBER.toString() -> {
                     text += """
                         <font color="black">
-                           <b>${fieldName}:</b>
+                           <b>${fieldName.toFieldNameShow()}:</b>
                         </font> $value <br/>
                     """.trimIndent()
                 }
                 FieldType.DATETIME.toString() -> {
                     text += """
                         <font color="black">
-                           <b>${fieldName}:</b>
+                           <b>${fieldName.toFieldNameShow()}:</b>
                         </font> ${DateTimeHelper.timestampToDatetimeString(value.toLong())} <br/>
                     """.trimIndent()
                 }

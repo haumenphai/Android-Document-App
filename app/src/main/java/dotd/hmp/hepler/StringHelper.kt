@@ -8,3 +8,6 @@ fun String.title(): String {
     result += this.substring(1).toLowerCase(Locale.ROOT)
     return result
 }
+
+fun String.toFieldNameShow(): String = this.replace("_", " ")
+fun String.toFieldNameStore(): String = this.replace(" ", "_")

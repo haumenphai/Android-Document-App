@@ -20,6 +20,7 @@ import  dotd.hmp.databinding.LayoutOneFieldBinding
 import dotd.hmp.dialog.DialogConfirmCreateModel
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.title
+import dotd.hmp.hepler.toFieldNameStore
 
 class CreateModelAcivity : AppCompatActivity() {
     private val b by lazy { ActivityCreateModelBinding.inflate(layoutInflater) }
@@ -111,7 +112,7 @@ class CreateModelAcivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         b2.editFieldName.addTextChangedListener {
-            field.fieldName = it.toString()
+            field.fieldName = it.toString().toFieldNameStore()
         }
 
     }

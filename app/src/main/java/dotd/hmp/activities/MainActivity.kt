@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
             } else {
-                val intent = Intent(this, ViewDataModelActivity::class.java)
+                val intent = Intent(this, ViewRecordsActivity::class.java)
                 intent.putExtra("model", it)
                 startActivity(intent)
             }

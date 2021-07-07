@@ -1,24 +1,23 @@
 package dotd.hmp.fragment
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.JsonObject
 import dotd.hmp.R
-import dotd.hmp.activities.ViewDataModelActivity
-import dotd.hmp.adapter.DataModelAdpater
+import dotd.hmp.activities.ViewRecordsActivity
+import dotd.hmp.activities.ViewDetailRecordActivity
+import dotd.hmp.adapter.RecordAdpater
 import dotd.hmp.data.Model
-import dotd.hmp.databinding.FragmentViewDataModelBinding
+import dotd.hmp.databinding.FragmentViewRecordsBinding
 
-class ViewDataModelFragment : Fragment() {
-    private lateinit var b: FragmentViewDataModelBinding
-    private val act: ViewDataModelActivity by lazy { activity as ViewDataModelActivity }
-    private val model: MutableLiveData<Model> by lazy { act.model }
-    private val adapter: DataModelAdpater = DataModelAdpater()
+class ViewRecordsFragment : Fragment() {
+    private lateinit var b: FragmentViewRecordsBinding
+    private val act: ViewRecordsActivity by lazy { activity as ViewRecordsActivity }
+    private val adapter: RecordAdpater = RecordAdpater()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +26,7 @@ class ViewDataModelFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        b = FragmentViewDataModelBinding.inflate(inflater, container, false)
+        b = FragmentViewRecordsBinding.inflate(inflater, container, false)
         hideSearchView()
         setConfigToolBar()
         setUpRecyclerView()
@@ -43,28 +42,40 @@ class ViewDataModelFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_add -> {
-                act.addFragment(AddModelRecordFragment())
+                act.addFragment(AddRecordFragment())
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun setUpRecyclerView() {
-        model.observeForever {
+        act.model.observeForever {
             adapter.setModel(it)
+            b.tvNoRecord.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
         }
 
         b.recyclerView.layoutManager = LinearLayoutManager(act)
         b.recyclerView.adapter = adapter
         adapter.onClickItem = {
-            Toast.makeText(act, it.toString(), Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, ViewDetailRecordActivity::class.java)
+            intent.putExtra("model", act.model.value)
+            intent.putExtra("recordString", it.toString())
+            startActivityForResult(intent, 123)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
+            val model = data.getSerializableExtra("model") as Model
+            act.model.value = model
         }
     }
 
     private fun setConfigToolBar() {
         act.setSupportActionBar(b.toolBar)
         b.appbarLayout.outlineProvider = null
-        act.supportActionBar!!.title = model.value!!.name
+        act.supportActionBar!!.title = act.model.value!!.name
     }
 
     private fun hideSearchView() {

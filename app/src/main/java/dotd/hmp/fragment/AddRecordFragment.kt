@@ -9,7 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
 import dotd.hmp.R
-import dotd.hmp.activities.ViewDataModelActivity
+import dotd.hmp.activities.ViewRecordsActivity
 import dotd.hmp.data.FieldType
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FieldDatetimeBinding
@@ -17,12 +17,11 @@ import dotd.hmp.databinding.FieldNumberBinding
 import dotd.hmp.databinding.FragmentAddModelRecordBinding
 import dotd.hmp.dialog.DialogPickDatetime
 import dotd.hmp.hepler.UIHelper
-import org.json.JSONObject
 
 
-class AddModelRecordFragment: Fragment() {
+class AddRecordFragment: Fragment() {
     private lateinit var b: FragmentAddModelRecordBinding
-    private val act: ViewDataModelActivity by lazy { activity as ViewDataModelActivity }
+    private val act: ViewRecordsActivity by lazy { activity as ViewRecordsActivity }
     private val jsonObj = JsonObject()
 
 
@@ -43,14 +42,18 @@ class AddModelRecordFragment: Fragment() {
         val model = act.model.value!!
         model.getFieldList().forEach { field ->
             val jsonObject2 = JsonObject()
+            jsonObject2.addProperty("fieldType", field.fieldType.toString())
+            jsonObject2.addProperty("value", "")
+            jsonObj.add(field.fieldName, jsonObject2)
 
             when (field.fieldType) {
                 FieldType.NUMBER -> {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_number, null)
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
+
+
                     binding.editContent.addTextChangedListener { text ->
-                        jsonObject2.addProperty("fieldType", FieldType.NUMBER.toString())
                         jsonObject2.addProperty("value", text.toString())
                         jsonObj.add(field.fieldName, jsonObject2)
                     }
@@ -60,8 +63,8 @@ class AddModelRecordFragment: Fragment() {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_text, null)
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
+
                     binding.editContent.addTextChangedListener { text ->
-                        jsonObject2.addProperty("fieldType", FieldType.TEXT.toString())
                         jsonObject2.addProperty("value", text.toString())
                         jsonObj.add(field.fieldName, jsonObject2)
                     }
@@ -71,10 +74,10 @@ class AddModelRecordFragment: Fragment() {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_datetime, null)
                     val binding = FieldDatetimeBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
+
                     binding.btnPickDateTime.setOnClickListener {
                         DialogPickDatetime.show(it.context) { dateTime ->
                             binding.editDatePreview.setText(dateTime.format())
-                            jsonObject2.addProperty("fieldType", FieldType.DATETIME.toString())
                             jsonObject2.addProperty("value", dateTime.toMiliseconds().toString())
                             jsonObj.add(field.fieldName, jsonObject2)
                         }

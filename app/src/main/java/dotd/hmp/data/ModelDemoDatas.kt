@@ -22,8 +22,8 @@ object ModelDemoDatas {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "${UUID.randomUUID()}"
                         },
-                        "createTime": {
-                             "fieldType": "${FieldType.NUMBER}",
+                        "create_time": {
+                            "fieldType": "${FieldType.DATETIME}",
                             "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
@@ -40,8 +40,8 @@ object ModelDemoDatas {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "${UUID.randomUUID()}"
                         },
-                        "createTime": {
-                             "fieldType": "${FieldType.NUMBER}",
+                        "create_time": {
+                            "fieldType": "${FieldType.DATETIME}",
                             "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
@@ -58,8 +58,8 @@ object ModelDemoDatas {
                             "fieldType": "${FieldType.TEXT}",
                             "value": "${UUID.randomUUID()}"
                         },
-                        "createTime": {
-                             "fieldType": "${FieldType.NUMBER}",
+                        "create_time": {
+                            "fieldType": "${FieldType.DATETIME}",
                             "value": "${System.currentTimeMillis()}"
                         },
                         "name": {
