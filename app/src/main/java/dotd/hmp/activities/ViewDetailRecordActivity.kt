@@ -33,6 +33,10 @@ class ViewDetailRecordActivity : AppCompatActivity() {
     private val recordCopy: JsonObject by lazy { record.deepCopy() }
     private val viewsToRemove = mutableListOf<View>()
 
+    companion object {
+        val ACTION_EDIT_RECORD = "action edit record"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,18 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         setUpLayoutViewRecord(record)
         setUpLayoutEditRecord()
         setClick()
+        handleIntentAction()
+    }
+
+    private fun handleIntentAction() {
+        intent.action?.let { action ->
+            when(action) {
+                ACTION_EDIT_RECORD -> {
+                    hideLayoutViewData()
+                    showLayoutEditData()
+                }
+            }
+        }
     }
 
     private fun setClick() {
@@ -126,7 +142,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         var text = ""
         val fieldNames = record.keySet()
         for (fieldName in fieldNames) {
-            if (fieldName == "id") continue
+            if (fieldName == "id" || fieldName == "is_selected") continue
 
             val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
             val value =  record.get(fieldName).asJsonObject.get("value").asString

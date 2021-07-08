@@ -1,10 +1,12 @@
 package dotd.hmp.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dotd.hmp.R
@@ -12,7 +14,10 @@ import dotd.hmp.activities.ViewRecordsActivity
 import dotd.hmp.activities.ViewDetailRecordActivity
 import dotd.hmp.adapter.RecordAdpater
 import dotd.hmp.data.Model
+import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
+import dotd.hmp.dialog.DialogConfirm
+import java.lang.Exception
 
 class ViewRecordsFragment : Fragment() {
     private lateinit var b: FragmentViewRecordsBinding
@@ -27,9 +32,10 @@ class ViewRecordsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         b = FragmentViewRecordsBinding.inflate(inflater, container, false)
-        hideSearchView()
+        hideView()
         setConfigToolBar()
         setUpRecyclerView()
+        setUpLayoutAction()
 
         return b.root
     }
@@ -56,11 +62,40 @@ class ViewRecordsFragment : Fragment() {
 
         b.recyclerView.layoutManager = LinearLayoutManager(act)
         b.recyclerView.adapter = adapter
+        setClickRecord()
+    }
+
+    private fun setClickRecord() {
+        fun hideActionEdit() {
+            if (adapter.getRecordsSeleted().size != 1) {
+                b.layoutActionRecords.actionEdit.visibility = View.INVISIBLE
+            } else {
+                b.layoutActionRecords.actionEdit.visibility = View.VISIBLE
+            }
+        }
+
         adapter.onClickItem = {
             val intent = Intent(context, ViewDetailRecordActivity::class.java)
             intent.putExtra("model", act.model.value)
             intent.putExtra("recordString", it.toString())
             startActivityForResult(intent, 123)
+        }
+        adapter.onLongClickItem = {
+            b.layoutActionRecords.root.visibility = View.VISIBLE
+            it.addProperty("is_selected", true)
+            hideActionEdit()
+
+            adapter.onClickItem = {
+                try {
+                    val isSelected = it.get("is_selected").asBoolean
+                    it.addProperty("is_selected", !isSelected)
+                } catch (e: Exception) {
+                    it.addProperty("is_selected", true)
+                }
+                adapter.notifyDataSetChanged()
+                hideActionEdit()
+            }
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -69,6 +104,8 @@ class ViewRecordsFragment : Fragment() {
         if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
             val model = data.getSerializableExtra("model") as Model
             act.model.value = model
+            Log.d("AAA", "22222" + act.model.value!!.getRecordArray().toString() )
+
         }
     }
 
@@ -78,8 +115,63 @@ class ViewRecordsFragment : Fragment() {
         act.supportActionBar!!.title = act.model.value!!.name
     }
 
-    private fun hideSearchView() {
-        b.layoutSearch.visibility = View.GONE
+    @SuppressLint("SetTextI18n")
+    private fun setUpLayoutAction() {
+        fun cancelAction() {
+            adapter.unSelectAll()
+            b.layoutActionRecords.root.visibility = View.GONE
+            setClickRecord()
+        }
+        val binding = b.layoutActionRecords
+
+        binding.actionSelectAll.setOnClickListener {
+            adapter.selectAll()
+        }
+        binding.actionDelete.setOnClickListener {
+            val recordsSelected = adapter.getRecordsSeleted()
+            if (recordsSelected.isEmpty()) {
+               return@setOnClickListener
+            }
+
+            DialogConfirm(act)
+                .setTitle("Delete")
+                .setMess("Delete ${recordsSelected.size} record?")
+                .setTextBtnOk("Delete")
+                .setTextBtnCancel("Cancel")
+                .setBtnOkClick {
+                    recordsSelected.forEach {
+                        val model = act.model.value!!
+                        model.deleteRecord(it)
+                        act.model.value = model
+                        ModelDB.update(model)
+                        cancelAction()
+                    }
+                    it.cancel()
+                }
+                .setBtnCancelClick {
+                    it.cancel()
+                }.show()
+        }
+        binding.actionEdit.setOnClickListener {
+            // only one record can be edit
+            val intent = Intent(context, ViewDetailRecordActivity::class.java)
+            val record = adapter.getRecordsSeleted()[0].asJsonObject
+            record.remove("is_selected")
+            cancelAction()
+
+            intent.putExtra("recordString", record.toString())
+            intent.putExtra("model", act.model.value)
+            intent.action = ViewDetailRecordActivity.ACTION_EDIT_RECORD
+
+            startActivityForResult(intent, 123)
+        }
+        binding.actionCancel.setOnClickListener {
+           cancelAction()
+        }
     }
 
+    private fun hideView() {
+        b.layoutSearch.visibility = View.GONE
+        b.layoutActionRecords.root.visibility = View.GONE
+    }
 }

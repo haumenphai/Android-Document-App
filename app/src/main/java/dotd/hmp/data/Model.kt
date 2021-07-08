@@ -48,7 +48,10 @@ class Model: Serializable {
     var jsonFields: String = ""
     var jsonData: String = "[]"
     var sequence: Int = 0
-    var description = ""
+    var description: String = ""
+
+    @Ignore
+    var isSelected = false
 
     constructor()
 
@@ -127,7 +130,12 @@ class Model: Serializable {
         }
     }
 
+    // todo: rename to getRecordList, return List<JsonObjet>
     fun getRecordArray(): com.google.gson.JsonArray = Gson().fromJson(jsonData, JsonArray::class.java)
+
+    fun setRecordList(list: List<JsonObject>) {
+        this.jsonData = Gson().toJson(list)
+    }
 
     fun isRecordValidate(record: JsonObject): Boolean {
         getFieldList().forEach {
