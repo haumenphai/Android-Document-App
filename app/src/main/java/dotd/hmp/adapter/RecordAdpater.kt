@@ -22,38 +22,32 @@ import java.lang.Exception
 class RecordAdpater :
         RecyclerView.Adapter<RecordAdpater.DataModelHolder>() {
 
-    private lateinit var recordList: JsonArray
+    private lateinit var recordList: List<JsonObject>
     private lateinit var model: Model
 
     @JvmName("setModel1")
     fun setModel(model: Model) {
         this.model = model
-        this.recordList = model.getRecordArray()
+        this.recordList = model.getRecordList()
         notifyDataSetChanged()
     }
 
     fun unSelectAll() {
-        recordList.forEach {
-            it.asJsonObject.remove("is_selected")
-        }
+        recordList.forEach { it.remove("is_selected") }
         notifyDataSetChanged()
     }
 
     fun selectAll() {
-        recordList.forEach {
-            it.asJsonObject.addProperty("is_selected", true)
-        }
+        recordList.forEach { it.addProperty("is_selected", true) }
         notifyDataSetChanged()
     }
 
     fun getRecordsSeleted(): List<JsonObject> {
          return recordList.filter {
             var isSelect = false
-            try {
-                 isSelect = it.asJsonObject.get("is_selected").asBoolean
-            } catch (e: Exception) {}
+            try { isSelect = it.get("is_selected").asBoolean } catch (e: Exception) {}
             isSelect
-        }.map { it.asJsonObject }.toList()
+         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataModelHolder {
@@ -64,7 +58,7 @@ class RecordAdpater :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: DataModelHolder, position: Int) {
         val b = holder.b
-        val record = recordList[position].asJsonObject
+        val record = recordList[position]
         b.tvSequence.text = "#${position+1}"
 
         try {
@@ -110,7 +104,7 @@ class RecordAdpater :
 
 
 
-    override fun getItemCount(): Int = recordList.size()
+    override fun getItemCount(): Int = recordList.size
 
     lateinit var onClickItem: (record: JsonObject) -> Unit
     lateinit var onLongClickItem: (record: JsonObject) -> Unit
@@ -119,10 +113,10 @@ class RecordAdpater :
         val b = ItemDataModelBinding.bind(itemView)
         init {
             b.background.setOnClickListener {
-                onClickItem(recordList[layoutPosition].asJsonObject)
+                onClickItem(recordList[layoutPosition])
             }
             b.background.setOnLongClickListener {
-                onLongClickItem(recordList[layoutPosition].asJsonObject)
+                onLongClickItem(recordList[layoutPosition])
                 true
             }
         }

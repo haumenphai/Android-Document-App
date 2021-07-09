@@ -1,6 +1,7 @@
 package dotd.hmp.data
 
 import android.graphics.Color
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -90,21 +91,19 @@ class Model: Serializable {
             throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
         }
         insertDefaultField(record)
-
-        val jsonArray = getRecordArray()
-        jsonArray.add(record)
-        jsonData = jsonArray.toString()
+        val recordList = getRecordList()
+        recordList.add(record)
+        jsonData = recordList.toString()
     }
 
     fun deleteRecord(record: JsonObject) {
-        val id = record["id"].asJsonObject["value"].asString
-        val recordArr = getRecordArray()
-
-        for (r in recordArr) {
-            val id2 = r.asJsonObject["id"].asJsonObject["value"].asString
+        val id = record.getValueOfField("id")
+        val recordList = getRecordList()
+        for (r in recordList) {
+            val id2 = r.getValueOfField("id")
             if (id == id2) {
-                recordArr.remove(r)
-                jsonData = recordArr.toString()
+                recordList.remove(r)
+                jsonData = recordList.toString()
                 break
             }
         }
@@ -115,23 +114,28 @@ class Model: Serializable {
             throw Exception("Exception when update new record, jsonOject not enough field when compared to fieldList of Model")
         }
 
-        val id = record["id"].asJsonObject["value"].asString
-        val recordArr = getRecordArray()
+        val id = record.getValueOfField("id")
+        val recordList = getRecordList()
 
-        for ((i, v) in recordArr.withIndex()) {
-            val id2 = v.asJsonObject["id"].asJsonObject["value"].asString
+        for ((i, v) in recordList.withIndex()) {
+            val id2 = v.getValueOfField("id")
             if (id == id2) {
                 insertUpdatetime(record)
-                recordArr.set(i, record)
+                recordList.set(i, record)
 
-                jsonData = recordArr.toString()
+                jsonData = recordList.toString()
                 break
             }
         }
     }
 
-    // todo: rename to getRecordList, return List<JsonObjet>
-    fun getRecordArray(): com.google.gson.JsonArray = Gson().fromJson(jsonData, JsonArray::class.java)
+    fun deleteAllRecord() {
+        jsonData = "[]"
+    }
+
+    fun getRecordList(): MutableList<JsonObject> {
+        return Gson().fromJson(jsonData, Array<JsonObject>::class.java).asList().toMutableList()
+    }
 
     fun setRecordList(list: List<JsonObject>) {
         this.jsonData = Gson().toJson(list)
@@ -149,21 +153,26 @@ class Model: Serializable {
     }
 
     fun sortByField(fieldName: String): Model {
-        val jsonArr = getRecordArray()
-        if (!hasField(fieldName) || jsonArr.size() == 0) {
+        val recordList = getRecordList()
+        if (recordList.isEmpty()) return this
+        if (!hasField(fieldName)) {
+            Log.e("Model", "Error at: [Model.kt, sortByField()]: Can't sort records, " +
+                      "field name: \"$fieldName\" not exist.")
             return this
         }
         getFieldList().forEach {
-            if (!it.isFieldCanSorted()) return this
+            if (!it.isFieldCanSorted()) {
+                Log.e("Model", "Error at: [Model.kt, sortByField()]: ${it} is not field type can sort.")
+                return this
+            }
         }
 
         val model = this.clone()
-        val jsonData = getRecordArray().sortedWith(compareBy(
-            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString},
-            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString}
-        )).toString()
-        model.jsonData = jsonData
-
+        val listSorted = recordList.sortedWith(compareBy(
+            {it.getValueOfField(fieldName)},
+            {it.getValueOfField(fieldName)}
+        ))
+        model.jsonData = listSorted.toString()
         return model
     }
 
@@ -201,7 +210,7 @@ class Model: Serializable {
 
         record.add("id", id)
         record.add("create_time", createTime)
-        insertUpdatetime(record)
+        record.add("update_time", createTime)
     }
 
     private fun insertUpdatetime(record: JsonObject) {
@@ -235,6 +244,9 @@ class Field(var fieldName: String, var fieldType: FieldType) {
 val defaultField = listOf("id", "create_time", "update_time")
 fun String.isDefaultField() = this in defaultField
 
+fun JsonObject.getValueOfField(fieldName: String): String {
+    return this.get(fieldName).asJsonObject.get("value").asString
+}
 
 fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
     val jsonObj = this.deepCopy()

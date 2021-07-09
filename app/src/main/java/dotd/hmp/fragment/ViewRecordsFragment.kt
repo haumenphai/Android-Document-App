@@ -104,8 +104,6 @@ class ViewRecordsFragment : Fragment() {
         if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
             val model = data.getSerializableExtra("model") as Model
             act.model.value = model
-            Log.d("AAA", "22222" + act.model.value!!.getRecordArray().toString() )
-
         }
     }
 
