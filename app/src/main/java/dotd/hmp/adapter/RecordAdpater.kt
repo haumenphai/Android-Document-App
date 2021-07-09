@@ -12,6 +12,7 @@ import com.google.gson.JsonObject
 import dotd.hmp.R
 import dotd.hmp.data.FieldType
 import dotd.hmp.data.Model
+import dotd.hmp.data.getValueOfField
 import dotd.hmp.data.isDefaultField
 import dotd.hmp.databinding.ItemDataModelBinding
 import dotd.hmp.hepler.DateTimeHelper
@@ -81,7 +82,7 @@ class RecordAdpater :
 
 
             val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
-            val value =  record.get(fieldName).asJsonObject.get("value").asString
+            val value =  record.getValueOfField(fieldName)
             when (fieldType) {
                 FieldType.TEXT.toString(), FieldType.NUMBER.toString() -> {
                     text += """

@@ -1,5 +1,6 @@
 package dotd.hmp.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import dotd.hmp.R
 import dotd.hmp.data.FieldType
 import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
+import dotd.hmp.data.getValueOfField
 import dotd.hmp.databinding.ActivityViewDetailRecordBinding
 import dotd.hmp.databinding.FieldDatetimeBinding
 import dotd.hmp.databinding.FieldNumberBinding
@@ -94,6 +96,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun setUpLayoutEditRecord() {
         model.getFieldList().forEach { field ->
             val jsonObj = record.get(field.fieldName).asJsonObject
@@ -103,7 +106,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
                     val view = LayoutInflater.from(this).inflate(R.layout.field_number, null)
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
-                    binding.editContent.setText(record.get(field.fieldName).asJsonObject.get("value").asString)
+                    binding.editContent.setText(record.getValueOfField(field.fieldName))
                     binding.editContent.addTextChangedListener { text ->
                         jsonObj.addProperty("value", text.toString())
                     }
@@ -113,7 +116,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
                     val view = LayoutInflater.from(this).inflate(R.layout.field_text, null)
                     val binding = FieldNumberBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
-                    binding.editContent.setText(record.get(field.fieldName).asJsonObject.get("value").asString)
+                    binding.editContent.setText(record.getValueOfField(field.fieldName))
                     binding.editContent.addTextChangedListener { text ->
                         jsonObj.addProperty("value", text.toString())
                     }
@@ -123,7 +126,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
                     val view = LayoutInflater.from(this).inflate(R.layout.field_datetime, null)
                     val binding = FieldDatetimeBinding.bind(view)
                     binding.tvFieldName.text = "${field.fieldName}:"
-                    binding.editDatePreview.setText(DateTimeHelper.timestampToDatetimeString(record.get(field.fieldName).asJsonObject.get("value").asLong))
+                    binding.editDatePreview.setText(DateTimeHelper.timestampToDatetimeString(record.getValueOfField(field.fieldName).toLong()))
                     binding.btnPickDateTime.setOnClickListener {
                         DialogPickDatetime.show(it.context) { dateTime ->
                             binding.editDatePreview.setText(dateTime.format())
@@ -145,7 +148,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
             if (fieldName == "id" || fieldName == "is_selected") continue
 
             val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
-            val value =  record.get(fieldName).asJsonObject.get("value").asString
+            val value =  record.getValueOfField(fieldName)
 
             when (fieldType) {
                 FieldType.TEXT.toString(), FieldType.NUMBER.toString() -> {

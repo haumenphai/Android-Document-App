@@ -248,6 +248,10 @@ fun JsonObject.getValueOfField(fieldName: String): String {
     return this.get(fieldName).asJsonObject.get("value").asString
 }
 
+fun JsonObject.getFieldType(fieldName: String): String {
+    return this.get(fieldName).asJsonObject.get("fieldType").asString
+}
+
 fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
     val jsonObj = this.deepCopy()
     jsonObj[fieldName].asJsonObject.addProperty("value", value)
