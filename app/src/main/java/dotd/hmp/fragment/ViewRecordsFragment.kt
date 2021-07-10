@@ -4,15 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dotd.hmp.R
 import dotd.hmp.activities.ViewRecordsActivity
 import dotd.hmp.activities.ViewDetailRecordActivity
-import dotd.hmp.adapter.RecordAdpater
+import dotd.hmp.adapter.RecordAdapater
 import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
@@ -22,7 +20,7 @@ import java.lang.Exception
 class ViewRecordsFragment : Fragment() {
     private lateinit var b: FragmentViewRecordsBinding
     private val act: ViewRecordsActivity by lazy { activity as ViewRecordsActivity }
-    private val adapter: RecordAdpater = RecordAdpater()
+    private val adapter: RecordAdapater = RecordAdapater()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -2,26 +2,21 @@ package dotd.hmp.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dotd.hmp.R
-import dotd.hmp.data.FieldType
-import dotd.hmp.data.Model
-import dotd.hmp.data.getValueOfField
-import dotd.hmp.data.isDefaultField
+import dotd.hmp.data.*
 import dotd.hmp.databinding.ItemDataModelBinding
 import dotd.hmp.hepler.DateTimeHelper
 import dotd.hmp.hepler.toFieldNameShow
 import dotd.hmp.hepler.setTextHTML
 import java.lang.Exception
 
-class RecordAdpater :
-        RecyclerView.Adapter<RecordAdpater.DataModelHolder>() {
+class RecordAdapater :
+        RecyclerView.Adapter<RecordAdapater.DataModelHolder>() {
 
     private lateinit var recordList: List<JsonObject>
     private lateinit var model: Model
@@ -81,7 +76,7 @@ class RecordAdpater :
             if (fieldName.isDefaultField() || fieldName == "is_selected") continue
 
 
-            val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
+            val fieldType = record.getFieldType(fieldName)
             val value =  record.getValueOfField(fieldName)
             when (fieldType) {
                 FieldType.TEXT.toString(), FieldType.NUMBER.toString() -> {

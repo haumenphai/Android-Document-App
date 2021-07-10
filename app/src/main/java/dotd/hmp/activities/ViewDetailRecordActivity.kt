@@ -13,10 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dotd.hmp.R
-import dotd.hmp.data.FieldType
-import dotd.hmp.data.Model
-import dotd.hmp.data.ModelDB
-import dotd.hmp.data.getValueOfField
+import dotd.hmp.data.*
 import dotd.hmp.databinding.ActivityViewDetailRecordBinding
 import dotd.hmp.databinding.FieldDatetimeBinding
 import dotd.hmp.databinding.FieldNumberBinding
@@ -147,7 +144,7 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         for (fieldName in fieldNames) {
             if (fieldName == "id" || fieldName == "is_selected") continue
 
-            val fieldType = record.get(fieldName).asJsonObject.get("fieldType").asString
+            val fieldType = record.getFieldType(fieldName)
             val value =  record.getValueOfField(fieldName)
 
             when (fieldType) {

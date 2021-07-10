@@ -17,6 +17,7 @@ import  dotd.hmp.databinding.LayoutOneFieldBinding
 import dotd.hmp.dialog.DialogConfirmCreateModel
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.title
+import dotd.hmp.hepler.toFieldNameShow
 import dotd.hmp.hepler.toFieldNameStore
 
 class CreateModelAcivity : AppCompatActivity() {
@@ -49,7 +50,7 @@ class CreateModelAcivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
                 if (it.fieldName.isDefaultField()) {
-                    showMess("Model musn't contain default field: $defaultField\n\nPlease change \"${it.fieldName}\" to another name!")
+                    showMess("Model mustn't contain default field: $defaultField\n\nPlease change \"${it.fieldName}\" to another name!")
                     return@setOnClickListener
                 }
             }
@@ -122,13 +123,8 @@ class CreateModelAcivity : AppCompatActivity() {
     private fun getTextFieldsConfirm(): String {
         var textContent = ""
         fieldList.forEach {
-            textContent += "${it.fieldName}: ${it.fieldType.toString().title()}\n"
+            textContent += "${it.fieldName.toFieldNameShow()}: ${it.fieldType.toString().title()}\n"
         }
         return textContent
     }
-
-    //   b2.editFieldName.inputType = InputType.TYPE_CLASS_TEXT +
-    //                                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-
-    //                         b2.editFieldName.inputType = InputType.TYPE_CLASS_NUMBER
 }

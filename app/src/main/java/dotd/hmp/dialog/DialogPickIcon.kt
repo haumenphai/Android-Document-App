@@ -39,6 +39,7 @@ class DialogPickIcon(val context: Context) {
     fun setItemIconClick(callBack: (itemIcon: ItemIcon) -> Unit): DialogPickIcon {
         adapter.onItemClick = {
             callBack(it)
+            cancel()
         }
         return this
     }

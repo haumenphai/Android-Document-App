@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="15dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:id="@+id/background"
-    android:background="@drawable/rippler_blue_white"
-    >
+    android:background="@drawable/rippler_blue_white">
 
     <ImageView
         android:id="@+id/icon"
@@ -15,6 +15,7 @@
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/rippler_blue_white"
+        tools:src="@drawable/ic_default_model_icon"
         />
     <TextView
         android:id="@+id/model_name"

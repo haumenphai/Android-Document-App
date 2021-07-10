@@ -66,7 +66,7 @@
 
     <include
         android:id="@+id/layout_action_records"
-        layout="@layout/layout_action_record"
+        layout="@layout/layout_action_edit_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

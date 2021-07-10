@@ -157,12 +157,12 @@ class Model: Serializable {
         if (recordList.isEmpty()) return this
         if (!hasField(fieldName)) {
             Log.e("Model", "Error at: [Model.kt, sortByField()]: Can't sort records, " +
-                      "field name: \"$fieldName\" not exist.")
+                      "field name: \"$fieldName\" doesn't not exist.")
             return this
         }
         getFieldList().forEach {
             if (!it.isFieldCanSorted()) {
-                Log.e("Model", "Error at: [Model.kt, sortByField()]: ${it} is not field type can sort.")
+                Log.e("Model", "Error at: [Model.kt, sortByField()]: $it is not field type can sort.")
                 return this
             }
         }
