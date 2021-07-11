@@ -11,15 +11,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dotd.hmp.R
-import dotd.hmp.data.Field
-import dotd.hmp.data.FieldType
-import dotd.hmp.data.Model
-import dotd.hmp.data.ModelDB
+import dotd.hmp.data.*
 import dotd.hmp.databinding.ActivityCreateModelBinding
 import  dotd.hmp.databinding.LayoutOneFieldBinding
 import dotd.hmp.dialog.DialogConfirmCreateModel
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.title
+import dotd.hmp.hepler.toFieldNameShow
+import dotd.hmp.hepler.toFieldNameStore
 
 class CreateModelAcivity : AppCompatActivity() {
     private val b by lazy { ActivityCreateModelBinding.inflate(layoutInflater) }
@@ -50,6 +49,10 @@ class CreateModelAcivity : AppCompatActivity() {
                     showMess("Field Name mustn't be empty")
                     return@setOnClickListener
                 }
+                if (it.fieldName.isDefaultField()) {
+                    showMess("Model mustn't contain default field: $defaultField\n\nPlease change \"${it.fieldName}\" to another name!")
+                    return@setOnClickListener
+                }
             }
             DialogConfirmCreateModel(this).apply {
                 b.tvContent.text = getTextFieldsConfirm()
@@ -74,7 +77,6 @@ class CreateModelAcivity : AppCompatActivity() {
             supportActionBar!!.title = "Create $modelName... ($it field)"
         }
     }
-
 
 
     private fun addNewLayoutOneFieldToRootLayout() {
@@ -111,7 +113,7 @@ class CreateModelAcivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         b2.editFieldName.addTextChangedListener {
-            field.fieldName = it.toString()
+            field.fieldName = it.toString().toFieldNameStore()
         }
 
     }
@@ -121,13 +123,8 @@ class CreateModelAcivity : AppCompatActivity() {
     private fun getTextFieldsConfirm(): String {
         var textContent = ""
         fieldList.forEach {
-            textContent += "${it.fieldName}: ${it.fieldType.toString().title()}\n"
+            textContent += "${it.fieldName.toFieldNameShow()}: ${it.fieldType.toString().title()}\n"
         }
         return textContent
     }
-
-    //   b2.editFieldName.inputType = InputType.TYPE_CLASS_TEXT +
-    //                                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-
-    //                         b2.editFieldName.inputType = InputType.TYPE_CLASS_NUMBER
 }

@@ -17,10 +17,10 @@ interface ModelDao {
     @Query("DELETE FROM model")
     fun deleteAll()
 
-    @Query("SELECT * FROM model ORDER BY sequence")
+    @Query("SELECT * FROM model")
     fun getList(): List<Model>
 
-    @Query("SELECT * FROM model ORDER BY sequence")
+    @Query("SELECT * FROM model")
     fun getLiveData(): LiveData<List<Model>>
 
 }

@@ -51,19 +51,8 @@ class ExampleUnitTest {
 
     @Test
     fun test2() {
-        val json = JsonObject()
-        val jsonArray = JsonArray()
-        jsonArray.add("ddd")
-
-        json.add("data", jsonArray)
-
-
-
-
-//        println(j)
-
-        println(jsonArray)
-        println(json)
+        val list = listOf(Field("name", FieldType.TEXT))
+        println(list.toString())
     }
 
 

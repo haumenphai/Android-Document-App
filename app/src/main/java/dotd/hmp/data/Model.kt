@@ -1,6 +1,7 @@
 package dotd.hmp.data
 
 import android.graphics.Color
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -8,7 +9,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dotd.hmp.R
-import org.json.JSONObject
 import java.io.Serializable
 import java.lang.Exception
 import java.util.*
@@ -24,7 +24,7 @@ jsonData:
        },
        "createTime": {
             "fieldType": "DATETIME",
-            "value": 12031200222
+            "value": "12031200222"
        },
        "name": {
             "fieldType": "TEXT",
@@ -32,11 +32,12 @@ jsonData:
         },
         "age": {
             "fieldType": "NUMBER",
-            "value": 20
+            "value": "20"
         }
     },
 ]
-
+All field value store as String,
+Not use org.json.JSONObject
  */
 
 @Entity
@@ -48,7 +49,10 @@ class Model: Serializable {
     var jsonFields: String = ""
     var jsonData: String = "[]"
     var sequence: Int = 0
-    var description = ""
+    var description: String = ""
+
+    @Ignore
+    var isSelected = false
 
     constructor()
 
@@ -60,67 +64,115 @@ class Model: Serializable {
 
     companion object {
         val itemAddNewModel by lazy {
-                Model("Add", Color.RED).apply {
+                Model("Add", R.drawable.ic_baseline_add_24).apply {
                     description = "add new model"
-                    icon = R.drawable.ic_baseline_add_24
+            }
+        }
+    }
+    fun isItemAddNewModel(): Boolean = this == itemAddNewModel
+
+
+    fun setFieldList(list: MutableList<Field>) {
+        list.forEach { field ->
+            if (field.fieldName.isDefaultField()) {
+                var defaultFieldName = ""
+                defaultField.forEach { defaultFieldName += "$it, " }
+                throw Exception("Field name mustn't be the same as default field name: (${field.fieldName}), default field: [$defaultFieldName]")
+            }
+        }
+        this.jsonFields = Gson().toJson(list)
+    }
+
+    // field list not contain default field
+    fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
+
+    fun addRecord(record: JsonObject) {
+        if (!isRecordValidate(record)) {
+            throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
+        }
+        insertDefaultField(record)
+        val recordList = getRecordList()
+        recordList.add(record)
+        jsonData = recordList.toString()
+    }
+
+    fun deleteRecord(record: JsonObject) {
+        val id = record.getValueOfField("id")
+        val recordList = getRecordList()
+        for (r in recordList) {
+            val id2 = r.getValueOfField("id")
+            if (id == id2) {
+                recordList.remove(r)
+                jsonData = recordList.toString()
+                break
             }
         }
     }
 
-    fun setFieldList(list: MutableList<Field>) {
-        this.jsonFields = Gson().toJson(list)
-    }
-
-    fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
-
-    fun addNewRecord(jsonObj: org.json.JSONObject) {
-        if (!jsonObj.isJsonObjRecordValidate()) {
-            throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
+    fun updateRecord(record: JsonObject) {
+        if (!isRecordValidate(record)) {
+            throw Exception("Exception when update new record, jsonOject not enough field when compared to fieldList of Model")
         }
-        insertDefaultField(jsonObj)
 
-        val jsonArray = getJsonArray()
-        jsonArray.add(Gson().fromJson(jsonObj.toString(), JsonObject::class.java))
-        jsonData = jsonArray.toString()
+        val id = record.getValueOfField("id")
+        val recordList = getRecordList()
+
+        for ((i, v) in recordList.withIndex()) {
+            val id2 = v.getValueOfField("id")
+            if (id == id2) {
+                insertUpdatetime(record)
+                recordList.set(i, record)
+
+                jsonData = recordList.toString()
+                break
+            }
+        }
     }
 
-    fun getJsonArray(): com.google.gson.JsonArray = Gson().fromJson(jsonData, JsonArray::class.java)
+    fun deleteAllRecord() {
+        jsonData = "[]"
+    }
 
-    private fun org.json.JSONObject.isJsonObjRecordValidate(): Boolean {
+    fun getRecordList(): MutableList<JsonObject> {
+        return Gson().fromJson(jsonData, Array<JsonObject>::class.java).asList().toMutableList()
+    }
+
+    fun setRecordList(list: List<JsonObject>) {
+        this.jsonData = Gson().toJson(list)
+    }
+
+    fun isRecordValidate(record: JsonObject): Boolean {
         getFieldList().forEach {
-            if (!this.has(it.fieldName)) {
+            // record does not contain field defined in model
+            if (!record.has(it.fieldName)) {
                 return false
+                // not check field has [fieldType, value] because performance
             }
         }
         return true
     }
 
-    private fun insertDefaultField(jsonObj: JSONObject) {
-        val id = JSONObject()
-        id.put("fieldType", FieldType.TEXT)
-        id.put("value", UUID.randomUUID().toString())
-
-        val createTime = JSONObject()
-        createTime.put("fieldType", FieldType.DATETIME)
-        createTime.put("value", System.currentTimeMillis())
-
-        jsonObj.put("id", id)
-        jsonObj.put("createTime", createTime)
-    }
-
     fun sortByField(fieldName: String): Model {
-        val jsonArr = getJsonArray()
-        if (!hasField(fieldName) || jsonArr.size() == 0) {
+        val recordList = getRecordList()
+        if (recordList.isEmpty()) return this
+        if (!hasField(fieldName)) {
+            Log.e("Model", "Error at: [Model.kt, sortByField()]: Can't sort records, " +
+                      "field name: \"$fieldName\" doesn't not exist.")
             return this
+        }
+        getFieldList().forEach {
+            if (!it.isFieldCanSorted()) {
+                Log.e("Model", "Error at: [Model.kt, sortByField()]: $it is not field type can sort.")
+                return this
+            }
         }
 
         val model = this.clone()
-        val jsonData = getJsonArray().sortedWith(compareBy(
-            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString},
-            {it.asJsonObject.get(fieldName).asJsonObject.get("value").asString}
-        )).toString()
-        model.jsonData = jsonData
-
+        val listSorted = recordList.sortedWith(compareBy(
+            {it.getValueOfField(fieldName)},
+            {it.getValueOfField(fieldName)}
+        ))
+        model.jsonData = listSorted.toString()
         return model
     }
 
@@ -131,8 +183,6 @@ class Model: Serializable {
         }
         return false
     }
-
-    fun isItemAddNewModel(): Boolean = itemAddNewModel == this
 
     fun hasIcon(): Boolean = icon != null
 
@@ -148,6 +198,27 @@ class Model: Serializable {
         return model
     }
 
+
+    private fun insertDefaultField(record: JsonObject) {
+        val id = JsonObject()
+        id.addProperty("fieldType", FieldType.TEXT.toString())
+        id.addProperty("value", UUID.randomUUID().toString())
+
+        val createTime = JsonObject()
+        createTime.addProperty("fieldType", FieldType.DATETIME.toString())
+        createTime.addProperty("value", System.currentTimeMillis().toString())
+
+        record.add("id", id)
+        record.add("create_time", createTime)
+        record.add("update_time", createTime)
+    }
+
+    private fun insertUpdatetime(record: JsonObject) {
+        val updateTime = JsonObject()
+        updateTime.addProperty("fieldType", FieldType.DATETIME.toString())
+        updateTime.addProperty("value", System.currentTimeMillis().toString())
+        record.add("update_time", updateTime)
+    }
 }
 
 enum class FieldType {
@@ -155,9 +226,34 @@ enum class FieldType {
 }
 
 class Field(var fieldName: String, var fieldType: FieldType) {
+
     fun isValid(): Boolean = fieldName.trim() != ""
+
+    fun isFieldCanSorted(): Boolean {
+        return this.fieldType in arrayOf(
+            FieldType.TEXT,
+            FieldType.NUMBER,
+            FieldType.DATETIME
+        )
+    }
+
+    override fun toString(): String = "($fieldName: $fieldType)"
+
 }
 
-val defaultField = arrayOf("id", "createTime")
+val defaultField = listOf("id", "create_time", "update_time")
 fun String.isDefaultField() = this in defaultField
 
+fun JsonObject.getValueOfField(fieldName: String): String {
+    return this.get(fieldName).asJsonObject.get("value").asString
+}
+
+fun JsonObject.getFieldType(fieldName: String): String {
+    return this.get(fieldName).asJsonObject.get("fieldType").asString
+}
+
+fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
+    val jsonObj = this.deepCopy()
+    jsonObj[fieldName].asJsonObject.addProperty("value", value)
+    return jsonObj
+}

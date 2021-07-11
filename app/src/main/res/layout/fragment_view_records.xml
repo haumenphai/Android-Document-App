@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ViewDataModelFragment"
     android:background="@color/white"
-    >
+    tools:context=".fragment.ViewRecordsFragment">
+    <!--todo: Check theme in layout, textview cannot visiable-->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="#6A3D3D"
-        >
+        android:background="#6A3D3D">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/app_name"
-            app:titleTextColor="@color/white"
-            />
+            app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tv_no_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="no record"
-        android:layout_centerInParent="true"
-        />
 
     <RelativeLayout
         android:id="@+id/layout_search"
@@ -47,11 +38,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_edit_classic"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
             android:hint="search..."
-            android:textSize="15sp"
-            />
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/img_search_close"
@@ -68,11 +58,27 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/appbar_layout"
-        tools:listitem="@layout/item_data_model"
+        android:layout_above="@id/layout_action_records"
         tools:itemCount="2"
+        tools:listitem="@layout/item_data_model" />
+
+    <include
+        android:id="@+id/layout_action_records"
+        layout="@layout/layout_action_edit_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         />
 
+    <TextView
+        android:id="@+id/tv_no_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="no record"
+        android:textColor="@color/text_color_hint"
+        android:textSize="15sp" />
 
 </RelativeLayout>
