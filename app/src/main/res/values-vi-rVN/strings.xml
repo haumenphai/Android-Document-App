@@ -48,6 +48,12 @@
     <string name="hours_ago">giờ trước</string>
     <string name="minutes_ago">phút trước</string>
     <string name="add_new_model">tạo mô hình mới</string>
-    <string name="default_field_create_time">ngày tạo</string>
-    <string name="default_field_last_update_time">chỉnh sửa lần cuối</string>
+    <string name="default_field_create_time">ngày_tạo</string>
+    <string name="default_field_last_update_time">chỉnh_sửa_lần_cuối</string>
+    <string name="name">tên</string>
+    <string name="age">tuổi</string>
+    <string name="student">Học sinh</string>
+    <string name="name_demo1">Nguyễn Thị Lấp Lánh Ánh Sao Mai</string>
+    <string name="name_demo2">Hoàng Văn Tú</string>
+    <string name="name_demo3">Lê Công Luyện</string>
 </resources>

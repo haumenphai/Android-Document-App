@@ -51,4 +51,10 @@
     <string name="add_new_model">add new model</string>
     <string name="default_field_create_time">create_time</string>
     <string name="default_field_last_update_time">last_update_time</string>
+    <string name="name">name</string>
+    <string name="age">age</string>
+    <string name="student">Student</string>
+    <string name="name_demo1">Peter</string>
+    <string name="name_demo2">Atali</string>
+    <string name="name_demo3">Cubet</string>
 </resources>
