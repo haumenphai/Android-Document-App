@@ -37,6 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:ellipsize="end"
         android:enabled="false"
+        android:layout_marginEnd="5dp"
         />
 
     <View
@@ -54,9 +55,11 @@
         android:id="@+id/btn_pick_date_time"
         android:layout_width="70dp"
         android:layout_height="40dp"
+        android:background="@drawable/bg_btn_classic"
         android:text="Pick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

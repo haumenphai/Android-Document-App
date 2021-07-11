@@ -7,7 +7,6 @@
     tools:context=".activities.CreateModelAcivity"
     >
 
-<!--    Todo: remove icon test-->
     <ImageView
         android:id="@+id/img_icon"
         android:layout_width="wrap_content"
@@ -42,20 +41,24 @@
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
         >
         <Button
             android:id="@+id/btn_add_new_field"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="add new field"
             android:layout_weight="1"
+            android:background="@drawable/bg_btn_classic"
             />
         <Button
+            android:layout_marginLeft="5dp"
             android:id="@+id/btn_create"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="Create Model"
             android:layout_weight="1"
+            android:background="@drawable/bg_btn_classic"
             />
     </LinearLayout>
 

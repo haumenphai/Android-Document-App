@@ -84,18 +84,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
         adapter.onLongClickItem = {
-            b.layoutActionModels.root.visibility = View.VISIBLE
-            it.isSelected = !it.isSelected
-            hideActionEdit()
-
-            val list = adapter.getList().toMutableList()
-            list.remove(Model.itemAddNewModel)
-            adapter.setList(list)
-
-            adapter.onClickItem = {
+            if (!it.isItemAddNewModel()) {
+                b.layoutActionModels.root.visibility = View.VISIBLE
                 it.isSelected = !it.isSelected
-                adapter.notifyDataSetChanged()
                 hideActionEdit()
+
+                val list = adapter.getList().toMutableList()
+                list.remove(Model.itemAddNewModel)
+                adapter.setList(list)
+
+                adapter.onClickItem = {
+                    it.isSelected = !it.isSelected
+                    adapter.notifyDataSetChanged()
+                    hideActionEdit()
+                }
             }
         }
     }

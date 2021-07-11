@@ -23,16 +23,32 @@ class ViewRecordsActivity : AppCompatActivity() {
         model.value = intent.getSerializableExtra("model") as Model
 
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
             .replace(R.id.container, ViewRecordsFragment())
             .commit()
 
     }
 
-    fun addFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().add(R.id.container, fragment).commit()
+    fun addFragment(fragment: Fragment, nameAddbackStack: String) =
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            .add(R.id.container, fragment)
+            .addToBackStack(nameAddbackStack)
+            .commit()
 
 
     fun removeFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().remove(fragment).commit()
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            .remove(fragment)
+            .commit()
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+
+    }
 }

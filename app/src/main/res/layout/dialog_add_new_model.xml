@@ -3,42 +3,39 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add New Model"
         android:layout_centerHorizontal="true"
+        android:text="Add New Model"
         android:textSize="17sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:id="@+id/layout_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
+
         <TextView
             android:id="@+id/tv_icon"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Icon:"
             android:gravity="center"
-            />
+            android:text="Icon:" />
+
         <ImageView
             android:id="@+id/img_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_toRightOf="@id/tv_icon"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_default_model_icon"
+            android:layout_toRightOf="@id/tv_icon"
             android:background="@drawable/rippler_blue_white"
-            />
+            android:src="@drawable/ic_default_model_icon" />
     </RelativeLayout>
 
 
@@ -46,34 +43,33 @@
         android:id="@+id/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="model name"
-        android:background="@drawable/bg_edit_classic"
         android:layout_below="@id/layout_icon"
         android:layout_marginTop="10dp"
-        android:textSize="15sp"
-        />
+        android:background="@drawable/bg_edit_classic"
+        android:hint="model name"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@id/edittext"
-        android:text="Cancel"
-        android:layout_toLeftOf="@id/btn_ok"
         android:layout_marginTop="10dp"
-        android:inputType="text"
         android:layout_marginRight="5dp"
-        />
+        android:layout_toLeftOf="@id/btn_ok"
+        android:background="@drawable/bg_btn_classic"
+        android:inputType="text"
+        android:text="Cancel" />
 
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@id/edittext"
-        android:text="OK"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_classic"
         android:inputType="text"
-        />
+        android:text="OK" />
 
 </RelativeLayout>

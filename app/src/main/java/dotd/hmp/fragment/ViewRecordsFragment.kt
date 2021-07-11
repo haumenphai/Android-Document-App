@@ -46,7 +46,7 @@ class ViewRecordsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_add -> {
-                act.addFragment(AddRecordFragment())
+                act.addFragment(AddRecordFragment(), "add_record_fragment")
             }
         }
         return super.onOptionsItemSelected(item)

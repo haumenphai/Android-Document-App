@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="330dp"
     android:layout_height="wrap_content"
-    android:background="#D6D6D6"
     android:layout_gravity="center"
     android:padding="8dp"
     >
@@ -81,13 +80,15 @@
         <Button
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_btn_classic"
             android:text="Save"
             android:layout_alignParentRight="true"
             />
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_btn_classic"
             android:id="@+id/btn_cancel"
             android:layout_toLeftOf="@id/btn_save"
             android:layout_marginRight="5dp"

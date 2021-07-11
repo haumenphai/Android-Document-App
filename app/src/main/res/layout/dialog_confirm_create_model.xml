@@ -53,7 +53,8 @@
     <Button
         android:id="@+id/btn_create"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:background="@drawable/bg_btn_classic"
         android:text="Create"
         android:layout_alignParentRight="true"
         android:layout_below="@id/scrollView"
@@ -61,7 +62,8 @@
     <Button
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:background="@drawable/bg_btn_classic"
         android:text="back"
         android:layout_toLeftOf="@id/btn_create"
         android:layout_below="@id/scrollView"
