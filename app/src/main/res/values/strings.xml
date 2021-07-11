@@ -1,5 +1,54 @@
 <resources>
     <string name="app_name">document-app</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_new_field">add new field</string>
+    <string name="create_model">Create Model</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="Save">Save</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Add_New_Model">Add New Model</string>
+    <string name="model_name">model name</string>
+    <string name="OK" translatable="false">OK</string>
+    <string name="Title">Title</string>
+    <string name="This_is_mess">This is mess</string>
+    <string name="Confirm">Confirm</string>
+    <string name="Create">Create</string>
+    <string name="Back">back</string>
+    <string name="Edit_Model">Edit Model</string>
+    <string name="name_1">name:</string>
+    <string name="content">content</string>
+    <string name="datetime_1">Datetime:</string>
+    <string name="pick">Pick</string>
+    <string name="input_number">input number</string>
+    <string name="input_text">input text</string>
+    <string name="create_record">create record</string>
+    <string name="search_1">search...</string>
+    <string name="no_record">no record</string>
+    <string name="select_all">Select all</string>
+    <string name="field_name">field name</string>
+    <string name="field_name_must_not_be_empty">Field Name mustn\'t be empty</string>
+    <string name="model_must_not_contain___">Model mustn\'t contain default field</string>
+    <string name="please_change">Please change</string>
+    <string name="to_other_name">to another name</string>
+    <string name="field">field</string>
+    <string name="text">Text</string>
+    <string name="number">Number</string>
+    <string name="datetime">Datetime</string>
+    <string name="record">Record</string>
+    <string name="delete_model">Delete model</string>
+    <string name="model">model</string>
+    <string name="delete_record">Delete Record</string>
+    <string name="add">Add</string>
+    <string name="model_name_must_not_be_empty">Model name mustn\'t be empty!</string>
+    <string name="name_must_not_be_empty">Name mustn\'t be empty!</string>
+    <string name="now">now</string>
+    <string name="years_ago">years ago</string>
+    <string name="months_ago">months ago</string>
+    <string name="days_ago">days ago</string>
+    <string name="hours_ago">hours ago</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="add_new_model">add new model</string>
+    <string name="default_field_create_time">create_time</string>
+    <string name="default_field_last_update_time">last_update_time</string>
 </resources>

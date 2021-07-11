@@ -1,5 +1,6 @@
 package dotd.hmp.hepler
 
+import dotd.hmp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,13 +86,12 @@ object DateTimeHelper {
      * get relative time has passed
      */
     fun getTimeHasPassed(timestamp: Long, current: Long = System.currentTimeMillis()): String {
-        // todo: replace mess = getString for translate
-        val now = "now"
-        val yearsAgo = "years ago"
-        val monthsAgo = "months ago"
-        val daysAgo = "days ago"
-        val hoursAgo = "hours ago"
-        val minutesAgo = "minutes ago"
+        val now = getStr(R.string.now)
+        val yearsAgo = getStr(R.string.years_ago)
+        val monthsAgo = getStr(R.string.months_ago)
+        val daysAgo = getStr(R.string.days_ago)
+        val hoursAgo = getStr(R.string.hours_ago)
+        val minutesAgo = getStr(R.string.minutes_ago)
 
         val dateTime = milisecondToDatetime(current - timestamp)
 

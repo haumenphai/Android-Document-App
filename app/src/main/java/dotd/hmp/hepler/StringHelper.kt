@@ -1,5 +1,6 @@
 package dotd.hmp.hepler
 
+import dotd.hmp.MyApplication
 import java.util.*
 
 fun String.title(): String {
@@ -11,3 +12,5 @@ fun String.title(): String {
 
 fun String.toFieldNameShow(): String = this.replace("_", " ")
 fun String.toFieldNameStore(): String = this.replace(" ", "_")
+
+fun getStr(res: Int): String = MyApplication.context.getString(res)

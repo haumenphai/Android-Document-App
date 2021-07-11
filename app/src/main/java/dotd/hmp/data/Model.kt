@@ -8,7 +8,9 @@ import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import dotd.hmp.MyApplication.Companion.context
 import dotd.hmp.R
+import dotd.hmp.hepler.getStr
 import java.io.Serializable
 import java.lang.Exception
 import java.util.*
@@ -64,8 +66,8 @@ class Model: Serializable {
 
     companion object {
         val itemAddNewModel by lazy {
-                Model("Add", R.drawable.ic_baseline_add_24).apply {
-                    description = "add new model"
+                Model(getStr(R.string.add), R.drawable.ic_baseline_add_24).apply {
+                    description = getStr(R.string.add_new_model)
             }
         }
     }
@@ -198,7 +200,6 @@ class Model: Serializable {
         return model
     }
 
-
     private fun insertDefaultField(record: JsonObject) {
         val id = JsonObject()
         id.addProperty("fieldType", FieldType.TEXT.toString())
@@ -209,8 +210,8 @@ class Model: Serializable {
         createTime.addProperty("value", System.currentTimeMillis().toString())
 
         record.add("id", id)
-        record.add("create_time", createTime)
-        record.add("update_time", createTime)
+        record.add(getStr(R.string.default_field_create_time), createTime)
+        record.add(getStr(R.string.default_field_last_update_time), createTime)
     }
 
     private fun insertUpdatetime(record: JsonObject) {
@@ -241,7 +242,7 @@ class Field(var fieldName: String, var fieldType: FieldType) {
 
 }
 
-val defaultField = listOf("id", "create_time", "update_time")
+val defaultField = listOf("id", getStr(R.string.default_field_create_time), getStr(R.string.default_field_last_update_time))
 fun String.isDefaultField() = this in defaultField
 
 fun JsonObject.getValueOfField(fieldName: String): String {

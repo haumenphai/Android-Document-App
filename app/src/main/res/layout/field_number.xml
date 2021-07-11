@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
+
     >
     <!--    Use for create new record (AddModelRecordFragment)-->
 
@@ -13,7 +14,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:padding="5dp"
-        android:text="field name 123123312: "
+        tools:text="field name 123123312: "
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/black"
@@ -28,7 +29,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_edit_classic"
-        android:hint="input number"
+        android:hint="@string/input_number"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_field_name"
@@ -42,7 +43,7 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/black"
+        android:background="#5C3700"
         app:layout_constraintTop_toBottomOf="@id/edit_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

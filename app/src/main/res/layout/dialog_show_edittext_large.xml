@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_edit_classic"
         android:gravity="left"
-        android:hint="content"
+        android:hint="@string/content"
         android:textSize="15sp"
         />
 

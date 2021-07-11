@@ -35,7 +35,7 @@ class DialogEditModel(private val context: Context, private val model: Model) {
         b.btnSave.setOnClickListener {
             val name = b.editModelName.text.toString()
             if (name.trim().isEmpty()) {
-                AlertDialog.Builder(context).setMessage("Name mustn't be empty!").show()
+                AlertDialog.Builder(context).setMessage(context.getString(R.string.name_must_not_be_empty)).show()
                 return@setOnClickListener
             }
 

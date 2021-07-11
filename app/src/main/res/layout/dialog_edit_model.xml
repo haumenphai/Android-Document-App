@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="19sp"
-        android:text="Edit Model:"
+        android:text="@string/Edit_Model"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:maxLines="1"
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_height="40dp"
-            android:text="name: "
+            android:text="@string/name_1"
             android:textStyle="bold"
             android:textSize="15sp"
             android:gravity="center"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:background="@drawable/bg_btn_classic"
-            android:text="Save"
+            android:text="@string/Save"
             android:layout_alignParentRight="true"
             />
         <Button
@@ -92,7 +92,7 @@
             android:id="@+id/btn_cancel"
             android:layout_toLeftOf="@id/btn_save"
             android:layout_marginRight="5dp"
-            android:text="Cancel"
+            android:text="@string/Cancel"
             />
     </RelativeLayout>
 
