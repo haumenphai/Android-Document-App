@@ -46,11 +46,13 @@ class CreateModelAcivity : AppCompatActivity() {
         b.btnCreate.setOnClickListener {
             fieldList.forEach {
                 if (!it.isValid()) {
-                    showMess("Field Name mustn't be empty")
+                    showMess(getString(R.string.field_name_must_not_be_empty))
                     return@setOnClickListener
                 }
                 if (it.fieldName.isDefaultField()) {
-                    showMess("Model mustn't contain default field: $defaultField\n\nPlease change \"${it.fieldName}\" to another name!")
+                    showMess("${getString(R.string.model_must_not_contain___)}: " +
+                            "$defaultField\n\n${getString(R.string.please_change)} \"${it.fieldName}\" " +
+                            "${getString(R.string.to_other_name)}!")
                     return@setOnClickListener
                 }
             }
@@ -74,7 +76,7 @@ class CreateModelAcivity : AppCompatActivity() {
         }
 
         fieldCount.observeForever {
-            supportActionBar!!.title = "Create $modelName... ($it field)"
+            supportActionBar!!.title = "${getString(R.string.Create)} $modelName... ($it ${getString(R.string.field)})"
         }
     }
 
@@ -99,15 +101,15 @@ class CreateModelAcivity : AppCompatActivity() {
             fieldCount.postValue(fieldCount.value!! - 1)
         }
     
-        val listSpinner = listOf("Text", "Number", "Datetime")
+        val listSpinner = listOf(getString(R.string.text), getString(R.string.number), getString(R.string.datetime))
         b2.spinner1.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, listSpinner)
 
         b2.spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (listSpinner[position]) {
-                    "Text" -> field.fieldType = FieldType.TEXT
-                    "Number" -> field.fieldType = FieldType.NUMBER
-                    "Datetime" -> field.fieldType = FieldType.DATETIME
+                    getString(R.string.text) -> field.fieldType = FieldType.TEXT
+                    getString(R.string.number) -> field.fieldType = FieldType.NUMBER
+                    getString(R.string.datetime) -> field.fieldType = FieldType.DATETIME
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}

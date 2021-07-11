@@ -38,7 +38,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_edit_classic"
-            android:hint="search..."
+            android:hint="@string/search_1"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:textSize="15sp" />
@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="no record"
+        android:text="@string/no_record"
         android:textColor="@color/text_color_hint"
         android:textSize="15sp" />
 

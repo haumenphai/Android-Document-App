@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/img_select_all"
                 android:layout_centerHorizontal="true"
-                android:text="Select all" />
+                android:text="@string/select_all" />
 
             <View
                 android:layout_width="0.5dp"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/img_delete"
                 android:layout_centerHorizontal="true"
-                android:text="Delete" />
+                android:text="@string/delete" />
 
             <View
                 android:layout_width="0.5dp"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/img_edit"
                 android:layout_centerHorizontal="true"
-                android:text="Edit" />
+                android:text="@string/edit" />
 
             <View
                 android:layout_width="0.5dp"
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/img_cancel"
                 android:layout_centerHorizontal="true"
-                android:text="Cancel" />
+                android:text="@string/cancel" />
         </RelativeLayout>
     </LinearLayout>
     <View

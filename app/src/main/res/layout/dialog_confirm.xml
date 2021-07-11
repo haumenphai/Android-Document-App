@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Title"
+        android:text="@string/Title"
         android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/text_color_hint"
@@ -35,7 +35,7 @@
                 android:id="@+id/tv_mess"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This is mess"
+                android:text="@string/This_is_mess"
                 android:maxHeight="120dp"
                 android:textColor="@color/text_color_hint"
                 />
@@ -53,7 +53,7 @@
             android:id="@+id/btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="OK"
+            android:text="@string/OK"
             android:layout_alignParentRight="true"
             android:background="@drawable/bg_btn_classic"
             />
@@ -62,7 +62,7 @@
             android:layout_height="35dp"
             android:background="@drawable/bg_btn_classic"
             android:id="@+id/btn_cancel"
-            android:text="Cancel"
+            android:text="@string/Cancel"
             android:layout_toLeftOf="@id/btn_ok"
             android:layout_marginRight="5dp"
             />

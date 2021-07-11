@@ -17,6 +17,7 @@ import dotd.hmp.databinding.FieldNumberBinding
 import dotd.hmp.databinding.FragmentAddModelRecordBinding
 import dotd.hmp.dialog.DialogPickDatetime
 import dotd.hmp.hepler.UIHelper
+import dotd.hmp.hepler.toFieldNameShow
 
 
 class AddRecordFragment: Fragment() {
@@ -50,7 +51,7 @@ class AddRecordFragment: Fragment() {
                 FieldType.NUMBER -> {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_number, null)
                     val binding = FieldNumberBinding.bind(view)
-                    binding.tvFieldName.text = "${field.fieldName}:"
+                    binding.tvFieldName.text = "${field.fieldName.toFieldNameShow()}:"
 
 
                     binding.editContent.addTextChangedListener { text ->
@@ -62,7 +63,7 @@ class AddRecordFragment: Fragment() {
                 FieldType.TEXT -> {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_text, null)
                     val binding = FieldNumberBinding.bind(view)
-                    binding.tvFieldName.text = "${field.fieldName}:"
+                    binding.tvFieldName.text = "${field.fieldName.toFieldNameShow()}:"
 
                     binding.editContent.addTextChangedListener { text ->
                         jsonObject2.addProperty("value", text.toString())
@@ -73,7 +74,7 @@ class AddRecordFragment: Fragment() {
                 FieldType.DATETIME -> {
                     val view = LayoutInflater.from(act).inflate(R.layout.field_datetime, null)
                     val binding = FieldDatetimeBinding.bind(view)
-                    binding.tvFieldName.text = "${field.fieldName}:"
+                    binding.tvFieldName.text = "${field.fieldName.toFieldNameShow()}:"
 
                     binding.btnPickDateTime.setOnClickListener {
                         DialogPickDatetime.show(it.context) { dateTime ->

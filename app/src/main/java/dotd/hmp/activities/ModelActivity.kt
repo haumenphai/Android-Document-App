@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import dotd.hmp.R
 import dotd.hmp.adapter.ModelApdater
 import dotd.hmp.data.*
 import dotd.hmp.databinding.ActivityMainBinding
@@ -14,7 +15,7 @@ import dotd.hmp.dialog.DialogEditModel
 import dotd.hmp.hepler.UIHelper
 
 
-class MainActivity : AppCompatActivity() {
+class ModelActivity : AppCompatActivity() {
     private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
@@ -124,10 +125,10 @@ class MainActivity : AppCompatActivity() {
             }
             val models = adapter.getItemSelected()
             DialogConfirm(this)
-                .setTitle("Delete model")
-                .setMess("Delete ${models.size} model?")
-                .setTextBtnOk("Delete")
-                .setTextBtnCancel("Cancel")
+                .setTitle(getString(R.string.delete_model))
+                .setMess("${getString(R.string.delete)} ${models.size} ${getString(R.string.model)}?")
+                .setTextBtnOk(getString(R.string.delete))
+                .setTextBtnCancel(getString(R.string.cancel))
                 .setBtnOkClick {
                     ModelDB.delete(models)
                     cancelAction()

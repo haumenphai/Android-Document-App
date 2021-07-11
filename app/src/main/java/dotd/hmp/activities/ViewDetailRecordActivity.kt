@@ -78,15 +78,15 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         }
         b.btnDelete.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Delete Record")
-                .setMessage("Delete Record?")
-                .setPositiveButton("Delete") { t ,l ->
+                .setTitle(getString(R.string.delete_record))
+                .setMessage("${getString(R.string.delete_record)}?")
+                .setPositiveButton(R.string.delete) { t ,l ->
                     model.deleteRecord(record)
                     ModelDB.update(model)
                     setResultForViewRecordsFragment()
                     finish()
                 }
-                .setNegativeButton("Cancel") { t, l ->
+                .setNegativeButton(R.string.Cancel) { t, l ->
 
                 }.show()
         }

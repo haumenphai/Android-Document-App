@@ -24,7 +24,7 @@ class DialogAddNewModel(val context: Context) {
         b.btnOk.setOnClickListener {
             val text = b.edittext.text.toString()
             if (text.trim().isEmpty()) {
-                AlertDialog.Builder(context).setMessage("Model name mustn't be empty!")
+                AlertDialog.Builder(context).setMessage(context.getString(R.string.model_name_must_not_be_empty))
                 return@setOnClickListener
             }
             callBack(text, icon)

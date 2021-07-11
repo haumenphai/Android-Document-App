@@ -15,6 +15,7 @@ import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.DialogConfirm
+import dotd.hmp.hepler.getStr
 import java.lang.Exception
 
 class ViewRecordsFragment : Fragment() {
@@ -130,10 +131,10 @@ class ViewRecordsFragment : Fragment() {
             }
 
             DialogConfirm(act)
-                .setTitle("Delete")
-                .setMess("Delete ${recordsSelected.size} record?")
-                .setTextBtnOk("Delete")
-                .setTextBtnCancel("Cancel")
+                .setTitle(getStr(R.string.delete))
+                .setMess("${getStr(R.string.delete)} ${recordsSelected.size} ${getString(R.string.record)}?")
+                .setTextBtnOk(getStr(R.string.delete))
+                .setTextBtnCancel(getStr(R.string.Cancel))
                 .setBtnOkClick {
                     recordsSelected.forEach {
                         val model = act.model.value!!

@@ -26,7 +26,6 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/rippler_blue_white"
         android:src="@drawable/ic_baseline_delete_24"
-        android:text="delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +45,7 @@
         android:layout_height="40dp"
         android:layout_weight="1"
         android:background="@drawable/bg_edit_classic"
-        android:hint="field name"
+        android:hint="@string/field_name"
         android:inputType="text|textNoSuggestions"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete_field"
