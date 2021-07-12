@@ -28,6 +28,8 @@ class RecordAdapater :
         notifyDataSetChanged()
     }
 
+    fun getModel() = model
+
     fun unSelectAll() {
         recordList.forEach { it.remove("is_selected") }
         notifyDataSetChanged()

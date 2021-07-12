@@ -33,11 +33,12 @@
         <EditText
             android:id="@+id/edit_search"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/bg_edit_classic"
+            android:paddingRight="36dp"
             android:hint="@string/search_1"
             android:imeOptions="actionSearch"
             android:inputType="text"
@@ -45,15 +46,21 @@
 
         <ImageView
             android:id="@+id/img_search_close"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
+            android:padding="15dp"
             android:src="@drawable/ic_clear"
             app:tint="@color/black" />
     </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/icon_loading_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/appbar_layout"
+        android:layout_centerHorizontal="true"
+        android:translationZ="1dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

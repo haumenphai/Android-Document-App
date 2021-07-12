@@ -56,4 +56,6 @@
     <string name="name_demo1">Nguyễn Thị Lấp Lánh Ánh Sao Mai</string>
     <string name="name_demo2">Hoàng Văn Tú</string>
     <string name="name_demo3">Lê Công Luyện</string>
+    <string name="pick_icon">Chọn Icon</string>
+    <string name="search">Tìm kiếm</string>
 </resources>

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dotd.hmp.R
@@ -16,8 +16,11 @@ import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.DialogConfirm
+import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.getStr
+import kotlinx.coroutines.*
 import java.lang.Exception
+import java.util.*
 
 class ViewRecordsFragment : Fragment() {
     private lateinit var b: FragmentViewRecordsBinding
@@ -36,6 +39,7 @@ class ViewRecordsFragment : Fragment() {
         setConfigToolBar()
         setUpRecyclerView()
         setUpLayoutAction()
+        setUpSearchView()
 
         return b.root
     }
@@ -47,9 +51,8 @@ class ViewRecordsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_add -> {
-                act.addFragment(AddRecordFragment(), "add_record_fragment")
-            }
+            R.id.menu_add -> act.addFragment(AddRecordFragment(), "add_record_fragment")
+            R.id.menu_search -> showSearchView()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -66,8 +69,6 @@ class ViewRecordsFragment : Fragment() {
     }
 
     private fun setClickRecord() {
-
-
         adapter.onClickItem = {
             val intent = Intent(context, ViewDetailRecordActivity::class.java)
             intent.putExtra("model", act.model.value)
@@ -163,9 +164,24 @@ class ViewRecordsFragment : Fragment() {
         }
     }
 
+    private fun setUpSearchView() {
+        b.editSearch.addTextChangedListener {
+           searchModel(it.toString())
+        }
+        b.editSearch.setOnEditorActionListener { v, actionId, event ->
+            searchModel(b.editSearch.text.toString(), "exact")
+            UIHelper.hideKeyboardFrom(act, b.root)
+            true
+        }
+        b.imgSearchClose.setOnClickListener {
+            closeSearchView()
+        }
+    }
+
     private fun hideView() {
         b.layoutSearch.visibility = View.GONE
         b.layoutActionRecords.root.visibility = View.GONE
+        b.iconLoadingSearch.visibility = View.GONE
     }
 
     private fun hideActionEdit() {
@@ -175,4 +191,34 @@ class ViewRecordsFragment : Fragment() {
             b.layoutActionRecords.actionEdit.visibility = View.VISIBLE
         }
     }
+
+    private fun closeSearchView() {
+        b.layoutSearch.visibility = View.GONE
+        b.iconLoadingSearch.visibility = View.GONE
+        b.editSearch.setText("")
+        UIHelper.hideKeyboardFrom(act, b.root)
+        adapter.setModel(act.model.value!!)
+    }
+
+    private fun showSearchView() {
+        UIHelper.showKeyboard(act)
+        b.editSearch.requestFocus()
+        b.layoutSearch.visibility = View.VISIBLE
+    }
+
+    private var job1: Job? = null
+    private fun searchModel(key: String, searchMethod: String = "relative") {
+        job1?.cancel()
+        b.iconLoadingSearch.visibility = View.VISIBLE
+
+        job1 = GlobalScope.launch {
+            val model = act.model.value!!.searchRecords(key, searchMethod = searchMethod)
+            withContext(Dispatchers.Main) {
+                adapter.setModel(model)
+                b.tvNoRecord.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
+                b.iconLoadingSearch.visibility = View.GONE
+            }
+        }
+    }
+
 }

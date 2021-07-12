@@ -1,19 +1,19 @@
 package dotd.hmp.data
 
-import android.graphics.Color
 import android.util.Log
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import dotd.hmp.MyApplication.Companion.context
 import dotd.hmp.R
+import dotd.hmp.hepler.DateTimeHelper
 import dotd.hmp.hepler.getStr
+import dotd.hmp.hepler.removeVietnameseAccents
 import java.io.Serializable
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.HashSet
 
 
 /*
@@ -175,6 +175,67 @@ class Model: Serializable {
             {it.getValueOfField(fieldName)}
         ))
         model.jsonData = listSorted.toString()
+        return model
+    }
+
+    /**
+     *
+     * @param _withField:
+     *   _withField = null => search value in all field
+     *
+     * @param searchMethod:
+     *     relative: relative search
+     *     exact: exact search
+     */
+    fun searchRecords(
+        keySearch: String,
+        _withField: MutableList<Field>? = null,
+        limit: Int? = null,
+        searchMethod: String = "relative"
+    ): Model {
+        if (keySearch.trim() == "") return this
+
+        val withField: MutableList<Field> = mutableListOf()
+        if (_withField == null) {
+            getFieldList().forEach {
+                withField.add(it)
+            }
+            withField.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
+        }
+
+        val model = this.clone()
+        val records = model.getRecordList()
+        val resultSet = HashSet<JsonObject>()
+        val key = keySearch.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()
+
+        for (r in records) {
+            for (field in withField) {
+                val v = r.getValueOfField(field.fieldName)
+                val value: String? = when(field.fieldType) {
+                    FieldType.DATETIME ->
+                        DateTimeHelper.timestampToDatetimeString(v.toLong())
+
+                    FieldType.TEXT, FieldType.NUMBER ->
+                        v.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()
+
+                    // field type not support for search when search in all field
+                    else -> null
+                }
+                value?.let {
+                    when (searchMethod) {
+                        "relative" ->
+                            if (value.contains(key))
+                                resultSet.add(r)
+                        "exact" ->
+                            if (value == key)
+                                resultSet.add(r)
+                    }
+                }
+            }
+            if (limit != null && limit == resultSet.size)
+                break
+        }
+        model.setRecordList(resultSet.toList())
         return model
     }
 

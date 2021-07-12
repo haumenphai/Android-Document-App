@@ -2,21 +2,24 @@ package dotd.hmp.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.R
 import dotd.hmp.adapter.ModelApdater
 import dotd.hmp.data.*
-import dotd.hmp.databinding.ActivityMainBinding
+import dotd.hmp.databinding.ModelActivityBinding
 import dotd.hmp.dialog.DialogAddNewModel
 import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
 import dotd.hmp.hepler.UIHelper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ModelActivity : AppCompatActivity() {
-    private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val b by lazy { ModelActivityBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
 
@@ -33,7 +36,11 @@ class ModelActivity : AppCompatActivity() {
 
         b.btnInsert.setOnClickListener {
             // TODO: remove test
-            ModelDB.insert(ModelDemoDatas.getModelStudent())
+            ModelDB.insert(ModelDemoDatas.getModelStudentTest())
+            GlobalScope.launch {
+                val model = ModelDemoDatas.getModelStudentTest(1000)
+                ModelDB.insert(model)
+            }
         }
     }
 
@@ -79,7 +86,7 @@ class ModelActivity : AppCompatActivity() {
                 }
             } else {
                 val intent = Intent(this, ViewRecordsActivity::class.java)
-                intent.putExtra("model", it)
+                intent.putExtra("model_id", it.id)
                 startActivity(intent)
             }
         }

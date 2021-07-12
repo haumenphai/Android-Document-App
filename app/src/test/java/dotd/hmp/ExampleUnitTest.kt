@@ -7,6 +7,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dotd.hmp.data.Field
 import dotd.hmp.data.FieldType
+import dotd.hmp.data.ModelDemoDatas
 import dotd.hmp.hepler.DateTimeHelper
 import org.json.JSONObject
 import org.junit.Test
@@ -87,21 +88,5 @@ class ExampleUnitTest {
 
     @Test
     fun tedt() {
-//        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss [E]")
-//        val date = Date(System.currentTimeMillis())
-//        println(sdf.format(date))
-
-        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss [E]")
-        val differenceTime = System.currentTimeMillis() - 1000233467
-        val date = Date(differenceTime)
-        val calendar = java.util.Calendar.getInstance()
-        calendar.time = date
-
-        println(date)
-        println(sdf.format(date))
-        println(calendar.get(Calendar.DAY_OF_MONTH))
-        println(LocalDateTime.MIN.plusSeconds(121).second)
-
-        println("2021-12-30 20:00:01 TH" > "2021-12-30 20:00:00 TH2")
     }
 }
