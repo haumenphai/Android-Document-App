@@ -38,6 +38,7 @@ class DialogConfirm(private val context: Context) {
     fun setBtnOkClick(onClick: (d: DialogConfirm) -> Unit): DialogConfirm {
         b.btnOk.setOnClickListener {
             onClick(this)
+            cancel()
         }
         return this
     }
@@ -45,6 +46,7 @@ class DialogConfirm(private val context: Context) {
     fun setBtnCancelClick(onClick: (d: DialogConfirm) -> Unit): DialogConfirm {
         b.btnCancel.setOnClickListener {
             onClick(this)
+            cancel()
         }
         return this
     }

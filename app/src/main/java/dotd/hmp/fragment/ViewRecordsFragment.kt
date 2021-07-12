@@ -66,13 +66,7 @@ class ViewRecordsFragment : Fragment() {
     }
 
     private fun setClickRecord() {
-        fun hideActionEdit() {
-            if (adapter.getRecordsSeleted().size != 1) {
-                b.layoutActionRecords.actionEdit.visibility = View.INVISIBLE
-            } else {
-                b.layoutActionRecords.actionEdit.visibility = View.VISIBLE
-            }
-        }
+
 
         adapter.onClickItem = {
             val intent = Intent(context, ViewDetailRecordActivity::class.java)
@@ -124,6 +118,7 @@ class ViewRecordsFragment : Fragment() {
 
         binding.actionSelectAll.setOnClickListener {
             adapter.selectAll()
+            hideActionEdit()
         }
         binding.actionDelete.setOnClickListener {
             val recordsSelected = adapter.getRecordsSeleted()
@@ -171,5 +166,13 @@ class ViewRecordsFragment : Fragment() {
     private fun hideView() {
         b.layoutSearch.visibility = View.GONE
         b.layoutActionRecords.root.visibility = View.GONE
+    }
+
+    private fun hideActionEdit() {
+        if (adapter.getRecordsSeleted().size != 1) {
+            b.layoutActionRecords.actionEdit.visibility = View.INVISIBLE
+        } else {
+            b.layoutActionRecords.actionEdit.visibility = View.VISIBLE
+        }
     }
 }

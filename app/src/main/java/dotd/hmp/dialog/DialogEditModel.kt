@@ -18,7 +18,7 @@ class DialogEditModel(private val context: Context, private val model: Model) {
         dialog.setContentView(view)
         dialog.setCanceledOnTouchOutside(false)
         b.editModelName.setText(model.name)
-        b.editModelName.setSelection(model.name.length)
+        b.editModelName.setSelection(0, model.name.length)
 
         if (model.icon != null)
             b.imgIcon.setImageResource(model.icon!!)
@@ -29,6 +29,8 @@ class DialogEditModel(private val context: Context, private val model: Model) {
                 b.imgIcon.setImageResource(it.drawableResource)
             }.show()
         }
+        b.btnCancel.setOnClickListener { cancel() }
+        b.btnSave.setOnClickListener { cancel() }
     }
 
     fun setBtnSaveClick(onClick: (modelEdited: Model) -> Unit): DialogEditModel {

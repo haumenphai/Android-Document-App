@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/img_cancel"
                 android:layout_centerHorizontal="true"
-                android:text="@string/cancel" />
+                android:text="@string/Cancel" />
         </RelativeLayout>
     </LinearLayout>
     <View

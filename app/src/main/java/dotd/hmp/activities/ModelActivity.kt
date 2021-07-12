@@ -53,12 +53,11 @@ class ModelActivity : AppCompatActivity() {
     }
 
     private fun setClickModel() {
-        fun hideActionEdit() {
-            if (adapter.getItemSelected().size != 1) {
-                b.layoutActionModels.actionEdit.visibility = View.INVISIBLE
-            } else {
-                b.layoutActionModels.actionEdit.visibility = View.VISIBLE
-            }
+
+        fun removeItemAdd() {
+            val list = adapter.getList().toMutableList()
+            list.remove(Model.itemAddNewModel)
+            adapter.setList(list)
         }
 
         adapter.onClickItem = {
@@ -89,15 +88,14 @@ class ModelActivity : AppCompatActivity() {
                 b.layoutActionModels.root.visibility = View.VISIBLE
                 it.isSelected = !it.isSelected
                 hideActionEdit()
-
-                val list = adapter.getList().toMutableList()
-                list.remove(Model.itemAddNewModel)
-                adapter.setList(list)
+                removeItemAdd()
 
                 adapter.onClickItem = {
-                    it.isSelected = !it.isSelected
-                    adapter.notifyDataSetChanged()
-                    hideActionEdit()
+                    if (!it.isItemAddNewModel()) {
+                        it.isSelected = !it.isSelected
+                        adapter.notifyDataSetChanged()
+                        hideActionEdit()
+                    }
                 }
             }
         }
@@ -118,6 +116,7 @@ class ModelActivity : AppCompatActivity() {
 
         b1.actionSelectAll.setOnClickListener {
             adapter.selectAll()
+            hideActionEdit()
         }
         b1.actionDelete.setOnClickListener {
             if (adapter.getItemSelected().isEmpty()) {
@@ -150,5 +149,12 @@ class ModelActivity : AppCompatActivity() {
         }
     }
 
+    private fun hideActionEdit() {
+        if (adapter.getItemSelected().size != 1) {
+            b.layoutActionModels.actionEdit.visibility = View.INVISIBLE
+        } else {
+            b.layoutActionModels.actionEdit.visibility = View.VISIBLE
+        }
+    }
 
 }
