@@ -44,7 +44,7 @@ class ModelActivity : AppCompatActivity() {
             ModelDB.insert(student)
             Log.d("AAA", student.getRecordList().toString())
             GlobalScope.launch {
-                val model = ModelDemoDatas.getModelStudentTest(10000)
+                val model = ModelDemoDatas.getModelStudentTest(1000)
                 ModelDB.insert(model)
             }
         }
@@ -150,11 +150,13 @@ class ModelActivity : AppCompatActivity() {
         }
         b1.actionEdit.setOnClickListener {
             // only one model can edit
-            val model = adapter.getItemSelected()[0]
-            DialogEditModel(this, model)
-                .setBtnSaveClick {
-                    ModelDB.update(it).also { isSuccess ->
-                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+            val oldModel = adapter.getItemSelected()[0]
+            DialogEditModel(this, oldModel.clone())
+                .setBtnSaveClick { newModel->
+                    Log.d("AAA", oldModel.jsonData)
+                    Log.d("AAA", newModel.jsonData)
+                    ModelDB.update(oldModel, newModel).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
                     }
                 }.show()
             cancelAction()

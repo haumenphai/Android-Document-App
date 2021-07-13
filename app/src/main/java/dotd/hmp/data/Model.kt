@@ -304,6 +304,7 @@ class Model: Serializable {
     fun writeJsonToFile() = writeFileText(getFilePath(), jsonData)
     fun deleteFileJson() = File(getFilePath()).delete()
 
+    fun getJsonDataFromFile(): String = readFileAsTextUsingInputStream(getFilePath())
 }
 
 enum class FieldType {

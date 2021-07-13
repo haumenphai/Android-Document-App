@@ -66,9 +66,10 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         }
         b.btnSave.setOnClickListener {
             UIHelper.hideKeyboardFrom(this, b.root)
+            val oldModel = model.clone()
             model.updateRecord(recordCopy)
-            ModelDB.update(model).also { isSuccess ->
-                if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+            ModelDB.update(oldModel, model).also { isSuccess ->
+                if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
             }
             setResultForViewRecordsFragment()
             setUpLayoutViewRecord(recordCopy)
@@ -84,9 +85,10 @@ class ViewDetailRecordActivity : AppCompatActivity() {
                 .setTitle(getString(R.string.delete_record))
                 .setMessage("${getString(R.string.delete_record)}?")
                 .setPositiveButton(R.string.delete) { t ,l ->
+                    val oldModel = model.clone()
                     model.deleteRecord(record)
-                    ModelDB.update(model).also { isSuccess ->
-                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+                    ModelDB.update(oldModel, model).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
                     }
                     setResultForViewRecordsFragment()
                     finish()

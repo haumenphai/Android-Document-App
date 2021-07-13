@@ -137,10 +137,11 @@ class ViewRecordsFragment : Fragment() {
                 .setBtnOkClick {
                     recordsSelected.forEach {
                         val model = act.model.value!!
+                        val oldModel = model.clone()
                         model.deleteRecord(it)
                         act.model.value = model
-                        ModelDB.update(model).also { isSuccess ->
-                            if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+                        ModelDB.update(oldModel, model).also { isSuccess ->
+                            if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(act)
                         }
                         cancelAction()
                     }

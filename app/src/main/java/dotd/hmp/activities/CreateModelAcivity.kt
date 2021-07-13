@@ -66,7 +66,7 @@ class CreateModelAcivity : AppCompatActivity() {
                     val model = Model(modelName, modelIcon)
                     model.setFieldList(fieldList)
                     ModelDB.insert(model).also { isSuccess ->
-                        if (!isSuccess) DialogShowMess.showMessInsertModelFailure()
+                        if (!isSuccess) DialogShowMess.showMessInsertModelFailure(context)
                     }
                     finish()
                 }
