@@ -18,6 +18,7 @@ import dotd.hmp.databinding.ActivityViewDetailRecordBinding
 import dotd.hmp.databinding.FieldDatetimeBinding
 import dotd.hmp.databinding.FieldNumberBinding
 import dotd.hmp.dialog.DialogPickDatetime
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.DateTimeHelper
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.toFieldNameShow
@@ -66,7 +67,9 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         b.btnSave.setOnClickListener {
             UIHelper.hideKeyboardFrom(this, b.root)
             model.updateRecord(recordCopy)
-            ModelDB.update(model)
+            ModelDB.update(model).also { isSuccess ->
+                if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+            }
             setResultForViewRecordsFragment()
             setUpLayoutViewRecord(recordCopy)
             hideLayoutEditData()
@@ -82,7 +85,9 @@ class ViewDetailRecordActivity : AppCompatActivity() {
                 .setMessage("${getString(R.string.delete_record)}?")
                 .setPositiveButton(R.string.delete) { t ,l ->
                     model.deleteRecord(record)
-                    ModelDB.update(model)
+                    ModelDB.update(model).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+                    }
                     setResultForViewRecordsFragment()
                     finish()
                 }

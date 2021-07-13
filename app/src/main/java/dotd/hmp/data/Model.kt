@@ -1,15 +1,13 @@
 package dotd.hmp.data
 
 import android.util.Log
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import dotd.hmp.MyApplication
 import dotd.hmp.R
-import dotd.hmp.hepler.DateTimeHelper
-import dotd.hmp.hepler.getStr
-import dotd.hmp.hepler.removeVietnameseAccents
+import dotd.hmp.hepler.*
+import java.io.File
 import java.io.Serializable
 import java.lang.Exception
 import java.util.*
@@ -42,16 +40,20 @@ All field value store as String,
 Not use org.json.JSONObject
  */
 
-@Entity
+@Entity()
 class Model: Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var name: String = ""
     var icon: Int? = null
     var jsonFields: String = ""
-    var jsonData: String = "[]"
     var sequence: Int = 0
     var description: String = ""
+
+    // not store jsonData to Database. save to file.
+    @Ignore
+    var jsonData = "[]"
+
 
     @Ignore
     var isSelected = false
@@ -136,6 +138,16 @@ class Model: Serializable {
     }
 
     fun getRecordList(): MutableList<JsonObject> {
+        if (jsonData == "[]") {
+            jsonData = try {
+                readFileAsTextUsingInputStream(getFilePath())
+            } catch (e: Exception) {
+                jsonData
+            }
+        }
+        if (jsonData == "empty")
+            jsonData = "[]"
+
         return Gson().fromJson(jsonData, Array<JsonObject>::class.java).asList().toMutableList()
     }
 
@@ -235,7 +247,11 @@ class Model: Serializable {
             if (limit != null && limit == resultSet.size)
                 break
         }
-        model.setRecordList(resultSet.toList())
+        if (resultSet.size == 0) {
+            model.jsonData = "empty"
+        } else {
+            model.setRecordList(resultSet.toList())
+        }
         return model
     }
 
@@ -281,6 +297,13 @@ class Model: Serializable {
         updateTime.addProperty("value", System.currentTimeMillis().toString())
         record.add("update_time", updateTime)
     }
+
+    @JvmName("getFilePath1")
+    fun getFilePath() = "${MyApplication.context.filesDir}/$name.json"
+
+    fun writeJsonToFile() = writeFileText(getFilePath(), jsonData)
+    fun deleteFileJson() = File(getFilePath()).delete()
+
 }
 
 enum class FieldType {

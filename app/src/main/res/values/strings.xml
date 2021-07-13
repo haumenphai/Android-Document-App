@@ -59,4 +59,7 @@
     <string name="name_demo3">Cubet</string>
     <string name="pick_icon">Pick Icon</string>
     <string name="search">Search</string>
+    <string name="insert_model_failure">Models cannot have the same name. \n\nCreate model failed.</string>
+    <string name="update_model_failure">Models cannot have the same name. \n\nEdit model failed.</string>
+
 </resources>

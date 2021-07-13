@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.R
@@ -13,7 +14,10 @@ import dotd.hmp.databinding.ModelActivityBinding
 import dotd.hmp.dialog.DialogAddNewModel
 import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
+import dotd.hmp.hepler.readFileAsTextUsingInputStream
+import dotd.hmp.hepler.writeFileText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -36,9 +40,11 @@ class ModelActivity : AppCompatActivity() {
 
         b.btnInsert.setOnClickListener {
             // TODO: remove test
-            ModelDB.insert(ModelDemoDatas.getModelStudentTest())
+            val student = ModelDemoDatas.getModelStudentTest()
+            ModelDB.insert(student)
+            Log.d("AAA", student.getRecordList().toString())
             GlobalScope.launch {
-                val model = ModelDemoDatas.getModelStudentTest(1000)
+                val model = ModelDemoDatas.getModelStudentTest(10000)
                 ModelDB.insert(model)
             }
         }
@@ -86,7 +92,7 @@ class ModelActivity : AppCompatActivity() {
                 }
             } else {
                 val intent = Intent(this, ViewRecordsActivity::class.java)
-                intent.putExtra("model_id", it.id)
+                intent.putExtra("model", it)
                 startActivity(intent)
             }
         }
@@ -147,7 +153,9 @@ class ModelActivity : AppCompatActivity() {
             val model = adapter.getItemSelected()[0]
             DialogEditModel(this, model)
                 .setBtnSaveClick {
-                    ModelDB.update(it)
+                    ModelDB.update(it).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+                    }
                 }.show()
             cancelAction()
         }

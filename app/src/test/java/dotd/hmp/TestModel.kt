@@ -5,6 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
+// todo: move TestModel to AndroidTest.
 class TestModel {
 
     // data for test, must not be changed
@@ -13,11 +14,7 @@ class TestModel {
         fieldList.add(Field("name", FieldType.TEXT))
         fieldList.add(Field("age", FieldType.NUMBER))
 
-        val model = Model().apply {
-            name = "Student"
-            icon = R.drawable.ic_clear
-            setFieldList(fieldList)
-            jsonData = """
+        val jsonData = """
                 [
                     {
                         "id": {
@@ -76,6 +73,11 @@ class TestModel {
                     
                 ]
             """.replace(" ", "").replace("\n", "")
+        val model = Model().apply {
+            name = "Student"
+            icon = R.drawable.ic_clear
+            setFieldList(fieldList)
+            this.jsonData = jsonData
         }
         return model
     }

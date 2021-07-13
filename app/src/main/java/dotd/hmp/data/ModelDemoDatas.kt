@@ -12,12 +12,7 @@ object ModelDemoDatas {
         val fieldList = mutableListOf<Field>()
         fieldList.add(Field(getStr(R.string.name), FieldType.TEXT))
         fieldList.add(Field(getStr(R.string.age), FieldType.NUMBER))
-
-        val model = Model().apply {
-            name = getStr(R.string.student)
-            icon = R.drawable.ic_clear
-            setFieldList(fieldList)
-            jsonData = """
+        val jsonData = """
                 [
                     {
                         "id": {
@@ -75,8 +70,13 @@ object ModelDemoDatas {
                     }
                     
                 ]
-            """
+            """.trim().replace("\n", "").replace(" ", "")
+        val model = Model().apply {
+            name = getStr(R.string.student)
+            icon = R.drawable.ic_clear
+            setFieldList(fieldList)
         }
+        model.jsonData = jsonData
         return model
     }
 

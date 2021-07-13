@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.DialogConfirm
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.getStr
 import kotlinx.coroutines.*
@@ -137,7 +139,9 @@ class ViewRecordsFragment : Fragment() {
                         val model = act.model.value!!
                         model.deleteRecord(it)
                         act.model.value = model
-                        ModelDB.update(model)
+                        ModelDB.update(model).also { isSuccess ->
+                            if (!isSuccess) DialogShowMess.showMessUpdateModelFailure()
+                        }
                         cancelAction()
                     }
                     it.cancel()

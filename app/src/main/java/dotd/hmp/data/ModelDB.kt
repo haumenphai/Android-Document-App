@@ -10,16 +10,71 @@ object ModelDB {
     private val db by lazy { ModelDatabase.instance }
     private val dao by lazy { db.dao() }
 
-    fun insert(vararg model: Model) = model.forEach { dao.insert(it) }
-    fun insert(list: List<Model>)   = list.forEach { dao.insert(it) }
+    fun insert(vararg model: Model): Boolean {
+        model.forEach {
+            if (!checkContraintModelName(it.name))
+                return false
+        }
+        model.forEach {
+            it.writeJsonToFile()
+            dao.insert(it)
+        }
+        return true
+    }
+    fun insert(list: List<Model>): Boolean {
+        list.forEach {
+            if (!checkContraintModelName(it.name))
+                return false
+        }
+        list.forEach {
+            it.writeJsonToFile()
+            dao.insert(it)
+        }
+        return true
+    }
 
-    fun delete(vararg model: Model) = model.forEach { dao.delete(it) }
-    fun delete(list: List<Model>)   = list.forEach { dao.delete(it) }
+    fun delete(vararg model: Model) {
+        model.forEach {
+            it.deleteFileJson()
+            dao.delete(it)
+        }
+    }
+    fun delete(list: List<Model>) {
+        list.forEach {
+            it.deleteFileJson()
+            dao.delete(it)
+        }
+    }
 
-    fun update(vararg model: Model) = model.forEach { dao.update(it) }
-    fun update(list: List<Model>)   = list.forEach { dao.update(it) }
+    fun update(vararg model: Model): Boolean {
+        model.forEach {
+            if (!checkContraintModelName(it.name))
+                return false
+        }
+        model.forEach {
+            it.writeJsonToFile()
+            dao.update(it)
+        }
+        return true
+    }
+    fun update(list: List<Model>): Boolean {
+        list.forEach {
+            if (!checkContraintModelName(it.name))
+                return false
+        }
+        list.forEach {
+            it.writeJsonToFile()
+            dao.update(it)
+        }
+        return true
+    }
 
-    fun deleteAll() = dao.deleteAll()
+    fun deleteAll() {
+        dao.getList().forEach {
+            it.deleteFileJson()
+        }
+        dao.deleteAll()
+    }
 
     fun getList() = dao.getList()
 
@@ -28,27 +83,48 @@ object ModelDB {
     fun getModel(id: Int) = dao.getModel(id)
 
 
-    fun insertInbackgroud(vararg model: Model, onComplete: () -> Unit) {
+    fun insertInbackgroud(vararg model: Model, onComplete: (isSuccess: Boolean) -> Unit) {
+        model.forEach {
+            if (!checkContraintModelName(it.name)) {
+                onComplete(false)
+                return
+            }
+        }
         GlobalScope.launch {
-            model.forEach { dao.insert(it) }
+            model.forEach {
+                it.writeJsonToFile()
+                dao.insert(it)
+            }
             withContext(Dispatchers.Main) {
-                onComplete()
+                onComplete(true)
             }
         }
     }
 
-    fun insertInbackgroud(list: List<Model>, onComplete: () -> Unit) {
+    fun insertInbackgroud(list: List<Model>, onComplete: (isSuccess: Boolean) -> Unit) {
+        list.forEach {
+            if (!checkContraintModelName(it.name)) {
+                onComplete(false)
+                return
+            }
+        }
         GlobalScope.launch {
-            list.forEach { dao.insert(it) }
+            list.forEach {
+                it.writeJsonToFile()
+                dao.insert(it)
+            }
             withContext(Dispatchers.Main) {
-                onComplete()
+                onComplete(true)
             }
         }
     }
 
     fun deleteInbackground(vararg model: Model, onComplete: () -> Unit) {
         GlobalScope.launch {
-            model.forEach { dao.delete(it) }
+            model.forEach {
+                it.deleteFileJson()
+                dao.delete(it)
+            }
             withContext(Dispatchers.Main) {
                 onComplete()
             }
@@ -57,34 +133,59 @@ object ModelDB {
 
     fun deleteInbackground(list: List<Model>, onComplete: () -> Unit) {
         GlobalScope.launch {
-            list.forEach { dao.delete(it) }
+            list.forEach {
+                it.deleteFileJson()
+                dao.delete(it)
+            }
             withContext(Dispatchers.Main) {
                 onComplete()
             }
         }
     }
 
-    fun updateInBackground(vararg model: Model, onComplete: () -> Unit) {
+    fun updateInBackground(vararg model: Model, onComplete: (isSuccess: Boolean) -> Unit) {
+        model.forEach {
+            if (!checkContraintModelName(it.name)) {
+                onComplete(false)
+                return
+            }
+        }
         GlobalScope.launch {
-            model.forEach { dao.update(it) }
+            model.forEach {
+                it.writeJsonToFile()
+                dao.update(it)
+            }
             withContext(Dispatchers.Main) {
-                onComplete()
+                onComplete(true)
             }
         }
     }
 
-    fun updateInBackground(list: List<Model>, onComplete: () -> Unit) {
+    fun updateInBackground(list: List<Model>, onComplete: (isSuccess: Boolean) -> Unit) {
+        list.forEach {
+            if (!checkContraintModelName(it.name)) {
+                onComplete(false)
+                return
+            }
+        }
         GlobalScope.launch {
-            list.forEach { dao.update(it) }
+            list.forEach {
+                it.writeJsonToFile()
+                dao.update(it)
+            }
             withContext(Dispatchers.Main) {
-                onComplete()
+                onComplete(true)
             }
         }
     }
 
     fun deleteAllInbackground(onComplete: () -> Unit) {
         GlobalScope.launch {
+            dao.getList().forEach {
+                it.deleteFileJson()
+            }
             dao.deleteAll()
+
             withContext(Dispatchers.Main) {
                 onComplete()
             }
@@ -116,5 +217,14 @@ object ModelDB {
                 onComplete(model)
             }
         }
+    }
+
+    private fun checkContraintModelName(modelName: String): Boolean {
+        val list = dao.getList()
+        for (model in list) {
+            if (modelName == model.name)
+                return false
+        }
+        return true
     }
 }

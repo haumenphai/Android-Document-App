@@ -22,7 +22,7 @@ class ViewRecordsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(b.root)
-        model.value = ModelDB.getModel(intent.getIntExtra("model_id", -1))
+        model.value = intent.getSerializableExtra("model") as Model
 
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
