@@ -15,6 +15,7 @@ import dotd.hmp.data.*
 import dotd.hmp.databinding.ActivityCreateModelBinding
 import  dotd.hmp.databinding.LayoutOneFieldBinding
 import dotd.hmp.dialog.DialogConfirmCreateModel
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.title
 import dotd.hmp.hepler.toFieldNameShow
@@ -64,7 +65,9 @@ class CreateModelAcivity : AppCompatActivity() {
                 b.btnCreate.setOnClickListener {
                     val model = Model(modelName, modelIcon)
                     model.setFieldList(fieldList)
-                    ModelDB.insert(model)
+                    ModelDB.insert(model).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessInsertModelFailure(context)
+                    }
                     finish()
                 }
                 dialog.show()

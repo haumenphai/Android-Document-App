@@ -56,4 +56,8 @@
     <string name="name_demo1">Nguyễn Thị Lấp Lánh Ánh Sao Mai</string>
     <string name="name_demo2">Hoàng Văn Tú</string>
     <string name="name_demo3">Lê Công Luyện</string>
+    <string name="pick_icon">Chọn Icon</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="insert_model_failure">Giữa các model không được trùng với tên nhau. Tạo model thất bại</string>
+    <string name="update_model_failure">Giữa các model không được trùng với tên nhau. Sửa model thất bại.</string>
 </resources>

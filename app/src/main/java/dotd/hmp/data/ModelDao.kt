@@ -23,4 +23,6 @@ interface ModelDao {
     @Query("SELECT * FROM model")
     fun getLiveData(): LiveData<List<Model>>
 
+    @Query("SELECT * FROM model WHERE id=:id")
+    fun getModel(id: Int): Model
 }

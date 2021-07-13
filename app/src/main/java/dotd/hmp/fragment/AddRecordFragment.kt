@@ -16,6 +16,7 @@ import dotd.hmp.databinding.FieldDatetimeBinding
 import dotd.hmp.databinding.FieldNumberBinding
 import dotd.hmp.databinding.FragmentAddModelRecordBinding
 import dotd.hmp.dialog.DialogPickDatetime
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.toFieldNameShow
 
@@ -92,8 +93,11 @@ class AddRecordFragment: Fragment() {
     fun setClick() {
         b.btnCreateRecord.setOnClickListener {
             val model = act.model.value!!
+            val oldModel = model.clone()
             model.addRecord(jsonObj)
-            ModelDB.update(model)
+            ModelDB.update(oldModel, model).also { isSuccess ->
+                if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(act)
+            }
             act.model.value = model
 
             act.removeFragment(this)

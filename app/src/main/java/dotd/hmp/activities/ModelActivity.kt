@@ -2,21 +2,28 @@ package dotd.hmp.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.R
 import dotd.hmp.adapter.ModelApdater
 import dotd.hmp.data.*
-import dotd.hmp.databinding.ActivityMainBinding
+import dotd.hmp.databinding.ModelActivityBinding
 import dotd.hmp.dialog.DialogAddNewModel
 import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
+import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
+import dotd.hmp.hepler.readFileAsTextUsingInputStream
+import dotd.hmp.hepler.writeFileText
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ModelActivity : AppCompatActivity() {
-    private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val b by lazy { ModelActivityBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
 
@@ -33,7 +40,13 @@ class ModelActivity : AppCompatActivity() {
 
         b.btnInsert.setOnClickListener {
             // TODO: remove test
-            ModelDB.insert(ModelDemoDatas.getModelStudent())
+            val student = ModelDemoDatas.getModelStudentTest()
+            ModelDB.insert(student)
+            Log.d("AAA", student.getRecordList().toString())
+            GlobalScope.launch {
+                val model = ModelDemoDatas.getModelStudentTest(1000)
+                ModelDB.insert(model)
+            }
         }
     }
 
@@ -137,10 +150,14 @@ class ModelActivity : AppCompatActivity() {
         }
         b1.actionEdit.setOnClickListener {
             // only one model can edit
-            val model = adapter.getItemSelected()[0]
-            DialogEditModel(this, model)
-                .setBtnSaveClick {
-                    ModelDB.update(it)
+            val oldModel = adapter.getItemSelected()[0]
+            DialogEditModel(this, oldModel.clone())
+                .setBtnSaveClick { newModel->
+                    Log.d("AAA", oldModel.jsonData)
+                    Log.d("AAA", newModel.jsonData)
+                    ModelDB.update(oldModel, newModel).also { isSuccess ->
+                        if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
+                    }
                 }.show()
             cancelAction()
         }
