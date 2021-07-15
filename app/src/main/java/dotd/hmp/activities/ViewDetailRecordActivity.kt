@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
@@ -23,7 +21,6 @@ import dotd.hmp.hepler.DateTimeHelper
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.toFieldNameShow
 import dotd.hmp.hepler.setTextHTML
-import java.util.*
 
 class ViewDetailRecordActivity : AppCompatActivity() {
     private val b by lazy { ActivityViewDetailRecordBinding.inflate(layoutInflater) }
@@ -66,11 +63,8 @@ class ViewDetailRecordActivity : AppCompatActivity() {
         }
         b.btnSave.setOnClickListener {
             UIHelper.hideKeyboardFrom(this, b.root)
-            val oldModel = model.clone()
             model.updateRecord(recordCopy)
-            ModelDB.update(oldModel, model).also { isSuccess ->
-                if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
-            }
+            ModelDB.update(model = model)
             setResultForViewRecordsFragment()
             setUpLayoutViewRecord(recordCopy)
             hideLayoutEditData()

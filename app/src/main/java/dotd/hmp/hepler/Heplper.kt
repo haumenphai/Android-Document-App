@@ -11,3 +11,13 @@ fun TextView.setTextHTML(html: String) {
         this.setText(Html.fromHtml(html), TextView.BufferType.SPANNABLE)
     }
 }
+
+fun <T> List<T>.toListCopy(): List<T> {
+    val original = this
+    return mutableListOf<T>().apply { addAll(original) }
+}
+
+fun <T> List<T>.toMutableListCopy(): MutableList<T> {
+    val original = this
+    return mutableListOf<T>().apply { addAll(original) }
+}

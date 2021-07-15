@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".fragment.ViewRecordsFragment">
-    <!--todo: Check theme in layout, textview cannot visiable-->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -62,11 +61,69 @@
         android:translationZ="1dp"
         />
 
+    <RelativeLayout
+        android:id="@+id/layout_control"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/appbar_layout"
+        >
+        <TextView
+            android:id="@+id/tv_records_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="1000"
+            android:textSize="12sp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/tv_records_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tv_records_count"
+            android:text="100-200 / "
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/black"
+            />
+
+        <LinearLayout
+            android:id="@+id/layout_button"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_records_count"
+            android:layout_alignParentRight="true"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:id="@+id/img_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_arr_left"
+                android:background="@drawable/rippler_blue_white"
+                app:tint="@color/black"
+                />
+            <ImageView
+                android:id="@+id/img_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_arr_right"
+                android:background="@drawable/rippler_blue_white"
+                app:tint="@color/black"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbar_layout"
+        android:layout_below="@id/layout_control"
         android:layout_above="@id/layout_action_records"
         tools:itemCount="2"
         tools:listitem="@layout/item_data_model" />
