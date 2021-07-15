@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.DialogConfirm
-import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.getStr
 import kotlinx.coroutines.*
@@ -61,13 +59,62 @@ class ViewRecordsFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         act.model.observeForever {
-            adapter.setModel(it)
+            pagingForRecords(it)
+            b.tvRecordsCount.text = it.getRecordList().size.toString()
             b.tvNoRecord.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
         }
 
         b.recyclerView.layoutManager = LinearLayoutManager(act)
         b.recyclerView.adapter = adapter
         setClickRecord()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun pagingForRecords(model: Model) {
+        val list = model.getRecordList()
+        val maxRecordsCurrent = 100
+        var start = 0
+        var end = maxRecordsCurrent
+
+        if (list.size < maxRecordsCurrent) {
+            end = list.size
+        }
+        adapter.setRecordList(list.subList(start, end))
+        adapter.setStartIndex(start)
+        b.tvRecordsCurrent.text = "${start+1}-$end / "
+
+
+        b.imgRight.setOnClickListener {
+            start += maxRecordsCurrent
+            end += maxRecordsCurrent
+            if (start >= list.size) {
+                start = 0
+                end = maxRecordsCurrent
+            }
+            if (end >= list.size) {
+                end = list.size
+            }
+
+            adapter.setRecordList(list.subList(start, end))
+            adapter.setStartIndex(start)
+            b.tvRecordsCurrent.text = "${start+1}-$end / "
+        }
+        b.imgLeft.setOnClickListener {
+            start -= maxRecordsCurrent
+            end -= maxRecordsCurrent
+            if (start < 0) {
+                start = list.size - maxRecordsCurrent
+                end = list.size
+                if (start < 0) {
+                    start = 0
+                }
+            }
+
+            adapter.setRecordList(list.subList(start, end))
+            adapter.setStartIndex(start)
+            b.tvRecordsCurrent.text = "${start+1}-$end / "
+        }
+
     }
 
     private fun setClickRecord() {
@@ -137,12 +184,9 @@ class ViewRecordsFragment : Fragment() {
                 .setBtnOkClick {
                     recordsSelected.forEach {
                         val model = act.model.value!!
-                        val oldModel = model.clone()
                         model.deleteRecord(it)
                         act.model.value = model
-                        ModelDB.update(oldModel, model).also { isSuccess ->
-                            if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(act)
-                        }
+                        ModelDB.update(model = model)
                         cancelAction()
                     }
                     it.cancel()

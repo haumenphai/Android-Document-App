@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.R
@@ -16,8 +15,6 @@ import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
 import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
-import dotd.hmp.hepler.readFileAsTextUsingInputStream
-import dotd.hmp.hepler.writeFileText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

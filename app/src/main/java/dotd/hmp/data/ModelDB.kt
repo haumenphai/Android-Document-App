@@ -1,6 +1,5 @@
 package dotd.hmp.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,14 +36,18 @@ object ModelDB {
     }
 
 
-    fun update(oldModel: Model, model: Model): Boolean {
-        if (!checkContraintModelName(model.name))
-            return false
+    fun update(oldModel: Model? = null, model: Model): Boolean {
+        if (oldModel != null) {
+            // changed  model name
+            if (!checkContraintModelName(model.name))
+                return false
 
-        if (oldModel.name.trim() != model.name.trim()) {
-            model.jsonData = oldModel.getJsonDataFromFile()
-            oldModel.deleteFileJson()
+            if (oldModel.name.trim() != model.name.trim()) {
+                model.jsonData = oldModel.getJsonDataFromFile()
+                oldModel.deleteFileJson()
+            }
         }
+
 
         model.writeJsonToFile()
         dao.update(model)
