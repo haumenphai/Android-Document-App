@@ -72,11 +72,11 @@ class ViewRecordsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun pagingForRecords(model: Model) {
         val list = model.getRecordList()
-        val maxRecordsCurrent = 100
+        val maxRecordsShowed = 100
         var start = 0
-        var end = maxRecordsCurrent
+        var end = maxRecordsShowed
 
-        if (list.size < maxRecordsCurrent) {
+        if (list.size < maxRecordsShowed) {
             end = list.size
         }
         adapter.setRecordList(list.subList(start, end))
@@ -85,11 +85,11 @@ class ViewRecordsFragment : Fragment() {
 
 
         b.imgRight.setOnClickListener {
-            start += maxRecordsCurrent
-            end += maxRecordsCurrent
+            start += maxRecordsShowed
+            end += maxRecordsShowed
             if (start >= list.size) {
                 start = 0
-                end = maxRecordsCurrent
+                end = maxRecordsShowed
             }
             if (end >= list.size) {
                 end = list.size
@@ -100,10 +100,10 @@ class ViewRecordsFragment : Fragment() {
             b.tvRecordsCurrent.text = "${start+1}-$end / "
         }
         b.imgLeft.setOnClickListener {
-            start -= maxRecordsCurrent
-            end -= maxRecordsCurrent
+            start -= maxRecordsShowed
+            end -= maxRecordsShowed
             if (start < 0) {
-                start = list.size - maxRecordsCurrent
+                start = list.size - maxRecordsShowed
                 end = list.size
                 if (start < 0) {
                     start = 0

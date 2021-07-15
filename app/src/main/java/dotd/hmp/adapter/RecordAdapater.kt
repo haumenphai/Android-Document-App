@@ -20,7 +20,7 @@ class RecordAdapater :
 
     private lateinit var recordList: List<JsonObject>
     private lateinit var model: Model
-    var start: Int = 0
+    var startIndex: Int = 0
 
     @JvmName("setModel1")
     fun setModel(model: Model) {
@@ -34,8 +34,9 @@ class RecordAdapater :
         notifyDataSetChanged()
     }
 
+    @JvmName("setStartIndex1")
     fun setStartIndex(start: Int) {
-        this.start = start
+        this.startIndex = start
         notifyDataSetChanged()
     }
 
@@ -69,7 +70,7 @@ class RecordAdapater :
     override fun onBindViewHolder(holder: DataModelHolder, position: Int) {
         val b = holder.b
         val record = recordList[position]
-        b.tvSequence.text = "#${start+position+1}"
+        b.tvSequence.text = "#${startIndex+position+1}"
 
         try {
             if (record.get("is_selected").asBoolean) {
