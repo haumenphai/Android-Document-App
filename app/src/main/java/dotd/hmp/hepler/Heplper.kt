@@ -12,12 +12,8 @@ fun TextView.setTextHTML(html: String) {
     }
 }
 
-fun <T> List<T>.toListCopy(): List<T> {
-    val original = this
-    return mutableListOf<T>().apply { addAll(original) }
-}
+fun <T> List<T>.toListCopy(): List<T> =
+    mutableListOf<T>().apply { addAll(this) }
 
-fun <T> List<T>.toMutableListCopy(): MutableList<T> {
-    val original = this
-    return mutableListOf<T>().apply { addAll(original) }
-}
+fun <T> List<T>.toMutableListCopy(): MutableList<T> =
+    mutableListOf<T>().apply { addAll(this) }
