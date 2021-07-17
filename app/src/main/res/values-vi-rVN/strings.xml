@@ -60,4 +60,18 @@
     <string name="search">Tìm kiếm</string>
     <string name="insert_model_failure">Giữa các model không được trùng với tên nhau. Tạo model thất bại</string>
     <string name="update_model_failure">Giữa các model không được trùng với tên nhau. Sửa model thất bại.</string>
+    <string name="group">Nhóm</string>
+    <string name="group_by">Nhóm theo</string>
+    <string name="mess_field_name_not_unique">Các tên trường trong mô hình không được trùng nhau</string>
+    <string name="filter">Lọc</string>
+    <string name="current_filters">Bộ lọc hiện tại</string>
+    <string name="add_new_filter">Thêm bộ lọc mới</string>
+    <string name="field_name_2">Tên trường</string>
+    <string name="value_1">Giá trị</string>
+    <string name="enter_value_">Nhập giá trị:</string>
+    <string name="not">không phải</string>
+    <string name="contains">chứa</string>
+    <string name="not_contains">không chứa</string>
+    <string name="not_equal">khác</string>
+    <string name="filter_by">Lọc theo</string>
 </resources>

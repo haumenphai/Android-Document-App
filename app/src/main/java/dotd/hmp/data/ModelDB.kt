@@ -8,14 +8,15 @@ import kotlinx.coroutines.withContext
 
 object ModelDB {
     private val db by lazy { ModelDatabase.instance }
-    private val dao by lazy { db.dao() }
+    private val modelDao by lazy { db.modelDao() }
+    private val filterRecordDao by lazy { db.filterRecordDao() }
 
     fun insert(model: Model): Boolean {
         if (!checkContraintModelName(model.name))
             return false
 
         model.writeJsonToFile()
-        dao.insert(model)
+        modelDao.insert(model)
 
         return true
     }
@@ -24,14 +25,14 @@ object ModelDB {
     fun delete(vararg model: Model) {
         model.forEach {
             it.deleteFileJson()
-            dao.delete(it)
+            modelDao.delete(it)
         }
     }
 
     fun delete(list: List<Model>) {
         list.forEach {
             it.deleteFileJson()
-            dao.delete(it)
+            modelDao.delete(it)
         }
     }
 
@@ -50,22 +51,22 @@ object ModelDB {
 
 
         model.writeJsonToFile()
-        dao.update(model)
+        modelDao.update(model)
         return true
     }
 
     fun deleteAll() {
-        dao.getList().forEach {
+        modelDao.getList().forEach {
             it.deleteFileJson()
         }
-        dao.deleteAll()
+        modelDao.deleteAll()
     }
 
-    fun getList() = dao.getList()
+    fun getList() = modelDao.getList()
 
-    fun getLiveData() = dao.getLiveData()
+    fun getLiveData() = modelDao.getLiveData()
 
-    fun getModel(id: Int) = dao.getModel(id)
+    fun getModel(id: Int) = modelDao.getModel(id)
 
 
     fun insertInbackgroud(vararg model: Model, onComplete: (isSuccess: Boolean) -> Unit) {
@@ -78,7 +79,7 @@ object ModelDB {
         GlobalScope.launch {
             model.forEach {
                 it.writeJsonToFile()
-                dao.insert(it)
+                modelDao.insert(it)
             }
             withContext(Dispatchers.Main) {
                 onComplete(true)
@@ -90,7 +91,7 @@ object ModelDB {
     fun deleteInbackground(model: Model, onComplete: () -> Unit) {
         GlobalScope.launch {
             model.deleteFileJson()
-            dao.delete(model)
+            modelDao.delete(model)
             withContext(Dispatchers.Main) {
                 onComplete()
             }
@@ -111,7 +112,7 @@ object ModelDB {
             }
 
             model.writeJsonToFile()
-            dao.update(model)
+            modelDao.update(model)
             withContext(Dispatchers.Main) {
                 onComplete(true)
             }
@@ -121,10 +122,10 @@ object ModelDB {
 
     fun deleteAllInbackground(onComplete: () -> Unit) {
         GlobalScope.launch {
-            dao.getList().forEach {
+            modelDao.getList().forEach {
                 it.deleteFileJson()
             }
-            dao.deleteAll()
+            modelDao.deleteAll()
 
             withContext(Dispatchers.Main) {
                 onComplete()
@@ -134,7 +135,7 @@ object ModelDB {
 
     fun getListInBackground(onComplete: (list: List<Model>) -> Unit) {
         GlobalScope.launch {
-            val list = dao.getList()
+            val list = modelDao.getList()
             withContext(Dispatchers.Main) {
                 onComplete(list)
             }
@@ -143,7 +144,7 @@ object ModelDB {
 
     fun getLiveDataInBackground(onComplete: (list: LiveData<List<Model>>) -> Unit) {
         GlobalScope.launch {
-            val liveData = dao.getLiveData()
+            val liveData = modelDao.getLiveData()
             withContext(Dispatchers.Main) {
                 onComplete(liveData)
             }
@@ -152,7 +153,7 @@ object ModelDB {
 
     fun getModelInBackground(id: Int, onComplete: (model: Model) -> Unit) {
         GlobalScope.launch {
-            val model = dao.getModel(id)
+            val model = modelDao.getModel(id)
             withContext(Dispatchers.Main) {
                 onComplete(model)
             }
@@ -160,7 +161,7 @@ object ModelDB {
     }
 
     private fun checkContraintModelName(modelName: String): Boolean {
-        val list = dao.getList()
+        val list = modelDao.getList()
         for (model in list) {
             if (modelName == model.name)
                 return false

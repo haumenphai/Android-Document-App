@@ -3,6 +3,8 @@ package dotd.hmp.hepler
 import android.os.Build
 import android.text.Html
 import android.widget.TextView
+import java.util.*
+import kotlin.collections.HashMap
 
 fun TextView.setTextHTML(html: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -12,12 +14,17 @@ fun TextView.setTextHTML(html: String) {
     }
 }
 
-fun <T> List<T>.toListCopy(): List<T> {
-    val original = this
-    return mutableListOf<T>().apply { addAll(original) }
-}
+fun <T> List<T>.toListCopy(): List<T> =
+    mutableListOf<T>().apply { addAll(this) }
 
-fun <T> List<T>.toMutableListCopy(): MutableList<T> {
-    val original = this
-    return mutableListOf<T>().apply { addAll(original) }
+fun <T> List<T>.toMutableListCopy(): MutableList<T> =
+    mutableListOf<T>().apply { addAll(this) }
+
+fun <K, V> Map<K, V>.getKey(value: V): K? {
+    for ((key, value1) in this) {
+        if (Objects.equals(value, value1)) {
+            return key
+        }
+    }
+    return null
 }

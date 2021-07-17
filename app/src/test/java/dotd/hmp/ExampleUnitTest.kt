@@ -1,27 +1,15 @@
 package dotd.hmp
 
-import android.icu.util.Calendar
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dotd.hmp.data.Field
 import dotd.hmp.data.FieldType
-import dotd.hmp.data.ModelDemoDatas
-import dotd.hmp.hepler.DateTimeHelper
 import org.json.JSONObject
-import org.junit.Test
-
 import org.junit.Assert.*
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.Period
-import java.time.format.DateTimeFormatter
+import org.junit.Test
 import java.util.*
-import java.util.Calendar.YEAR
-import kotlin.time.Duration
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -88,5 +76,23 @@ class ExampleUnitTest {
 
     @Test
     fun tedt() {
+        val list = mutableListOf(1, 2, 3, 4, 5, 6)
+        val l1 = list.subList(0, 2)
+        val l2 = list.subList(2, 4)
+        val l3 = list.subList(4, 6)
+
+        println(l1)
+        println(l2)
+        println(l3)
+
+
+        println(list.chunked(list.size))
     }
+
+    @Test
+    fun test22() {
+        println("13" >= "14")
+    }
+
+
 }

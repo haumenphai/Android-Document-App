@@ -57,6 +57,11 @@ class CreateModelAcivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
+            if (!checkFieldNameUnique(fieldList)) {
+                showMess(getString(R.string.mess_field_name_not_unique))
+                return@setOnClickListener
+            }
+
             DialogConfirmCreateModel(this).apply {
                 b.tvContent.text = getTextFieldsConfirm()
                 b.tvModelName.text = modelName
@@ -131,5 +136,13 @@ class CreateModelAcivity : AppCompatActivity() {
             textContent += "${it.fieldName.toFieldNameShow()}: ${it.fieldType.toString().title()}\n"
         }
         return textContent
+    }
+
+    private fun checkFieldNameUnique(fieldList: List<Field>): Boolean {
+        val fieldSet = fieldList.map { it.fieldName }.toSet()
+        if (fieldList.size != fieldSet.size) {
+            return false
+        }
+        return true
     }
 }

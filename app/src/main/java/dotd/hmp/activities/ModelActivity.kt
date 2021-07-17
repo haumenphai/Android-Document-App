@@ -15,15 +15,14 @@ import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
 import dotd.hmp.dialog.DialogShowMess
 import dotd.hmp.hepler.UIHelper
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class ModelActivity : AppCompatActivity() {
     private val b by lazy { ModelActivityBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
-
+    val list = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(b.root)
@@ -31,7 +30,7 @@ class ModelActivity : AppCompatActivity() {
 
         b.btnTest.setOnClickListener {
             // TODO: remove test
-            val db = ModelDatabase.instance.dao()
+            val db = ModelDatabase.instance.modelDao()
             db.deleteAll()
         }
 
@@ -51,7 +50,7 @@ class ModelActivity : AppCompatActivity() {
         b.recyclerView.adapter = adapter
         b.recyclerView.layoutManager = GridLayoutManager(this, 4)
 
-        ModelDatabase.instance.dao().getLiveData().observe(this, {
+        ModelDatabase.instance.modelDao().getLiveData().observe(this, {
             val list = it.toMutableList()
             if (!list.contains(Model.itemAddNewModel))
                 list.add(Model.itemAddNewModel)
@@ -150,8 +149,6 @@ class ModelActivity : AppCompatActivity() {
             val oldModel = adapter.getItemSelected()[0]
             DialogEditModel(this, oldModel.clone())
                 .setBtnSaveClick { newModel->
-                    Log.d("AAA", oldModel.jsonData)
-                    Log.d("AAA", newModel.jsonData)
                     ModelDB.update(oldModel, newModel).also { isSuccess ->
                         if (!isSuccess) DialogShowMess.showMessUpdateModelFailure(this)
                     }
