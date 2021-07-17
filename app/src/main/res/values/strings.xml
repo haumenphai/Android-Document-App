@@ -61,5 +61,19 @@
     <string name="search">Search</string>
     <string name="insert_model_failure">Models cannot have the same name. \n\nCreate model failed.</string>
     <string name="update_model_failure">Models cannot have the same name. \n\nEdit model failed.</string>
+    <string name="group">Group</string>
+    <string name="group_by">Group by</string>
+    <string name="filter">Filter</string>
+    <string name="current_filters">Current Filters:</string>
+    <string name="add_new_filter">Add new filter</string>
+    <string name="field_name_2">Field Name:</string>
+    <string name="value_1">Value:</string>
+    <string name="enter_value_">Enter value...</string>
+    <string name="not">not</string>
+    <string name="contains">contains</string>
+    <string name="not_contains">not contains</string>
+    <string name="not_equal">not equal</string>
+    <string name="mess_field_name_not_unique">The field names in the model must not be the same</string>
+    <string name="filter_by">Filter by</string>
 
 </resources>

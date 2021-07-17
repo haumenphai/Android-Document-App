@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_rippler_item_group"
+    android:id="@+id/background"
+    >
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center|left"
+        tools:text="age: 15 (20)"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:textStyle="bold"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/text_color_hint"
+        android:id="@+id/line"
+        />
+</RelativeLayout>

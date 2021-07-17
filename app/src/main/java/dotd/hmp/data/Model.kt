@@ -90,6 +90,14 @@ class Model: Serializable {
     // field list not contain default field
     fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
 
+    fun getField(fieldName: String): Field? {
+        getFieldList().forEach {
+            if (fieldName == it.fieldName)
+                return it
+        }
+        return null
+    }
+
     fun addRecord(record: JsonObject) {
         if (!isRecordValidate(record)) {
             throw Exception("Exception when add new record, jsonOject not enough field when compared to fieldList of Model")
@@ -198,25 +206,37 @@ class Model: Serializable {
      * @param searchMethod:
      *     relative: relative search
      *     exact: exact search
+     *
+     * @param records: search in records
      */
     fun searchRecords(
         keySearch: String,
         _withField: MutableList<Field>? = null,
         limit: Int? = null,
-        searchMethod: String = "relative"
+        searchMethod: String = "relative",
+        records: List<JsonObject> = getRecordList(),
+        filter: FilterRecord? = null
     ): Model {
         if (keySearch.trim() == "") return this
 
-        val withField: MutableList<Field> = mutableListOf()
-        if (_withField == null) {
-            getFieldList().forEach {
-                withField.add(it)
+        var withField: MutableList<Field> = mutableListOf()
+
+        when {
+            filter != null -> {
+                withField = mutableListOf(filter.getField())
             }
-            withField.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
+            _withField == null -> {
+                getFieldList().forEach {
+                    withField.add(it)
+                }
+                withField.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
+            }
+            else -> {
+                withField = _withField
+            }
         }
 
         val model = this.clone()
-        val records = model.getRecordList()
         val resultSet = HashSet<JsonObject>()
         val key = keySearch.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()
 
@@ -225,24 +245,55 @@ class Model: Serializable {
                 val v = r.getValueOfField(field.fieldName)
                 val value: String? = when(field.fieldType) {
                     FieldType.DATETIME ->
-                        DateTimeHelper.timestampToDatetimeString(v.toLong())
+                        DateTimeHelper.timestampToDatetimeString(v.toLong()).toLowerCase(Locale.ROOT)
 
                     FieldType.TEXT, FieldType.NUMBER ->
                         v.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()
 
-                    // field type not support for search when search in all field
+                    // field type not support for search
                     else -> null
                 }
+
                 value?.let {
-                    when (searchMethod) {
-                        "relative" ->
-                            if (value.contains(key))
-                                resultSet.add(r)
-                        "exact" ->
-                            if (value == key)
-                                resultSet.add(r)
+                    if (filter != null) {
+                        when(filter.operator) {
+                            ">" ->
+                                if (value > key)
+                                    resultSet.add(r)
+                            ">=" ->
+                                if (value >= key)
+                                    resultSet.add(r)
+                            "<" ->
+                                if (value < key)
+                                    resultSet.add(r)
+                            "<=" ->
+                                if (value <= key)
+                                    resultSet.add(r)
+                            "=" ->
+                                if (value == key)
+                                    resultSet.add(r)
+                            "!=" ->
+                                if (value != key)
+                                    resultSet.add(r)
+                            "contains" ->
+                                if (value.contains(key))
+                                    resultSet.add(r)
+                            "not contains" ->
+                                if (!value.contains(key))
+                                    resultSet.add(r)
+                        }
+                    } else {
+                        when (searchMethod) {
+                            "relative" ->
+                                if (value.contains(key))
+                                    resultSet.add(r)
+                            "exact" ->
+                                if (value == key)
+                                    resultSet.add(r)
+                        }
                     }
                 }
+
             }
             if (limit != null && limit == resultSet.size)
                 break
@@ -254,6 +305,15 @@ class Model: Serializable {
         }
         return model
     }
+
+    fun filter(filter: FilterRecord, records: List<JsonObject> = getRecordList()): Model {
+        return searchRecords(
+            keySearch = filter.value,
+            records = records,
+            filter = filter
+        )
+    }
+
 
     fun hasField(fieldName: String): Boolean {
         getFieldList().forEach {
@@ -276,6 +336,24 @@ class Model: Serializable {
         model.description = this.description
         return model
     }
+
+    fun getDifferentFieldValue(field: Field, records: List<JsonObject> = getRecordList()): List<String> {
+        val set = HashSet<String>()
+        records.forEach {
+            set.add(it.getValueOfField(field))
+        }
+        return set.toList()
+    }
+
+    fun getRecordsHasValueOfField(field: Field, value: String, records: List<JsonObject> = getRecordList()): List<JsonObject> {
+        return searchRecords(
+            keySearch = value,
+            _withField = mutableListOf(field),
+            searchMethod = "exact",
+            records = records
+        ).getRecordList()
+    }
+
 
     private fun insertDefaultField(record: JsonObject) {
         val id = JsonObject()
@@ -312,6 +390,7 @@ enum class FieldType {
 }
 
 class Field(var fieldName: String, var fieldType: FieldType) {
+    var isChecked = false
 
     fun isValid(): Boolean = fieldName.trim() != ""
 
@@ -323,6 +402,10 @@ class Field(var fieldName: String, var fieldType: FieldType) {
         )
     }
 
+    fun clone(): Field {
+        return Field(fieldName, fieldType)
+    }
+
     override fun toString(): String = "($fieldName: $fieldType)"
 
 }
@@ -332,6 +415,14 @@ fun String.isDefaultField() = this in defaultField
 
 fun JsonObject.getValueOfField(fieldName: String): String {
     return this.get(fieldName).asJsonObject.get("value").asString
+}
+
+fun JsonObject.getValueOfField(field: Field): String {
+    val value = getValueOfField(field.fieldName)
+    return when (field.fieldType) {
+        FieldType.NUMBER, FieldType.TEXT -> value
+        FieldType.DATETIME -> DateTimeHelper.timestampToDatetimeString(value.toLong())
+    }
 }
 
 fun JsonObject.getFieldType(fieldName: String): String {

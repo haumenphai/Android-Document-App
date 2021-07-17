@@ -1,6 +1,5 @@
 package dotd.hmp.data
 
-import android.graphics.Color
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,9 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Model::class], version = 1)
+@Database(entities = [Model::class, FilterRecord::class], version = 1)
 abstract class ModelDatabase: RoomDatabase() {
-    abstract fun dao(): ModelDao
+    abstract fun modelDao(): ModelDao
+    abstract fun filterRecordDao(): FilterRecordDao
 
     companion object {
         val instance: ModelDatabase by lazy {

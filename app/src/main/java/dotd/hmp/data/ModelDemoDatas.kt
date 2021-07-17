@@ -70,7 +70,7 @@ object ModelDemoDatas {
                     }
                     
                 ]
-            """.trim().replace("\n", "").replace(" ", "")
+            """.trim().replace("\n", "")
         val model = Model().apply {
             name = getStr(R.string.student)
             icon = R.drawable.ic_clear
