@@ -406,7 +406,7 @@ class Model: Serializable {
         val updateTime = JsonObject()
         updateTime.addProperty("fieldType", FieldType.DATETIME.toString())
         updateTime.addProperty("value", System.currentTimeMillis().toString())
-        record.add("update_time", updateTime)
+        record.add(getStr(R.string.default_field_last_update_time), updateTime)
     }
 
     @JvmName("getFilePath1")
@@ -466,4 +466,66 @@ fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
     val jsonObj = this.deepCopy()
     jsonObj[fieldName].asJsonObject.addProperty("value", value)
     return jsonObj
+}
+
+fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
+    val html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                }
+
+                td, th {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #dddddd;
+                }
+            </style>
+        </head>
+        <body>
+            <table>
+                <tr>%s</tr>
+                %s
+            </table>
+        </body>
+
+        </html>
+    """.trimIndent()
+
+    val fieldList = getFieldList().toMutableList()
+    fieldList.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
+    fieldList.add(Field(getStr(R.string.default_field_last_update_time), FieldType.DATETIME))
+
+    var tr1 = ""
+    tr1 += "<th></th>"
+    fieldList.forEach {
+        tr1 += "<th>${it.fieldName.toFieldNameShow()}</th>"
+    }
+
+    var trList = ""
+
+    for ((i,v) in records.withIndex()) {
+        var td = "<td>${i+1}.</td>"
+
+        fieldList.forEach { field ->
+            var value = ""
+            try {
+                value = v.getValueOfField(field)
+            } catch (e: Exception) {}
+            td += "<td>$value</td>"
+        }
+        trList += "<tr>$td</tr>"
+    }
+
+
+
+   return html.format(tr1, trList)
 }

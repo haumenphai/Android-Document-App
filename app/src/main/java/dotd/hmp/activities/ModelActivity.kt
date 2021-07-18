@@ -19,12 +19,14 @@ import kotlinx.coroutines.*
 
 
 class ModelActivity : AppCompatActivity() {
-    private val b by lazy { ModelActivityBinding.inflate(layoutInflater) }
+    private lateinit var b: ModelActivityBinding
     private val adapter: ModelApdater = ModelApdater()
 
     val list = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        b = ModelActivityBinding.inflate(layoutInflater)
+
         setContentView(b.root)
         setUpRecyclerView()
 

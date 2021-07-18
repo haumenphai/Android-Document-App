@@ -80,5 +80,6 @@
     <string name="decrease">Decrease</string>
     <string name="sort_by">Sort by</string>
     <string name="reverse">Reverse</string>
+    <string name="operator_">Operator:</string>
 
 </resources>
