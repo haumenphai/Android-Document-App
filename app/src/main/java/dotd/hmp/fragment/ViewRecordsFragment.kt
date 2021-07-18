@@ -467,7 +467,7 @@ class ViewRecordsFragment : Fragment() {
             val motherOfList = if (originalList.size >= maxThread) {
                 originalList.chunked(originalList.size / maxThread).toMutableList()
             }  else {
-                originalList.chunked(1).toMutableList()
+                originalList.chunked(originalList.size).toMutableList()
             }
             val resultSet = HashSet<JsonObject>()
 
