@@ -14,9 +14,7 @@ import dotd.hmp.R
 import dotd.hmp.data.*
 import dotd.hmp.databinding.DialogFilterRecordsBinding
 import dotd.hmp.databinding.ItemFilterRecordBinding
-import dotd.hmp.hepler.getKey
-import dotd.hmp.hepler.getStr
-import dotd.hmp.hepler.setTextHTML
+import dotd.hmp.hepler.*
 
 class DialogFilterRecord(
     private val context: Context,
@@ -37,10 +35,10 @@ class DialogFilterRecord(
         adapter.setList(filterRecordList)
 
 
-        val fieldNameList = model.getFieldList().map { it.fieldName }.toMutableList()
+        val fieldNameList = model.getFieldList().map { it.fieldName.toFieldNameShow() }.toMutableList()
         val operatorListShow = FilterRecord.operatorAvailable.values.toMutableList()
 
-        var field: Field = model.getField(fieldNameList[0])!!
+        var field: Field = model.getField(fieldNameList[0].toFieldNameStore())!!
         var operator: String = FilterRecord.operatorAvailable.getKey(operatorListShow[0])!!
         var value: String
 
@@ -51,7 +49,7 @@ class DialogFilterRecord(
             ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, fieldNameList)
         b.spinnerFieldName.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                field = model.getField(fieldNameList[position])!!
+                field = model.getField(fieldNameList[position].toFieldNameStore())!!
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -165,7 +163,7 @@ class DialogFilterRecord(
             }
 
             val text = """
-                ${filterRecord.getField().fieldName} <b>${filterRecord.getOperatorToShow()}</b> ${filterRecord.value}
+                ${filterRecord.getField().fieldName.toFieldNameShow()} <b>${filterRecord.getOperatorToShow()}</b> ${filterRecord.value}
             """.trimIndent()
             b.tvContent.setTextHTML(text)
         }

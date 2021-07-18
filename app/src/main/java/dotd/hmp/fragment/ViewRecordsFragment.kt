@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,10 +21,7 @@ import dotd.hmp.data.FilterRecord
 import dotd.hmp.data.Model
 import dotd.hmp.data.ModelDB
 import dotd.hmp.databinding.FragmentViewRecordsBinding
-import dotd.hmp.dialog.DialogConfirm
-import dotd.hmp.dialog.DialogFilterRecord
-import dotd.hmp.dialog.DialogPickFieldForGroup
-import dotd.hmp.dialog.DialogLoadingFullScreen
+import dotd.hmp.dialog.*
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.getStr
 import kotlinx.coroutines.*
@@ -50,6 +48,10 @@ class ViewRecordsFragment : Fragment() {
     private var fieldForGroup: Field? = null
     private var isGrouping: Boolean = false
 
+    private var isSorting: Boolean = false
+    private var fieldForSort: Field? = null
+    private var reverseSort: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -62,6 +64,7 @@ class ViewRecordsFragment : Fragment() {
         setUpRecyclerView()
         setUpLayoutAction()
         setUpSearchView()
+        setUpSortRecords()
 
         return b.root
     }
@@ -98,6 +101,10 @@ class ViewRecordsFragment : Fragment() {
         var start = 0
         var end = maxRecordsShowed
         var currentRecords: List<JsonObject> = listOf()
+
+        if (isSorting) {
+            records = sortRecords(records)
+        }
 
         fun initValue(records: List<JsonObject>) {
             b.tvRecordsCount.text = records.size.toString()
@@ -164,6 +171,27 @@ class ViewRecordsFragment : Fragment() {
         }
         setUpFilterGroup(currentRecords)
     }
+
+    private val dialogSortRecord by lazy { DialogSortRecords(act, model.getFieldList()) }
+    private fun setUpSortRecords() {
+        dialogSortRecord.setOnClickItem { field, reverse ->
+            this.fieldForSort = field
+            this.reverseSort = reverse
+            this.isSorting = true
+            pagingForRecords(model.getRecordList())
+        }
+        b.imgSort.setOnClickListener {
+            dialogSortRecord.show()
+        }
+    }
+
+    private fun sortRecords(records: List<JsonObject>): MutableList<JsonObject> {
+        val list = model.sortByField(fieldForSort!!, records).getRecordList()
+        if (reverseSort)
+            list.reverse()
+        return list
+    }
+
 
     private val dialogGroupsRecord by lazy { DialogPickFieldForGroup(act, model.getFieldList()) }
     private val dialogFilterRecord by lazy { DialogFilterRecord(act, model) }
