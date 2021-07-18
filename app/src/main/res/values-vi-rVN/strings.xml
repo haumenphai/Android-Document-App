@@ -74,4 +74,9 @@
     <string name="not_contains">không chứa</string>
     <string name="not_equal">khác</string>
     <string name="filter_by">Lọc theo</string>
+    <string name="sort">Sắp xếp</string>
+    <string name="increase">Tăng dần</string>
+    <string name="decrease">Giảm dần</string>
+    <string name="sort_by">Sắp xếp theo</string>
+    <string name="reverse">Đảo ngược</string>
 </resources>

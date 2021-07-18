@@ -174,26 +174,34 @@ class Model: Serializable {
         return true
     }
 
-    fun sortByField(fieldName: String): Model {
-        val recordList = getRecordList()
+    fun sortByField(field: Field, recordList: List<JsonObject> = getRecordList()): Model {
         if (recordList.isEmpty()) return this
-        if (!hasField(fieldName)) {
+        if (!hasField(field.fieldName)) {
             Log.e("Model", "Error at: [Model.kt, sortByField()]: Can't sort records, " +
-                      "field name: \"$fieldName\" doesn't not exist.")
+                      "field name: \"$field.fieldName\" doesn't not exist.")
             return this
         }
-        getFieldList().forEach {
-            if (!it.isFieldCanSorted()) {
-                Log.e("Model", "Error at: [Model.kt, sortByField()]: $it is not field type can sort.")
-                return this
-            }
+        if (!field.isFieldCanSorted()) {
+            Log.e("Model", "Error at: [Model.kt, sortByField()]: $field is not field type can sort.")
+            return this
         }
 
         val model = this.clone()
-        val listSorted = recordList.sortedWith(compareBy(
-            {it.getValueOfField(fieldName)},
-            {it.getValueOfField(fieldName)}
-        ))
+        val listSorted: List<JsonObject> = when (field.fieldType) {
+            FieldType.NUMBER -> {
+                recordList.sortedWith(compareBy(
+                    {it.getValueOfField(field).toFloat()},
+                    {it.getValueOfField(field).toFloat()}
+                ))
+            }
+            FieldType.TEXT, FieldType.DATETIME -> {
+                recordList.sortedWith(compareBy(
+                    {it.getValueOfField(field)},
+                    {it.getValueOfField(field)}
+                ))
+            }
+        }
+
         model.jsonData = listSorted.toString()
         return model
     }
@@ -256,19 +264,44 @@ class Model: Serializable {
 
                 value?.let {
                     if (filter != null) {
-                        when(filter.operator) {
+                        when (filter.operator) {
                             ">" ->
-                                if (value > key)
+                            {
+                                if (field.fieldType == FieldType.NUMBER) {
+                                    if (value.toFloat() > key.toFloat())
+                                        resultSet.add(r)
+                                } else if (value > key) {
                                     resultSet.add(r)
+                                }
+                            }
                             ">=" ->
-                                if (value >= key)
+                            {
+                                if (field.fieldType == FieldType.NUMBER) {
+                                    if (value.toFloat() >= key.toFloat())
+                                        resultSet.add(r)
+                                } else if (value >= key) {
                                     resultSet.add(r)
+                                }
+                            }
+
                             "<" ->
-                                if (value < key)
+                            {
+                                if (field.fieldType == FieldType.NUMBER) {
+                                    if (value.toFloat() < key.toFloat())
+                                        resultSet.add(r)
+                                } else if (value < key) {
                                     resultSet.add(r)
+                                }
+                            }
                             "<=" ->
-                                if (value <= key)
+                            {
+                                if (field.fieldType == FieldType.NUMBER) {
+                                    if (value.toFloat() <= key.toFloat())
+                                        resultSet.add(r)
+                                } else if (value <= key) {
                                     resultSet.add(r)
+                                }
+                            }
                             "=" ->
                                 if (value == key)
                                     resultSet.add(r)

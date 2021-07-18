@@ -26,10 +26,6 @@ interface ModelDao {
     @Query("SELECT * FROM model WHERE id=:id")
     fun getModel(id: Int): Model
 
-    @Query("SELECT * FROM filterrecord WHERE modelId=:modelId")
-    fun getFilterRecordList(modelId: Int): List<FilterRecord>
 
-    @Query("SELECT * FROM filterrecord WHERE modelId=:modelId")
-    fun getFilterRecordLiveData(modelId: Int): LiveData<List<FilterRecord>>
 
 }

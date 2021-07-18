@@ -183,6 +183,27 @@
                 android:background="@drawable/rippler_blue_white"
                 android:src="@drawable/ic_group" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_sort"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_records_current"
+            android:layout_toLeftOf="@id/layout_filter_group"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:weightSum="2">
+
+            <ImageView
+                android:id="@+id/img_sort"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_sort"
+                android:background="@drawable/rippler_blue_white"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

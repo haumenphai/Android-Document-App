@@ -75,5 +75,10 @@
     <string name="not_equal">not equal</string>
     <string name="mess_field_name_not_unique">The field names in the model must not be the same</string>
     <string name="filter_by">Filter by</string>
+    <string name="sort">Sort</string>
+    <string name="increase">Increase</string>
+    <string name="decrease">Decrease</string>
+    <string name="sort_by">Sort by</string>
+    <string name="reverse">Reverse</string>
 
 </resources>

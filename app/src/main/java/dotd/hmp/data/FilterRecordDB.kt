@@ -4,26 +4,25 @@ import androidx.lifecycle.LiveData
 
 object FilterRecordDB {
     private val db by lazy { ModelDatabase.instance }
-    private val modelDao by lazy { db.modelDao() }
-    private val filterRecordDao by lazy { db.filterRecordDao() }
+    private val dao by lazy { db.filterRecordDao() }
 
     fun getList(modelId: Int): List<FilterRecord> {
-        return modelDao.getFilterRecordList(modelId)
+        return dao.getFilterRecordList(modelId)
     }
 
     fun getLiveData(modelId: Int): LiveData<List<FilterRecord>> {
-        return modelDao.getFilterRecordLiveData(modelId)
+        return dao.getFilterRecordLiveData(modelId)
     }
 
     fun insert(filterRecord: FilterRecord) {
-        filterRecordDao.insert(filterRecord)
+        dao.insert(filterRecord)
     }
 
     fun update(filterRecord: FilterRecord) {
-        filterRecordDao.update(filterRecord)
+        dao.update(filterRecord)
     }
 
     fun delete(filterRecord: FilterRecord) {
-        filterRecordDao.delete(filterRecord)
+        dao.delete(filterRecord)
     }
 }

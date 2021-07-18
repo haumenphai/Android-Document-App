@@ -11,7 +11,7 @@ class FilterRecord {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var modelId: Int = 0
-    var field: String = ""      // json
+    var _field: String = ""      // json
     var operator: String = ""
     var value: String = ""
 
@@ -24,11 +24,11 @@ class FilterRecord {
     }
 
     fun getField(): Field {
-        return Gson().fromJson(field, Field::class.java)
+        return Gson().fromJson(_field, Field::class.java)
     }
 
     fun setFiled(field: Field) {
-        this.field = Gson().toJson(field)
+        this._field = Gson().toJson(field)
     }
 
     fun getOperatorToShow(): String {
@@ -69,6 +69,12 @@ interface FilterRecordDao {
 
     @Query("SELECT * FROM filterrecord")
     fun getLiveData(): LiveData<List<FilterRecord>>
+
+    @Query("SELECT * FROM filterrecord WHERE modelId=:modelId")
+    fun getFilterRecordList(modelId: Int): List<FilterRecord>
+
+    @Query("SELECT * FROM filterrecord WHERE modelId=:modelId")
+    fun getFilterRecordLiveData(modelId: Int): LiveData<List<FilterRecord>>
 }
 
 
