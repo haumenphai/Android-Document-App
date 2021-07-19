@@ -102,6 +102,7 @@ class ViewRecordsFragment : Fragment() {
         }
         webView.webChromeClient = WebChromeClient()
         layoutWebView.removeAllViews()
+        b.container.addView(webView)
         webView
     }
 
@@ -109,14 +110,14 @@ class ViewRecordsFragment : Fragment() {
         b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
 
         b.imgTable.setOnClickListener {
-            b.container.addView(webView)
+            webView.visibility = View.VISIBLE
             this.viewMode = ViewMODE.TABLE
             b.imgTable.setBackgroundColor(Color.parseColor("#B6B6B6"))
             b.imgList.setBackgroundResource(R.drawable.rippler_blue_white)
             pagingForRecords(model.getRecordList())
         }
         b.imgList.setOnClickListener {
-            b.container.removeView(webView)
+            webView.visibility = View.GONE
             this.viewMode = ViewMODE.LIST
             b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
             b.imgTable.setBackgroundResource(R.drawable.rippler_blue_white)
