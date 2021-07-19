@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -101,6 +102,7 @@ class ViewRecordsFragment : Fragment() {
             builtInZoomControls = true
         }
         webView.webChromeClient = WebChromeClient()
+        webView.addJavascriptInterface(this, "app")
         layoutWebView.removeAllViews()
         b.container.addView(webView)
         webView
@@ -581,6 +583,14 @@ class ViewRecordsFragment : Fragment() {
                 b.iconLoadingSearch.visibility = View.GONE
             }
         }
+    }
+
+    @JavascriptInterface
+    fun viewRecord(recordID: String) {
+        val intent = Intent(context, ViewDetailRecordActivity::class.java)
+        intent.putExtra("model", act.model.value)
+        intent.putExtra("recordString", model.getRecord(recordID).toString())
+        startActivityForResult(intent, 123)
     }
 
     private enum class ViewMODE {

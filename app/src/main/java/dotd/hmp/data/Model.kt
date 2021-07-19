@@ -387,6 +387,14 @@ class Model: Serializable {
         ).getRecordList()
     }
 
+    fun getRecord(recordId: String, records: List<JsonObject> = getRecordList()): JsonObject? {
+        records.forEach {
+            if (it.getValueOfField("id") == recordId)
+                return it
+        }
+        return null
+    }
+
 
     private fun insertDefaultField(record: JsonObject) {
         val id = JsonObject()
@@ -408,6 +416,7 @@ class Model: Serializable {
         updateTime.addProperty("value", System.currentTimeMillis().toString())
         record.add(getStr(R.string.default_field_last_update_time), updateTime)
     }
+
 
     @JvmName("getFilePath1")
     fun getFilePath() = "${MyApplication.context.filesDir}/$name.json"
@@ -488,6 +497,10 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
                 tr:nth-child(even) {
                     background-color: #dddddd;
                 }
+                
+                tr:active {
+                     background-color: darkgoldenrod;
+                }
             </style>
         </head>
         <body>
@@ -496,9 +509,23 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
                 %s
             </table>
         </body>
+        
+        <script>
+            var trList = Array.from(document.getElementsByTagName('tr'));
+            trList = trList.slice(1, trList.length);
 
+            for (let i = 0; i < trList.length; i++) {
+                const record = trList[i];
+                const idRecord = record.getAttribute('id');
+                trList[i].addEventListener("click", function () {
+                    app.viewRecord(idRecord);
+                });
+            }
+        </script>
+             
         </html>
     """.trimIndent()
+    // todo: app.openRecord(recordString)
 
     val fieldList = getFieldList().toMutableList()
     fieldList.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
@@ -513,6 +540,7 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
     var trList = ""
 
     for ((i,v) in records.withIndex()) {
+        val idRecord = v.getValueOfField("id")
         var td = "<td>${i+1}.</td>"
 
         fieldList.forEach { field ->
@@ -522,7 +550,7 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
             } catch (e: Exception) {}
             td += "<td>$value</td>"
         }
-        trList += "<tr>$td</tr>"
+        trList += """<tr id="$idRecord">$td</tr>"""
     }
 
 
