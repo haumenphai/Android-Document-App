@@ -9,6 +9,9 @@ import android.util.Log
 import android.view.*
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
+import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -86,28 +89,34 @@ class ViewRecordsFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun setUpViewMode() {
-//        b.webView.settings.useWideViewPort = true
-//        b.webView.setInitialScale(1)
-        b.webView.settings.apply {
+    private val layoutWebView: FrameLayout by lazy {
+        layoutInflater.inflate(R.layout.view_webview, b.root, false) as FrameLayout
+    }
+    private val webView: WebView by lazy {
+        val webView: WebView = layoutWebView.findViewById(R.id.web_view)
+        webView.settings.apply {
             displayZoomControls = false
             useWideViewPort = true
             javaScriptEnabled = true
             builtInZoomControls = true
         }
-        b.webView.webChromeClient = WebChromeClient()
+        webView.webChromeClient = WebChromeClient()
+        layoutWebView.removeAllViews()
+        webView
+    }
 
+    private fun setUpViewMode() {
+        b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
 
         b.imgTable.setOnClickListener {
-            b.webView.visibility = View.VISIBLE
+            b.container.addView(webView)
             this.viewMode = ViewMODE.TABLE
             b.imgTable.setBackgroundColor(Color.parseColor("#B6B6B6"))
             b.imgList.setBackgroundResource(R.drawable.rippler_blue_white)
             pagingForRecords(model.getRecordList())
         }
         b.imgList.setOnClickListener {
-            b.webView.visibility = View.GONE
+            b.container.removeView(webView)
             this.viewMode = ViewMODE.LIST
             b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
             b.imgTable.setBackgroundResource(R.drawable.rippler_blue_white)
@@ -117,7 +126,10 @@ class ViewRecordsFragment : Fragment() {
 
     private fun loadDataViewTable(records: List<JsonObject>) {
         if (viewMode == ViewMODE.TABLE) {
-            b.webView.loadDataWithBaseURL(null,model.toHtmlTable(records), "text/html; charset=utf-8", "UTF-8", null)
+            webView.loadDataWithBaseURL(
+                null, model.toHtmlTable(records),
+                "text/html; charset=utf-8", "UTF-8", null
+            )
         }
     }
 

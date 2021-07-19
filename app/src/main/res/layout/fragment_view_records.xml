@@ -239,37 +239,43 @@
         android:layout_below="@id/layout_control"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/layout_action_records"
-        android:layout_below="@id/line"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_data_model" />
-
-    <WebView
-        android:visibility="gone"
-        android:id="@+id/web_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_action_records"
+        android:id="@+id/container"
         android:layout_below="@id/line"
-        >
-
-    </WebView>
-
-    <ExpandableListView
-        android:visibility="gone"
-        android:id="@+id/expanded_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_above="@id/layout_action_records"
-        android:layout_below="@id/layout_control"
-        android:divider="@color/black"
-        android:dividerHeight="0.5dp"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-        />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_data_model" />
+        <ExpandableListView
+            android:visibility="gone"
+            android:id="@+id/expanded_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/black"
+            android:dividerHeight="0.5dp"
+            android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+            />
+    </RelativeLayout>
+
+
+
+<!--    <WebView-->
+<!--        android:visibility="gone"-->
+<!--        android:id="@+id/web_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_above="@id/layout_action_records"-->
+<!--        android:layout_below="@id/line"-->
+<!--        >-->
+<!--    </WebView>-->
+
+
 
     <include
         android:id="@+id/layout_action_records"
