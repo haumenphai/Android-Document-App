@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dotd.hmp.R
 import dotd.hmp.data.Field
+import dotd.hmp.data.FieldType
 import dotd.hmp.databinding.DialogSortRecordsBinding
 import dotd.hmp.databinding.ItemSortReocrdsBinding
 import dotd.hmp.hepler.getStr
@@ -18,7 +19,7 @@ import dotd.hmp.hepler.toFieldNameShow
 
 class DialogSortRecords(
     private val context: Context,
-    private val list: List<Field>
+    private val list: MutableList<Field>
 ) {
     private val view by lazy { LayoutInflater.from(context).inflate(R.layout.dialog_sort_records, null) }
     private val b by lazy { DialogSortRecordsBinding.bind(view) }
@@ -29,9 +30,15 @@ class DialogSortRecords(
     }
     private val adapter: FieldAdapter by lazy { FieldAdapter() }
 
+    private fun getFieldDefaultSort(): Field {
+        val field = Field(getStr(R.string.default_field_create_time), FieldType.DATETIME)
+        field.isChecked = true
+        return field
+    }
     init {
         b.recyclerView.layoutManager = LinearLayoutManager(context)
         b.recyclerView.adapter = adapter
+        list.add(0, getFieldDefaultSort())
         adapter.setList(list)
 
     }

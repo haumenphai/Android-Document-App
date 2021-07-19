@@ -117,7 +117,7 @@ class ViewRecordsFragment : Fragment() {
             pagingForRecords(model.getRecordList())
         }
         b.imgList.setOnClickListener {
-            webView.visibility = View.GONE
+            webView.visibility = View.INVISIBLE
             this.viewMode = ViewMODE.LIST
             b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
             b.imgTable.setBackgroundResource(R.drawable.rippler_blue_white)
@@ -233,7 +233,7 @@ class ViewRecordsFragment : Fragment() {
         setUpFilterGroup(currentRecords)
     }
 
-    private val dialogSortRecord by lazy { DialogSortRecords(act, model.getFieldList()) }
+    private val dialogSortRecord by lazy { DialogSortRecords(act, model.getFieldList().toMutableList()) }
     private fun setUpSortRecords() {
         dialogSortRecord.setOnClickItem { field, reverse ->
             this.fieldForSort = field
