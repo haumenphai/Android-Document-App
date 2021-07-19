@@ -3,10 +3,15 @@ package dotd.hmp.fragment
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,10 +21,7 @@ import dotd.hmp.activities.ViewDetailRecordActivity
 import dotd.hmp.activities.ViewRecordsActivity
 import dotd.hmp.adapter.GroupsRecordExpandAdapater
 import dotd.hmp.adapter.RecordAdapater
-import dotd.hmp.data.Field
-import dotd.hmp.data.FilterRecord
-import dotd.hmp.data.Model
-import dotd.hmp.data.ModelDB
+import dotd.hmp.data.*
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.*
 import dotd.hmp.hepler.UIHelper
@@ -29,6 +31,7 @@ import java.util.*
 import java.util.concurrent.*
 import kotlin.collections.HashSet
 import kotlin.system.measureTimeMillis
+
 
 @SuppressLint("SetTextI18n")
 
@@ -52,6 +55,9 @@ class ViewRecordsFragment : Fragment() {
     private var fieldForSort: Field? = null
     private var reverseSort: Boolean = false
 
+    private var viewMode = ViewMODE.LIST
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -65,6 +71,7 @@ class ViewRecordsFragment : Fragment() {
         setUpLayoutAction()
         setUpSearchView()
         setUpSortRecords()
+        setUpViewMode()
 
         return b.root
     }
@@ -81,6 +88,52 @@ class ViewRecordsFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private val layoutWebView: FrameLayout by lazy {
+        layoutInflater.inflate(R.layout.view_webview, b.root, false) as FrameLayout
+    }
+    private val webView: WebView by lazy {
+        val webView: WebView = layoutWebView.findViewById(R.id.web_view)
+        webView.settings.apply {
+            displayZoomControls = false
+            useWideViewPort = true
+            javaScriptEnabled = true
+            builtInZoomControls = true
+        }
+        webView.webChromeClient = WebChromeClient()
+        layoutWebView.removeAllViews()
+        webView
+    }
+
+    private fun setUpViewMode() {
+        b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
+
+        b.imgTable.setOnClickListener {
+            b.container.addView(webView)
+            this.viewMode = ViewMODE.TABLE
+            b.imgTable.setBackgroundColor(Color.parseColor("#B6B6B6"))
+            b.imgList.setBackgroundResource(R.drawable.rippler_blue_white)
+            pagingForRecords(model.getRecordList())
+        }
+        b.imgList.setOnClickListener {
+            b.container.removeView(webView)
+            this.viewMode = ViewMODE.LIST
+            b.imgList.setBackgroundColor(Color.parseColor("#B6B6B6"))
+            b.imgTable.setBackgroundResource(R.drawable.rippler_blue_white)
+            pagingForRecords(model.getRecordList())
+        }
+    }
+
+    private fun loadDataViewTable(records: List<JsonObject>) {
+        if (viewMode == ViewMODE.TABLE) {
+            webView.loadDataWithBaseURL(
+                null, model.toHtmlTable(records),
+                "text/html; charset=utf-8", "UTF-8", null
+            )
+        }
+    }
+
+
 
     private fun setUpRecyclerView() {
         act.model.observeForever {
@@ -126,8 +179,10 @@ class ViewRecordsFragment : Fragment() {
                     records = sortRecords(it)
                 }
                 initValue(records)
+                loadDataViewTable(currentRecords)
             }
         }
+        loadDataViewTable(currentRecords)
 
 
         b.imgRight.setOnClickListener {
@@ -150,6 +205,7 @@ class ViewRecordsFragment : Fragment() {
             if (isGrouping) {
                 groupRecord(currentRecords)
             }
+            loadDataViewTable(currentRecords)
         }
         b.imgLeft.setOnClickListener {
             start -= maxRecordsShowed
@@ -171,6 +227,7 @@ class ViewRecordsFragment : Fragment() {
             if (isGrouping) {
                 groupRecord(currentRecords)
             }
+            loadDataViewTable(currentRecords)
         }
         setUpFilterGroup(currentRecords)
     }
@@ -514,7 +571,7 @@ class ViewRecordsFragment : Fragment() {
                 jobList.forEach { it.join() }
             }
             Log.d("AAA", time.toString())
-            Log.d("AAA",  Runtime.getRuntime().availableProcessors().toString())
+            Log.d("AAA", Runtime.getRuntime().availableProcessors().toString())
 
             withContext(Dispatchers.Main) {
                 val resultSearch = resultSet.toMutableList()
@@ -525,4 +582,7 @@ class ViewRecordsFragment : Fragment() {
         }
     }
 
+    private enum class ViewMODE {
+        LIST, TABLE
+    }
 }

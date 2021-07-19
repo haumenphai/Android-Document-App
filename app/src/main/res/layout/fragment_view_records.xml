@@ -185,13 +185,13 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_sort"
-            android:layout_width="70dp"
+            android:layout_width="35dp"
             android:layout_height="match_parent"
             android:layout_below="@id/tv_records_current"
             android:layout_toLeftOf="@id/layout_filter_group"
             android:orientation="horizontal"
             android:gravity="right"
-            android:weightSum="2">
+            android:weightSum="1">
 
             <ImageView
                 android:id="@+id/img_sort"
@@ -200,6 +200,32 @@
                 android:src="@drawable/ic_sort"
                 android:background="@drawable/rippler_blue_white"
                 android:layout_weight="1"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_below="@id/tv_records_current"
+            >
+
+            <ImageView
+                android:id="@+id/img_list"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rippler_blue_white"
+                android:src="@drawable/ic_list" />
+
+            <ImageView
+                android:id="@+id/img_table"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rippler_blue_white"
+                android:src="@drawable/ic_table_2"
+                android:padding="1dp"
                 />
 
         </LinearLayout>
@@ -213,26 +239,43 @@
         android:layout_below="@id/layout_control"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/layout_action_records"
+        android:layout_height="match_parent"
+        android:id="@+id/container"
         android:layout_below="@id/line"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_data_model" />
-
-    <ExpandableListView
-        android:visibility="gone"
-        android:id="@+id/expanded_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_above="@id/layout_action_records"
-        android:layout_below="@id/layout_control"
-        android:divider="@color/black"
-        android:dividerHeight="0.5dp"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-        />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_data_model" />
+        <ExpandableListView
+            android:visibility="gone"
+            android:id="@+id/expanded_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/black"
+            android:dividerHeight="0.5dp"
+            android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+            />
+    </RelativeLayout>
+
+
+
+<!--    <WebView-->
+<!--        android:visibility="gone"-->
+<!--        android:id="@+id/web_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_above="@id/layout_action_records"-->
+<!--        android:layout_below="@id/line"-->
+<!--        >-->
+<!--    </WebView>-->
+
+
 
     <include
         android:id="@+id/layout_action_records"

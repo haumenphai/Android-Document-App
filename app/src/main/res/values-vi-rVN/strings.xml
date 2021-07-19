@@ -79,4 +79,5 @@
     <string name="decrease">Giảm dần</string>
     <string name="sort_by">Sắp xếp theo</string>
     <string name="reverse">Đảo ngược</string>
+    <string name="operator_">Bộ lọc:</string>
 </resources>

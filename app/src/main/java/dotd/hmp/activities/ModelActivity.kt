@@ -19,7 +19,7 @@ import kotlinx.coroutines.*
 
 
 class ModelActivity : AppCompatActivity() {
-    private val b by lazy { ModelActivityBinding.inflate(layoutInflater) }
+    private val b: ModelActivityBinding by lazy { ModelActivityBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
     val list = mutableListOf<String>()

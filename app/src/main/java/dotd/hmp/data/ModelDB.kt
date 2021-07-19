@@ -9,7 +9,6 @@ import kotlinx.coroutines.withContext
 object ModelDB {
     private val db by lazy { ModelDatabase.instance }
     private val modelDao by lazy { db.modelDao() }
-    private val filterRecordDao by lazy { db.filterRecordDao() }
 
     fun insert(model: Model): Boolean {
         if (!checkContraintModelName(model.name))

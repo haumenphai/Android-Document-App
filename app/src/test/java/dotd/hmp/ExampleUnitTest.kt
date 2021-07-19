@@ -92,6 +92,8 @@ class ExampleUnitTest {
     @Test
     fun test22() {
         println("13" >= "14")
+        val s = "%s %s"
+        println(s.format("2123"))
     }
 
 
