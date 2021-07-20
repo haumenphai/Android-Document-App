@@ -479,81 +479,259 @@ fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
 
 fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
     val html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                table {
-                    font-family: arial, sans-serif;
-                    border-collapse: collapse;
-                }
+<!DOCTYPE html>
+<html lang="en">
 
-                td, th {
-                    border: 1px solid black;
-                    text-align: left;
-                    padding: 8px;
-                }
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table,
+        td,
+        th {
+            border: 1px solid black;
+            padding: 10px;
+            border-collapse: collapse;
+        }
 
-                tr:nth-child(even) {
-                    background-color: #dddddd;
-                }
-                
-                tr:active {
-                     background-color: darkgoldenrod;
-                }
-            </style>
-        </head>
-        <body>
-            <table>
-                <tr>%s</tr>
-                %s
-            </table>
-        </body>
-        
-        <script>
-            var trList = Array.from(document.getElementsByTagName('tr'));
-            trList = trList.slice(1, trList.length);
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
 
-            for (let i = 0; i < trList.length; i++) {
-                const record = trList[i];
-                const idRecord = record.getAttribute('id');
-                trList[i].addEventListener("click", function () {
-                    app.viewRecord(idRecord);
-                });
+        .record:active {
+            background-color: rgb(81, 111, 246);
+        }
+
+        .field:active {
+            background-color: #e58f8f;
+        }
+
+        .img-icon-sort {
+            visibility: hidden;
+            height: 15px;
+        }
+
+        img[active="true"] {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+
+
+    </table>
+
+    <script>
+        function toStr(arr) {
+            let s = '';
+            arr.forEach(e => {
+                s += e;
+            });
+            return s;
+        }
+
+        function sortByField(arr, fieldName, reverse) {
+            let result = [...arr].sort((a, b) => (a[fieldName] > b[fieldName]) ? 1 : -1);
+            if (reverse === 'true') {
+                return result.reverse();
             }
-        </script>
-             
-        </html>
+            return result;
+        }
+
+        function loadDataToTable(thStr, trStr) {
+            const table = document.getElementsByTagName('table')[0];
+            tableValue = "<tr>{th_list}</tr>{td_list}"
+                .replace('{th_list}', thStr)
+                .replace('{td_list}', trStr)
+            table.innerHTML = tableValue;
+        }
+
+        function toShow(fieldName) {
+            return fieldName.replace('_', " ");
+        }
+
+
+        // mũi tên xuống là sắp xếp tăng dần, (mặc định)
+       
+
+        function getThStr(fieldList) {
+            var thTemplate =
+                "<th class=\"field\" field_name=\"{field_name_store}\">\n" +
+                "      {field_name}\n" +
+                "      <img class=\"img-icon-sort\" src=\"file:///android_res/drawable/icon_down.png\" temp=\"true\" >\n" +
+                "</th>";
+
+            var thStr = "<th></th>\n";
+
+            for (fieldName of fieldList) {
+                if (fieldName == 'id') {
+                    continue;
+                }
+                if (fieldName == 'create_time') {
+                    thStr += thTemplate.replace('{field_name}', toShow(fieldName))
+                        .replace('{field_name_store}', fieldName)
+                        .replace("temp=\"true\"", "active=\"true\"");
+                } else {
+                    thStr += thTemplate.replace('{field_name}', toShow(fieldName))
+                        .replace('{field_name_store}', fieldName);
+                }
+            }
+            return thStr;
+        }
+
+
+
+        function getTrStr(_data, fieldList) {
+            let trStr = '';
+            for (let i = 0; i < _data.length; i++) {
+                let td = "<td>" + (i + 1) + ".</td>\n"
+
+                const record = _data[i];
+                const idRecord = record.id;
+
+                for (const fieldName of fieldList) {
+                    if (fieldName == 'id') {
+                        continue;
+                    }
+                    const value = record[fieldName];
+                    td += "<td>" + value + "</td>\n";
+                }
+
+                trStr += "<tr id=\"" + idRecord + "\"" + " class=\"record\">" + td + "</tr>\n";
+            }
+            return trStr;
+        }
+
+        function setClickRecord(onClick) {
+            const trListHTML = Array.from(document.getElementsByClassName('record'));
+            trListHTML.forEach(e => {
+                e.addEventListener('click', () => {
+                    const idRecord = e.getAttribute('id')
+                    onClick(idRecord);
+                });
+            });
+        }
+
+
+        function hideAllImgSort() {
+            const thListHTML = Array.from(document.getElementsByClassName('field'));
+            thListHTML.forEach(th => {
+                th.getElementsByTagName('img')[0].style.visibility = 'hidden';
+            });
+        }
+
+        // loop set click for sort field.
+        function loop() {
+            const thListHTML = Array.from(document.getElementsByClassName('field'));
+            thListHTML.forEach(th => {
+                if (th.getAttribute('sort_up') == null) {
+                    th.setAttribute('sort_up', 'false')
+                }
+
+                th.addEventListener('click', () => {
+                    const fieldName = th.getAttribute('field_name');
+                    console.log(fieldName);
+                    const img = th.getElementsByTagName('img')[0]; // only one
+
+                    hideAllImgSort()
+                    img.style.visibility = 'visible';
+
+                    let sortUp = th.getAttribute('sort_up');
+
+                    if (sortUp === 'true') {
+                        img.setAttribute('src', 'file:///android_res/drawable/icon_up.png');
+                        th.setAttribute('sort_up', 'false')
+                    } else if (sortUp === 'false') {
+                        img.setAttribute('src', 'file:///android_res/drawable/icon_down.png');
+                        th.setAttribute('sort_up', 'true')
+                    }
+
+
+                    console.log("Sort by: " + fieldName + " , revert: " + th.getAttribute('sort_up'))
+                    const thListHTML = Array.from(document.getElementsByClassName('field'));
+                    let thStr1 = "<th></th>" + toStr(thListHTML.map(e => e.outerHTML));
+
+                    const dataSorted = sortByField(data, fieldName, th.getAttribute('sort_up'));
+
+                    loadDataToTable(thStr1, getTrStr(dataSorted, fieldList));
+                    loop();
+                });
+            });
+            setClickRecord((idRecord) => {
+                app.viewRecord(idRecord);
+            })
+
+        }
+
+        // doesn't show id.
+//        var fieldList = ["id", "name", "age", "create_time"];
+//        var data = [
+//            {
+//                "id": "1",
+//                "create_time": "2021-12-20",
+//                "name": "Akame",
+//                "age": 29,
+//            },
+//            {
+//                "id": "2",
+//                "create_time": "2021-12-23",
+//                "name": "Bake",
+//                "age": 12,
+//            },
+//            {
+//                "id": "3",
+//                "create_time": "2021-10-29",
+//                "name": "Cukaz",
+//                "age": 40,
+//            },
+//        ];
+        {js-code: fieldList}
+        {js-code: data}
+
+        loadDataToTable(getThStr(fieldList), getTrStr(data, fieldList));
+        loop();
+
+
+    </script>
+</body>
+
+</html>
     """.trimIndent()
-    // todo: app.openRecord(recordString)
 
     val fieldList = getFieldList().toMutableList()
+    fieldList.add(Field("id", FieldType.TEXT))
     fieldList.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
     fieldList.add(Field(getStr(R.string.default_field_last_update_time), FieldType.DATETIME))
 
-    var tr1 = ""
-    tr1 += "<th></th>"
-    fieldList.forEach {
-        tr1 += "<th>${it.fieldName.toFieldNameShow()}</th>"
-    }
+    var jsCodeFieldList = "var fieldList = [{fieldList}];"
+    var temp = ""
+    fieldList.forEach { temp += """ "${it.fieldName}", """ }
+    jsCodeFieldList = jsCodeFieldList.replace("{fieldList}", temp)
 
-    var trList = ""
-
-    for ((i,v) in records.withIndex()) {
-        val idRecord = v.getValueOfField("id")
-        var td = "<td>${i+1}.</td>"
-
+    var jsCodeData = "var data = [{data}];"
+    var temp1 = ""
+    records.forEach { record ->
+        var s = ""
         fieldList.forEach { field ->
             var value = ""
             try {
-                value = v.getValueOfField(field)
+                value = record.getValueOfField(field)
+                if (field.fieldType == FieldType.NUMBER) {
+                }
             } catch (e: Exception) {}
-            td += "<td>$value</td>"
+            if (field.fieldType == FieldType.NUMBER) {
+                s += """ "${field.fieldName}": ${value.toDouble()}, """
+            } else {
+                s += """ "${field.fieldName}": "$value", """
+            }
         }
-        trList += """<tr id="$idRecord">$td</tr>"""
+        s = "{$s},"
+        temp1 += s
     }
+    jsCodeData = jsCodeData.replace("{data}", temp1)
 
+    return html.replace("{js-code: fieldList}",jsCodeFieldList)
+               .replace(" {js-code: data}", jsCodeData)
 
-
-   return html.format(tr1, trList)
 }
