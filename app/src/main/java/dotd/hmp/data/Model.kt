@@ -478,7 +478,7 @@ fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
 }
 
 fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
-    val html = """
+    var html = """
 <!DOCTYPE html>
 <html lang="en">
 
@@ -523,6 +523,9 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
     </table>
 
     <script>
+        // const fieldCreateTime = "create_time";
+        {const-field-create-time}
+        
         function toStr(arr) {
             let s = '';
             arr.forEach(e => {
@@ -548,7 +551,7 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
         }
 
         function toShow(fieldName) {
-            return fieldName.replace('_', " ");
+            return fieldName.replaceAll('_', " ");
         }
 
 
@@ -568,7 +571,7 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
                 if (fieldName == 'id') {
                     continue;
                 }
-                if (fieldName == 'create_time') {
+                if (fieldName === fieldCreateTime) {
                     thStr += thTemplate.replace('{field_name}', toShow(fieldName))
                         .replace('{field_name_store}', fieldName)
                         .replace("temp=\"true\"", "active=\"true\"");
@@ -717,11 +720,13 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
             var value = ""
             try {
                 value = record.getValueOfField(field)
-                if (field.fieldType == FieldType.NUMBER) {
-                }
             } catch (e: Exception) {}
             if (field.fieldType == FieldType.NUMBER) {
-                s += """ "${field.fieldName}": ${value.toDouble()}, """
+                try {
+                    s += """ "${field.fieldName}": ${value.toDouble()}, """
+                } catch (e: Exception) {
+                    s += """ "${field.fieldName}": "$value", """
+                }
             } else {
                 s += """ "${field.fieldName}": "$value", """
             }
@@ -731,7 +736,9 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
     }
     jsCodeData = jsCodeData.replace("{data}", temp1)
 
-    return html.replace("{js-code: fieldList}",jsCodeFieldList)
-               .replace(" {js-code: data}", jsCodeData)
+    html = html.replace("{js-code: fieldList}",jsCodeFieldList)
+        .replace(" {js-code: data}", jsCodeData)
+        .replace("{const-field-create-time}","const fieldCreateTime = \"${getStr(R.string.default_field_create_time)}\";")
+    return html
 
 }
