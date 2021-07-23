@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dotd.hmp.R
 import dotd.hmp.adapter.ModelApdater
 import dotd.hmp.data.*
-import dotd.hmp.databinding.ModelActivityBinding
+import dotd.hmp.databinding.ActivityModelBinding
 import dotd.hmp.dialog.DialogAddNewModel
 import dotd.hmp.dialog.DialogConfirm
 import dotd.hmp.dialog.DialogEditModel
@@ -19,13 +19,14 @@ import kotlinx.coroutines.*
 
 
 class ModelActivity : AppCompatActivity() {
-    private val b: ModelActivityBinding by lazy { ModelActivityBinding.inflate(layoutInflater) }
+    private val b: ActivityModelBinding by lazy { ActivityModelBinding.inflate(layoutInflater) }
     private val adapter: ModelApdater = ModelApdater()
 
     val list = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(b.root)
+        setConfigToolBar()
         setUpRecyclerView()
 
         b.btnTest.setOnClickListener {
@@ -44,6 +45,10 @@ class ModelActivity : AppCompatActivity() {
                 ModelDB.insert(model)
             }
         }
+    }
+
+    private fun setConfigToolBar() {
+        setSupportActionBar(b.toolBar)
     }
 
     private fun setUpRecyclerView() {
