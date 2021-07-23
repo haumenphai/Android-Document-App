@@ -17,7 +17,7 @@ class DateTime {
     override fun toString(): String =
         "Datetime(year=$year, month=$month, day=$day, hour=$hour, minute=$minute, second=$seconds, milisecond=$milisecond)"
 
-    fun format(format: String = "yyyy-MM-dd hh:mm:ss [E]"): String {
+    fun format(format: String = "yyyy-MM-dd HH:mm:ss [E]"): String {
         val c = Calendar.getInstance()
         c.set(Calendar.YEAR, year)
         c.set(Calendar.MONTH, month)
@@ -44,7 +44,7 @@ class DateTime {
 }
 
 object DateTimeHelper {
-    fun timestampToDatetimeString(timestamp: Long, format: String = "yyyy-MM-dd hh:mm:ss [E]"): String {
+    fun timestampToDatetimeString(timestamp: Long, format: String = "yyyy-MM-dd HH:mm:ss [E]"): String {
         val sdf = SimpleDateFormat(format)
         val date = Date(timestamp)
         return sdf.format(date)
