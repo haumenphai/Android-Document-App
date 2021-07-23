@@ -479,6 +479,8 @@ fun JsonObject.updateFieldValue(fieldName: String, value: String): JsonObject {
 }
 
 fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
+    if (records.isEmpty()) return ""
+
     var html = """
 <!DOCTYPE html>
 <html lang="en">
