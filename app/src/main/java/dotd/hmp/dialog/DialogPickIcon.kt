@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dotd.hmp.R
 import dotd.hmp.databinding.DialogPickIconBinding
 import dotd.hmp.databinding.ItemIconBinding
+import dotd.hmp.hepler.setImageAssets
 
 class DialogPickIcon(val context: Context) {
     private val view by lazy { LayoutInflater.from(context).inflate(R.layout.dialog_pick_icon, null) }
@@ -25,9 +26,9 @@ class DialogPickIcon(val context: Context) {
 
         val listIcon = listOf(
             // todo: this is demo data, remove it
-            ItemIcon(R.drawable.ic_baseline_add_24, ""),
-            ItemIcon(R.drawable.ic_baseline_delete_24, ""),
-            ItemIcon(R.drawable.ic_clear, ""),
+            ItemIcon("auto_tone.png", ""),
+            ItemIcon("icon_trai_tim.png", ""),
+            ItemIcon("icon_trai_tim_xam.png", ""),
         )
         adapter.setList(listIcon)
     }
@@ -45,7 +46,7 @@ class DialogPickIcon(val context: Context) {
     }
 }
 
-class ItemIcon(var drawableResource: Int, var name: String = "")
+class ItemIcon(var pathIcon: String, var name: String = "")
 
 class ItemIconApdapter(private var list: List<ItemIcon> = mutableListOf()):
     RecyclerView.Adapter<ItemIconApdapter.ItemIconHolder>() {
@@ -66,7 +67,7 @@ class ItemIconApdapter(private var list: List<ItemIcon> = mutableListOf()):
         val b = holder.b
         val itemIcon = list[position]
 
-        b.imgIcon.setImageResource(itemIcon.drawableResource)
+        b.imgIcon.setImageAssets(itemIcon.pathIcon)
     }
 
     override fun getItemCount(): Int = list.size

@@ -78,11 +78,11 @@ class ModelActivity : AppCompatActivity() {
             val activity = this
             if (it.isItemAddNewModel()) {
                 DialogAddNewModel(this).apply {
-                    setBtnOkClick { modelName, icon ->
+                    setBtnOkClick { modelName, pathIcon ->
                         UIHelper.hideKeyboardFrom(activity, b.root)
                         val intent = Intent(activity, CreateModelAcivity::class.java)
                         intent.putExtra("model_name", modelName)
-                        intent.putExtra("icon", icon)
+                        intent.putExtra("path_icon", pathIcon)
                         startActivity(intent)
                     }
                     setBtnCancelClick {

@@ -75,7 +75,6 @@ class TestModel {
             """.replace(" ", "").replace("\n", "")
         val model = Model().apply {
             name = "Student"
-            icon = R.drawable.ic_clear
             setFieldList(fieldList)
             this.jsonData = jsonData
         }

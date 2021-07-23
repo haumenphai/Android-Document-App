@@ -41,14 +41,14 @@ Not use org.json.JSONObject
  */
 
 @Entity()
-class Model: Serializable {
+class Model : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var name: String = ""
-    var icon: Int? = null
     var jsonFields: String = ""
     var sequence: Int = 0
     var description: String = ""
+    var pathIconAssets: String = defaultIcon
 
     // not store jsonData to Database. save to file.
     @Ignore
@@ -60,18 +60,21 @@ class Model: Serializable {
 
     constructor()
 
-    @Ignore
-    constructor(name: String, icon: Int) {
+    constructor(name: String, pathIcon: String) {
         this.name = name
-        this.icon = icon
+        this.pathIconAssets = pathIcon
     }
 
     companion object {
+        // todo: replace icon
         val itemAddNewModel by lazy {
-                Model(getStr(R.string.add), R.drawable.ic_baseline_add_24).apply {
+                Model().apply {
+                    name = getStr(R.string.add)
                     description = getStr(R.string.add_new_model)
-            }
+                    pathIconAssets = defaultIcon
+                }
         }
+        const val defaultIcon = "auto_tone.png"
     }
     fun isItemAddNewModel(): Boolean = this == itemAddNewModel
 
@@ -356,13 +359,11 @@ class Model: Serializable {
         return false
     }
 
-    fun hasIcon(): Boolean = icon != null
 
     fun clone(): Model {
         val model = Model()
         model.id = this.id
         model.name = this.name
-        model.icon = this.icon
         model.jsonFields = this.jsonFields
         model.jsonData = this.jsonData
         model.sequence = this.sequence

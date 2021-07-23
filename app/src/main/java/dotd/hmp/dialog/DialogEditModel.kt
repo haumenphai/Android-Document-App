@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import dotd.hmp.R
 import dotd.hmp.data.Model
 import dotd.hmp.databinding.DialogEditModelBinding
+import dotd.hmp.hepler.setImageAssets
 
 class DialogEditModel(private val context: Context, private val model: Model) {
     private val view by lazy { LayoutInflater.from(context).inflate(R.layout.dialog_edit_model, null) }
@@ -20,13 +21,12 @@ class DialogEditModel(private val context: Context, private val model: Model) {
         b.editModelName.setText(model.name)
         b.editModelName.setSelection(0, model.name.length)
 
-        if (model.icon != null)
-            b.imgIcon.setImageResource(model.icon!!)
+        b.imgIcon.setImageAssets(model.pathIconAssets)
 
         b.imgIcon.setOnClickListener {
             DialogPickIcon(context).setItemIconClick {
-                modelCopy.icon = it.drawableResource
-                b.imgIcon.setImageResource(it.drawableResource)
+                modelCopy.pathIconAssets = it.pathIcon
+                b.imgIcon.setImageAssets(it.pathIcon)
             }.show()
         }
         b.btnCancel.setOnClickListener { cancel() }

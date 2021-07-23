@@ -5,21 +5,25 @@ import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import dotd.hmp.R
+import dotd.hmp.data.Model
 import dotd.hmp.databinding.DialogAddNewModelBinding
 import dotd.hmp.hepler.UIHelper
+import dotd.hmp.hepler.setImageAssets
 
 class DialogAddNewModel(val context: Context) {
     private val view by lazy { LayoutInflater.from(context).inflate(R.layout.dialog_add_new_model, null) }
     val b by lazy { DialogAddNewModelBinding.bind(view) }
     val dialog by lazy { Dialog(context) }
 
+    private var pathIcon = Model.defaultIcon
+
     init {
         dialog.setContentView(b.root)
         dialog.setCanceledOnTouchOutside(false)
+        b.imgIcon.setImageAssets(pathIcon)
     }
 
-    fun setBtnOkClick(callBack: (modelName: String, icon: Int) -> Unit) {
-        var icon = R.drawable.ic_default_model_icon
+    fun setBtnOkClick(callBack: (modelName: String, pathIcon: String) -> Unit) {
 
         b.btnOk.setOnClickListener {
             val text = b.edittext.text.toString()
@@ -27,7 +31,7 @@ class DialogAddNewModel(val context: Context) {
                 AlertDialog.Builder(context).setMessage(context.getString(R.string.model_name_must_not_be_empty))
                 return@setOnClickListener
             }
-            callBack(text, icon)
+            callBack(text, pathIcon)
             cancel()
         }
 
@@ -36,9 +40,9 @@ class DialogAddNewModel(val context: Context) {
             UIHelper.hideKeyboardFrom(context, b.edittext)
             DialogPickIcon(context).apply {
                 setItemIconClick { itemIcon ->
-                    icon = itemIcon.drawableResource
+                    pathIcon = itemIcon.pathIcon
                     cancel()
-                    this@DialogAddNewModel.b.imgIcon.setImageResource(icon)
+                    this@DialogAddNewModel.b.imgIcon.setImageAssets(pathIcon)
                 }
                 show()
             }

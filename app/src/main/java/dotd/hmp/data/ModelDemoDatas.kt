@@ -73,7 +73,6 @@ object ModelDemoDatas {
             """.trim().replace("\n", "")
         val model = Model().apply {
             name = getStr(R.string.student)
-            icon = R.drawable.ic_clear
             setFieldList(fieldList)
         }
         model.jsonData = jsonData
@@ -89,7 +88,6 @@ object ModelDemoDatas {
 
         val model = Model().apply {
             name = "Student Test"
-            icon = R.drawable.ic_clear
             setFieldList(fieldList)
         }
         var jsonData = ""

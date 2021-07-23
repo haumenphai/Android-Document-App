@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dotd.hmp.R
 import dotd.hmp.data.Model
 import dotd.hmp.databinding.ItemModelBinding
+import dotd.hmp.hepler.setImageAssets
 
 class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerView.Adapter<ModelApdater.ModelHolder>() {
 
@@ -42,10 +43,7 @@ class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerVie
         val b = holder.b
         val model = list[position]
 
-        if (model.hasIcon())
-            b.icon.setImageResource(model.icon!!)
-        else
-            b.icon.setImageResource(R.drawable.ic_default_model_icon)
+        b.icon.setImageAssets(model.pathIconAssets)
 
 
         if (model.isSelected) {
@@ -53,16 +51,8 @@ class ModelApdater(private var list: List<Model> = mutableListOf()): RecyclerVie
             b.icon.background = null
         } else {
             b.background.setBackgroundResource(R.drawable.rippler_blue_white)
-            if (model.hasIcon())
-                b.icon.setImageResource(model.icon!!)
-            else
-                b.icon.setImageResource(R.drawable.ic_default_model_icon)
+            b.icon.setImageAssets(model.pathIconAssets)
         }
-
-
-
-
-
         b.modelName.text = model.name
     }
 

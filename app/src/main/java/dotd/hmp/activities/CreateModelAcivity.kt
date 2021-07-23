@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dotd.hmp.R
 import dotd.hmp.data.*
@@ -25,7 +24,7 @@ class CreateModelAcivity : AppCompatActivity() {
     private val b by lazy { ActivityCreateModelBinding.inflate(layoutInflater) }
     private val fieldList = mutableListOf<Field>()
     private val modelName by lazy { intent.getStringExtra("model_name")!! }
-    private val modelIcon by lazy { intent.getIntExtra("icon", -1) }
+    private val pathIcon by lazy { intent.getStringExtra("path_icon")!! }
     private val fieldCount = MutableLiveData<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +67,7 @@ class CreateModelAcivity : AppCompatActivity() {
 
                 b.btnBack.setOnClickListener { dialog.cancel() }
                 b.btnCreate.setOnClickListener {
-                    val model = Model(modelName, modelIcon)
+                    val model = Model(modelName, pathIcon)
                     model.setFieldList(fieldList)
                     ModelDB.insert(model).also { isSuccess ->
                         if (!isSuccess) DialogShowMess.showMessInsertModelFailure(context)
