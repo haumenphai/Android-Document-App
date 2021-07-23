@@ -7,13 +7,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
+import android.webkit.*
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -102,7 +97,16 @@ class ViewRecordsFragment : Fragment() {
             javaScriptEnabled = true
             builtInZoomControls = true
         }
-        webView.webChromeClient = WebChromeClient()
+
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                Log.d("AAA", consoleMessage.message() + " -- From line "
+                            + consoleMessage.lineNumber() + " of "
+                            + consoleMessage.sourceId()
+                )
+                return super.onConsoleMessage(consoleMessage)
+            }
+        }
         webView.addJavascriptInterface(this, "app")
         layoutWebView.removeAllViews()
         b.container.addView(webView)

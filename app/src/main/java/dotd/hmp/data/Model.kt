@@ -523,6 +523,12 @@ fun Model.toHtmlTable(records: List<JsonObject> = getRecordList()): String {
     </table>
 
     <script>
+        if(typeof String.prototype.replaceAll == "undefined") {
+            String.prototype.replaceAll = function(match, replace){
+               return this.replace(new RegExp(match, 'g'), () => replace);
+            }
+        }
+    
         // const fieldCreateTime = "create_time";
         {const-field-create-time}
         
