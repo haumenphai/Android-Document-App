@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_field_name"
         app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textMultiLine|textNoSuggestions"
+        android:inputType="text|textNoSuggestions"
         android:textColor="@color/black"
         android:textColorHint="@color/text_color_hint"
         />
