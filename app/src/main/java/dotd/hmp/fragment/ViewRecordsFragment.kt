@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.webkit.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -21,9 +23,7 @@ import dotd.hmp.adapter.RecordAdapater
 import dotd.hmp.data.*
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.*
-import dotd.hmp.hepler.TimeDelayUlti
-import dotd.hmp.hepler.UIHelper
-import dotd.hmp.hepler.getStr
+import dotd.hmp.hepler.*
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.*
@@ -517,16 +517,34 @@ class ViewRecordsFragment : Fragment() {
     }
 
     private fun setUpSearchView() {
+        var withField: MutableList<Field>? = null
         b.editSearch.addTextChangedListener {
-           searchRecords(it.toString())
+           searchRecords(it.toString(), withField = withField)
         }
         b.editSearch.setOnEditorActionListener { v, actionId, event ->
-            searchRecords(b.editSearch.text.toString(), "exact")
+            searchRecords(b.editSearch.text.toString(), "exact", withField)
             UIHelper.hideKeyboardFrom(act, b.root)
             true
         }
         b.imgSearchClose.setOnClickListener {
             closeSearchView()
+        }
+
+        val fieldNameList = model.getFieldList().map { it.fieldName.toFieldNameShow() }.toMutableList()
+        fieldNameList.add(getString(R.string.default_field_create_time).toFieldNameShow())
+        fieldNameList.add(0,getString(R.string.all))
+        b.spinnerSearchByField.adapter =
+            ArrayAdapter(act, R.layout.support_simple_spinner_dropdown_item, fieldNameList)
+        b.spinnerSearchByField.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                withField = null
+                val fieldName = fieldNameList[position].toFieldNameStore()
+                if (fieldName != getStr(R.string.all)) {
+                    withField = mutableListOf(model.getField(fieldName)!!)
+                }
+                searchRecords(b.editSearch.text.toString(), withField = null)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
@@ -560,13 +578,20 @@ class ViewRecordsFragment : Fragment() {
     }
 
     private var job1: Job? = null
-    private fun searchRecords(key: String, searchMethod: String = "relative") {
+    private fun searchRecords(key: String, searchMethod: String = "relative", withField: MutableList<Field>? = null)  {
         job1?.cancel()
         b.iconLoadingSearch.visibility = View.VISIBLE
         val maxThread = Runtime.getRuntime().availableProcessors()
 
         job1 = GlobalScope.launch {
             val originalList = model.getRecordList()
+            if (originalList.isEmpty()) {
+                withContext(Dispatchers.Main) {
+                    b.iconLoadingSearch.visibility = View.GONE
+                }
+                return@launch
+            }
+
             val motherOfList = if (originalList.size >= maxThread) {
                 originalList.chunked(originalList.size / maxThread).toMutableList()
             }  else {
@@ -578,7 +603,7 @@ class ViewRecordsFragment : Fragment() {
                 val jobList = mutableListOf<Job>()
                 motherOfList.forEach {
                     val job = launch {
-                        val model = model.searchRecords(key, searchMethod = searchMethod, records = it)
+                        val model = model.searchRecords(key, searchMethod = searchMethod, records = it, _withField = withField)
                         resultSet.addAll(model.getRecordList())
                     }
                     jobList.add(job)

@@ -90,11 +90,20 @@ class Model : Serializable {
         this.jsonFields = Gson().toJson(list)
     }
 
-    // field list not contain default field
+    // field list does not contain default field
     fun getFieldList(): List<Field> = Gson().fromJson(this.jsonFields, Array<Field>::class.java).asList()
 
+    // get all field, includes default field
+    fun getAllField(): List<Field> {
+        val fieldList = getFieldList().toMutableList()
+        fieldList.add(Field("id", FieldType.TEXT))
+        fieldList.add(Field(getStr(R.string.default_field_create_time), FieldType.DATETIME))
+        fieldList.add(Field(getStr(R.string.default_field_last_update_time), FieldType.DATETIME))
+        return fieldList
+    }
+
     fun getField(fieldName: String): Field? {
-        getFieldList().forEach {
+        getAllField().forEach {
             if (fieldName == it.fieldName)
                 return it
         }
@@ -246,7 +255,7 @@ class Model : Serializable {
                 withField = _withField
             }
         }
-
+        Log.d("AAA", withField.toString())
         val model = this.clone()
         val resultSet = HashSet<JsonObject>()
         val key = keySearch.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()

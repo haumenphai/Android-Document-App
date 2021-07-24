@@ -81,5 +81,6 @@
     <string name="sort_by">Sort by</string>
     <string name="reverse">Reverse</string>
     <string name="operator_">Operator:</string>
+    <string name="all">all</string>
 
 </resources>
