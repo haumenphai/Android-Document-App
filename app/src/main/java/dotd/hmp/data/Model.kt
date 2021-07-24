@@ -71,10 +71,10 @@ class Model : Serializable {
                 Model().apply {
                     name = getStr(R.string.add)
                     description = getStr(R.string.add_new_model)
-                    pathIconAssets = defaultIcon
+                    pathIconAssets = "icon_add.png"
                 }
         }
-        const val defaultIcon = "auto_tone.png"
+        const val defaultIcon = "icon_cube.png"
     }
     fun isItemAddNewModel(): Boolean = this == itemAddNewModel
 

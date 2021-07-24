@@ -26,9 +26,11 @@ class DialogPickIcon(val context: Context) {
 
         val listIcon = listOf(
             // todo: this is demo data, remove it
-            ItemIcon("auto_tone.png", ""),
-            ItemIcon("icon_trai_tim.png", ""),
-            ItemIcon("icon_trai_tim_xam.png", ""),
+            ItemIcon("icon_cube.png", ""),
+            ItemIcon("icon_money.png", ""),
+            ItemIcon("icon_person.png", ""),
+            ItemIcon("icon_note.png", ""),
+            ItemIcon("icon_add.png", ""),
         )
         adapter.setList(listIcon)
     }
