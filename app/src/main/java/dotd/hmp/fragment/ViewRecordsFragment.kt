@@ -76,7 +76,7 @@ class ViewRecordsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        TimeDelayUlti.setTime(200).onFinish { webView.visibility = View.INVISIBLE }
+        TimeDelay.setTime(200).onFinish { webView.visibility = View.INVISIBLE }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -88,6 +88,7 @@ class ViewRecordsFragment : Fragment() {
         when (item.itemId) {
             R.id.menu_add -> act.addFragment(AddRecordFragment(), "add_record_fragment")
             R.id.menu_search -> showSearchView()
+            R.id.menu_analysis -> showDialogAnalysis()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -629,6 +630,77 @@ class ViewRecordsFragment : Fragment() {
         intent.putExtra("recordString", model.getRecord(recordID).toString())
         startActivityForResult(intent, 123)
     }
+
+    private fun showDialogAnalysis() {
+        DialogShowTextLarge(act)
+            .setTitle(getStr(R.string.analysis_title_dialog))
+            .setContentHTML(getContentAnalysic())
+            .show()
+    }
+
+    private fun getContentAnalysic(): String {
+        var result = ""
+        val records = model.getRecordList()
+        val maxTitle = getStr(R.string.max)
+        val minTitle = getStr(R.string.min)
+        val avgTitle = getStr(R.string.avg)
+        val sumTitle = getStr(R.string.sum)
+
+        fun sum(list: List<Double>): Double {
+            var _result = 0.0
+            list.forEach { _result += it }
+            return _result
+        }
+
+        fun avg(list: List<Double>): Double {
+            return sum(list) / list.size
+        }
+
+        fun max(list: List<Double>): Double {
+            var max = Double.MIN_VALUE
+            list.forEach {
+                if (it > max) max = it
+            }
+            return  max
+        }
+
+        fun min(list: List<Double>): Double {
+            var min = Double.MAX_VALUE
+            list.forEach {
+                if (it < min) min = it
+            }
+            return  min
+        }
+
+
+        for (field in model.getFieldList()) {
+            if (field.fieldType == FieldType.NUMBER) {
+                val valueList = mutableListOf<Double>()
+                for (record in records) {
+                    valueList.add(record.getValueOfField(field).toDouble())
+                }
+
+                result += """
+                        <font color="black">
+                            <b>${field.fieldName}:</b>
+                        </font>
+                        <br>
+                        $maxTitle: ${formatDouble(max(valueList), 2)} <br>
+                        $minTitle: ${formatDouble(min(valueList), 2)} <br>
+                        $sumTitle: ${formatDouble(sum(valueList), 2)} <br>
+                        $avgTitle: ${formatDouble(avg(valueList), 2)} <br>
+                        _____________________________
+                        <br>
+                    """.trimIndent()
+            } else {
+                // todo: check field type: String
+                continue
+            }
+        }
+
+        return result
+    }
+
 
     private enum class ViewMODE {
         LIST, TABLE

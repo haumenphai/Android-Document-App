@@ -81,4 +81,10 @@
     <string name="reverse">Đảo ngược</string>
     <string name="operator_">Bộ lọc:</string>
     <string name="all">tất cả</string>
+    <string name="analysis">phân tích</string>
+    <string name="analysis_title_dialog">Phân tích</string>
+    <string name="max">lớn nhất</string>
+    <string name="min">nhỏ nhất</string>
+    <string name="avg">trung bình</string>
+    <string name="sum">tổng</string>
 </resources>

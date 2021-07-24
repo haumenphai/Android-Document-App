@@ -10,6 +10,14 @@
         />
 
     <item
+        android:id="@+id/menu_analysis"
+        android:title="@string/analysis"
+        android:icon="@drawable/ic_analysis"
+        app:showAsAction="always"
+        app:iconTint="@color/white"
+        />
+
+    <item
         android:id="@+id/menu_add"
         android:title="@string/add"
         android:icon="@drawable/ic_baseline_add_24"

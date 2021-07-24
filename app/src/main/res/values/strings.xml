@@ -82,5 +82,11 @@
     <string name="reverse">Reverse</string>
     <string name="operator_">Operator:</string>
     <string name="all">all</string>
+    <string name="analysis">analysis</string>
+    <string name="analysis_title_dialog">Analysis</string>
+    <string name="max">max</string>
+    <string name="min">min</string>
+    <string name="avg">avg</string>
+    <string name="sum">sum</string>
 
 </resources>

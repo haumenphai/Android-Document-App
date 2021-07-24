@@ -255,7 +255,6 @@ class Model : Serializable {
                 withField = _withField
             }
         }
-        Log.d("AAA", withField.toString())
         val model = this.clone()
         val resultSet = HashSet<JsonObject>()
         val key = keySearch.removeVietnameseAccents().toLowerCase(Locale.ROOT).trim()

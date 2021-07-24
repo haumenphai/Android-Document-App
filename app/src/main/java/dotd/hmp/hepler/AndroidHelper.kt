@@ -12,7 +12,7 @@ fun ImageView.setImageAssets(path: String, context: Context = MyApplication.cont
 }
 
 
-object TimeDelayUlti {
+object TimeDelay {
     private var milisecond = 0L
 
     fun onFinish(onRun: () -> Unit) {
@@ -24,7 +24,7 @@ object TimeDelayUlti {
         }.start()
     }
 
-    fun setTime(milisecondDelay: Long): TimeDelayUlti {
+    fun setTime(milisecondDelay: Long): TimeDelay {
         this.milisecond = milisecondDelay
         return this
     }
