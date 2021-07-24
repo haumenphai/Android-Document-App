@@ -21,6 +21,7 @@ import dotd.hmp.adapter.RecordAdapater
 import dotd.hmp.data.*
 import dotd.hmp.databinding.FragmentViewRecordsBinding
 import dotd.hmp.dialog.*
+import dotd.hmp.hepler.TimeDelayUlti
 import dotd.hmp.hepler.UIHelper
 import dotd.hmp.hepler.getStr
 import kotlinx.coroutines.*
@@ -73,6 +74,11 @@ class ViewRecordsFragment : Fragment() {
         return b.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        TimeDelayUlti.setTime(200).onFinish { webView.visibility = View.INVISIBLE }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragment_view_data_model_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -97,6 +103,7 @@ class ViewRecordsFragment : Fragment() {
             javaScriptEnabled = true
             builtInZoomControls = true
         }
+
 
         webView.webChromeClient = object : WebChromeClient() {
             override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
